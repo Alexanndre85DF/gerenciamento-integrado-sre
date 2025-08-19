@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <title>Busca Ativa - Equipe Multiprofissional - SRE GURUPI</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Busca Ativa - Equipe Multiprofissional</h1>
+        <button class="logout-btn" onclick="logout()">Sair</button>
+    </div>
+
+    <div class="main-container">
+        <div class="card">
+            <h2>Formulário de Busca Ativa</h2>
+            
+            <form id="activeSearchForm" class="form-container">
+                <!-- Cabeçalho Padrão -->
+                <div class="form-section">
+                    <h3>Informações Gerais</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="school">Nome da Escola:</label>
+                            <select id="school" name="school" required>
+                                <option value="">Selecione a escola</option>
+                                <option value="CENTRO DE ENSINO MEDIO ARY RIBEIRO VALADAO FILHO">CENTRO DE ENSINO MEDIO ARY RIBEIRO VALADAO FILHO</option>
+                                <option value="CENTRO DE ENSINO MEDIO BOM JESUS">CENTRO DE ENSINO MEDIO BOM JESUS</option>
+                                <option value="CENTRO DE ENSINO MEDIO DE GURUPI">CENTRO DE ENSINO MEDIO DE GURUPI</option>                                
+                                <option value="COL DE TECELAGEM ART NSA SENHORA AUXILIADORA">COL DE TECELAGEM ART NSA SENHORA AUXILIADORA</option>
+                                <option value="COL EST ALAIR SENA CONCEICAO">COL EST ALAIR SENA CONCEICAO</option>
+                                <option value="COLÉGIO AGRICOLA DOM BOSCO">COLÉGIO AGRICOLA DOM BOSCO</option>
+                                <option value="COLÉGIO ESTADUAL ADELAIDE FRANCISCO SOARES">COLÉGIO ESTADUAL ADELAIDE FRANCISCO SOARES</option>
+                                <option value="COLÉGIO ESTADUAL ANITA CASSIMIRO MORENO">COLÉGIO ESTADUAL ANITA CASSIMIRO MORENO</option>
+                                <option value="COLÉGIO ESTADUAL BENEDITO PEREIRA BANDEIRA">COLÉGIO ESTADUAL BENEDITO PEREIRA BANDEIRA</option>
+                                <option value="COLÉGIO ESTADUAL CANDIDO FIGUEIRA">COLÉGIO ESTADUAL CANDIDO FIGUEIRA</option>
+                                <option value="COLÉGIO ESTADUAL DE ALVORADA">COLÉGIO ESTADUAL DE ALVORADA</option>
+                                <option value="COLÉGIO ESTADUAL DE TALISMA">COLÉGIO ESTADUAL DE TALISMA</option>
+                                <option value="COLÉGIO ESTADUAL DOM ALANO">COLÉGIO ESTADUAL DOM ALANO</option>
+                                <option value="COLÉGIO ESTADUAL ELSEBAO LIMA">COLÉGIO ESTADUAL ELSEBAO LIMA</option>
+                                <option value="COLÉGIO ESTADUAL FAMILIA AGRICOLA JOSE PORFIRIO DE SOUZA">COLÉGIO ESTADUAL FAMILIA AGRICOLA JOSE PORFIRIO DE SOUZA</option>
+                                <option value="COLÉGIO ESTADUAL GIRASSOL DE TEMPO INTEGRAL JOSE SEABRA LEMOS">COLÉGIO ESTADUAL GIRASSOL DE TEMPO INTEGRAL JOSE SEABRA LEMOS</option>
+                                <option value="COLÉGIO ESTADUAL JOAO TAVARES MARTINS">COLÉGIO ESTADUAL JOAO TAVARES MARTINS</option>
+                                <option value="COLÉGIO ESTADUAL NOSSA SENHORA APARECIDA">COLÉGIO ESTADUAL NOSSA SENHORA APARECIDA</option>
+                                <option value="COLÉGIO ESTADUAL OLAVO BILAC">COLÉGIO ESTADUAL OLAVO BILAC</option>
+                                <option value="COLÉGIO ESTADUAL PORTO DO RIO MARANHAO">COLÉGIO ESTADUAL PORTO DO RIO MARANHAO</option>
+                                <option value="COLÉGIO ESTADUAL POSITIVO DE GURUPI">COLÉGIO ESTADUAL POSITIVO DE GURUPI</option>
+                                <option value="COLÉGIO ESTADUAL PROFESSORA ONEIDES ROSA DE MOURA">COLÉGIO ESTADUAL PROFESSORA ONEIDES ROSA DE MOURA</option>
+                                <option value="COLÉGIO ESTADUAL REGINA SIQUEIRA CAMPOS">COLÉGIO ESTADUAL REGINA SIQUEIRA CAMPOS</option>
+                                <option value="COLÉGIO ESTADUAL TARSO DUTRA">COLÉGIO ESTADUAL TARSO DUTRA</option>
+                                <option value="COLÉGIO ESTADUAL TIRADENTES">COLÉGIO ESTADUAL TIRADENTES</option>
+                                <option value="COLEGIO MILITAR DO ESTADO DO TOCANTINS - ADJULIO BALTHAZAR">COLEGIO MILITAR DO ESTADO DO TOCANTINS - ADJULIO BALTHAZAR</option>
+                                <option value="COLEGIO MILITAR DO ESTADO DO TOCANTINS - PROFESSORA MARIA">COLEGIO MILITAR DO ESTADO DO TOCANTINS - PROFESSORA MARIA</option>
+                                <option value="COLEGIO MILITAR DO ESTADO DO TOCANTINS PRESIDENTE COSTA E SILVA">COLEGIO MILITAR DO ESTADO DO TOCANTINS PRESIDENTE COSTA E SILVA</option>
+                                <option value="ESC DE TEC ART NOSSA SRA AUXILIADORA">ESC DE TEC ART NOSSA SRA AUXILIADORA</option>
+                                <option value="ESC EST RETIRO">ESC EST RETIRO</option>
+                                <option value="ESC EST TANCREDO DE ALMEIDA NEVES">ESC EST TANCREDO DE ALMEIDA NEVES</option>
+                                <option value="ESCOLA ESTADUAL ANA MARIA DE JESUS">ESCOLA ESTADUAL ANA MARIA DE JESUS</option>
+                                <option value="ESCOLA ESTADUAL DR JOAQUIM PEREIRA DA COSTA">ESCOLA ESTADUAL DR JOAQUIM PEREIRA DA COSTA</option>
+                                <option value="ESCOLA ESTADUAL FE E ALEGRIA PAROQUIAL BERNARDO SAYAO">ESCOLA ESTADUAL FE E ALEGRIA PAROQUIAL BERNARDO SAYAO</option>
+                                <option value="ESCOLA ESTADUAL GERCINA BORGES TEIXEIRA">ESCOLA ESTADUAL GERCINA BORGES TEIXEIRA</option>
+                                <option value="ESCOLA ESTADUAL HERCILIA CARVALHO DA SILVA">ESCOLA ESTADUAL HERCILIA CARVALHO DA SILVA</option>
+                                <option value="ESCOLA ESTADUAL NOSSA SENHORA DO CARMO">ESCOLA ESTADUAL NOSSA SENHORA DO CARMO</option>
+                                <option value="ESCOLA ESTADUAL OLAVO BILAC">ESCOLA ESTADUAL OLAVO BILAC</option>
+                                <option value="ESCOLA ESTADUAL PADRE JOSE DE ANCHIETA">ESCOLA ESTADUAL PADRE JOSE DE ANCHIETA</option>
+                                <option value="ESCOLA ESTADUAL PASSO A PASSO">ESCOLA ESTADUAL PASSO A PASSO</option>
+                                <option value="ESCOLA ESTADUAL PRESBITERIANA ARAGUAIA">ESCOLA ESTADUAL PRESBITERIANA ARAGUAIA</option>
+                                <option value="ESCOLA ESTADUAL PRESBITERIANA EDUCACIONAL">ESCOLA ESTADUAL PRESBITERIANA EDUCACIONAL</option>
+                                <option value="ESCOLA ESTADUAL RUI BARBOSA">ESCOLA ESTADUAL RUI BARBOSA</option>
+                                <option value="ESCOLA ESTADUAL SALVADOR CAETANO">ESCOLA ESTADUAL SALVADOR CAETANO</option>
+                                <option value="ESCOLA ESTADUAL VALDIR LINS">ESCOLA ESTADUAL VALDIR LINS</option>
+                                <option value="ESCOLA ESTADUAL VILA GUARACY">ESCOLA ESTADUAL VILA GUARACY</option>
+                                <option value="ESCOLA INDIGENA BARRA DO RIO VERDE">ESCOLA INDIGENA BARRA DO RIO VERDE</option>
+                                <option value="ESCOLA INDIGENA IJANARI">ESCOLA INDIGENA IJANARI</option>
+                                <option value="ESCOLA INDIGENA IJAWALA">ESCOLA INDIGENA IJAWALA</option>
+                                <option value="ESCOLA INDIGENA SANAWE">ESCOLA INDIGENA SANAWE</option>
+                                <option value="ESCOLA INDIGENA TAINA">ESCOLA INDIGENA TAINA</option>
+                                <option value="ESCOLA INDIGENA TEMANARE">ESCOLA INDIGENA TEMANARE</option>
+                                <option value="ESCOLA INDIGENA TEWADURE">ESCOLA INDIGENA TEWADURE</option>
+                                <option value="ESCOLA INDIGENA TXUIRI-HINA">ESCOLA INDIGENA TXUIRI-HINA</option>
+                                <option value="ESCOLA INDIGENA WAHURI">ESCOLA INDIGENA WAHURI</option>
+                                <option value="ESCOLA INDIGENA WATAKURI">ESCOLA INDIGENA WATAKURI</option>
+                                <option value="INSTITUTO EDUCACIONAL PASSO A PASSO">INSTITUTO EDUCACIONAL PASSO A PASSO</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="municipality">Município:</label>
+                            <select id="municipality" name="municipality" required>
+                                <option value="">Selecione o município</option>
+                                <option value="Aliança do Tocantins">Aliança do Tocantins</option>
+                                <option value="Alvorada">Alvorada</option>
+                                <option value="Araguaçu">Araguaçu</option>
+                                <option value="Cariri do Tocantins">Cariri do Tocantins</option>
+                                <option value="Crixás do Tocantins">Crixás do Tocantins</option>
+                                <option value="Dueré">Dueré</option>
+                                <option value="Figueirópolis">Figueirópolis</option>
+                                <option value="Formoso do Araguaia">Formoso do Araguaia</option>
+                                <option value="Gurupi">Gurupi</option>
+                                <option value="Jaú do Tocantins">Jaú do Tocantins</option>
+                                <option value="Palmeirópolis">Palmeirópolis</option>
+                                <option value="Peixe">Peixe</option>
+                                <option value="Sandolândia">Sandolândia</option>
+                                <option value="São Salvador do Tocantins">São Salvador do Tocantins</option>
+                                <option value="São Valério">São Valério</option>
+                                <option value="Sucupira">Sucupira</option>
+                                <option value="Talismã">Talismã</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="technician">Técnico(a):</label>
+                            <input type="text" id="technician" name="technician" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Data do Registro:</label>
+                            <input type="date" id="date" name="date" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Informações da Turma -->
+                <div class="form-section">
+                    <h3>Informações da Turma</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="className">Nome da Turma:</label>
+                            <input type="text" id="className" name="className" placeholder="Nome da turma" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="shift">Turno:</label>
+                            <select id="shift" name="shift" required>
+                                <option value="">Selecione o turno</option>
+                                <option value="Matutino">Matutino</option>
+                                <option value="Vespertino">Vespertino</option>
+                                <option value="Noturno">Noturno</option>
+                                <option value="Integral">Integral</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Informações do Estudante -->
+                <div class="form-section">
+                    <h3>Estudante</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="studentName">Nome do(a) estudante:</label>
+                            <input type="text" id="studentName" name="studentName" placeholder="Nome completo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="absences">Nº de faltas:</label>
+                            <input type="number" id="absences" name="absences" value="0" min="0" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Checkboxes Esquerda -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" name="pcd" value="true"> PCD</label>
+                                <label><input type="checkbox" name="ministerioPublico" value="true"> Ministério Público</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" name="menorIdade" value="true"> Menor de Idade</label>
+                                <label><input type="checkbox" name="atestadoMedico" value="true"> Atestado Médico</label>
+                                <label><input type="checkbox" name="conselhoTutelar" value="true"> Conselho Tutelar</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Número de Visitas -->
+                    <div class="form-section">
+                        <h4>Número de Visitas:</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label><input type="checkbox" name="primeiraVisita" value="1"> 1ª visita</label>
+                            </div>
+                            <div class="form-group">
+                                <label><input type="checkbox" name="segundaVisita" value="2"> 2ª visita</label>
+                            </div>
+                            <div class="form-group">
+                                <label><input type="checkbox" name="terceiraVisita" value="3"> 3ª visita</label>
+                            </div>
+                            <div class="form-group">
+                                <label>Total de visitas: <span id="totalVisitas">0</span></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Observações -->
+                <div class="form-section">
+                    <h3>Observações:</h3>
+                    <div class="form-group">
+                        <textarea id="observations" name="observations" rows="4" placeholder="Digite suas observações sobre o estudante..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Links de Documentos -->
+                <div class="form-section">
+                    <h3>Links de Documentos:</h3>
+                    <p class="form-description">Insira links para Google Drive, Google Docs, Planilhas ou outros documentos online</p>
+                    <div class="form-group">
+                        <textarea id="documentLinks" name="documentLinks" rows="4" placeholder="Ex: https://drive.google.com/...&#10;https://docs.google.com/..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Botões -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Salvar Registro</button>
+                    <button type="button" class="btn btn-secondary" onclick="window.history.back()">Voltar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyABEloTfC_nT5vfDHpeqYdDjNoPCKwE-Eo",
+            authDomain: "projeto-alex-aaadf.firebaseapp.com",
+            projectId: "projeto-alex-aaadf",
+            storageBucket: "projeto-alex-aaadf.firebasestorage.app",
+            messagingSenderId: "720032595137",
+            appId: "1:720032595137:web:85834232e770a942216840"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Verificar autenticação
+        function checkAuth() {
+            const userRole = localStorage.getItem('userRole');
+            const userCPF = localStorage.getItem('userCPF');
+            const userName = localStorage.getItem('userName');
+            
+            if (!userRole || !userCPF || !userName) {
+                window.location.href = '../index.html';
+            }
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('userCPF');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userId');
+            window.location.href = '../index.html';
+        }
+
+        // Definir data atual
+        function setCurrentDate() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            document.getElementById('date').value = `${year}-${month}-${day}`;
+        }
+
+        // Calcular total de visitas
+        function calcularTotalVisitas() {
+            const primeira = document.querySelector('input[name="primeiraVisita"]').checked ? 1 : 0;
+            const segunda = document.querySelector('input[name="segundaVisita"]').checked ? 1 : 0;
+            const terceira = document.querySelector('input[name="terceiraVisita"]').checked ? 1 : 0;
+            const total = primeira + segunda + terceira;
+            document.getElementById('totalVisitas').textContent = total;
+        }
+
+        // Inicializar
+        checkAuth();
+        setCurrentDate();
+        
+        // Event listeners para checkboxes de visitas
+        document.querySelectorAll('input[name="primeiraVisita"], input[name="segundaVisita"], input[name="terceiraVisita"]').forEach(checkbox => {
+            checkbox.addEventListener('change', calcularTotalVisitas);
+        });
+        
+        // Form handler
+        document.getElementById('activeSearchForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            try {
+                console.log('Iniciando salvamento...');
+                
+                const formData = {
+                    department: 'Equipe Multiprofissional',
+                    indicator: 'Busca Ativa',
+                    school: document.getElementById('school').value,
+                    municipality: document.getElementById('municipality').value,
+                    technician: document.getElementById('technician').value,
+                    date: document.getElementById('date').value,
+                    className: document.getElementById('className').value,
+                    shift: document.getElementById('shift').value,
+                    studentName: document.getElementById('studentName').value,
+                    absences: parseInt(document.getElementById('absences').value),
+                    pcd: document.querySelector('input[name="pcd"]').checked,
+                    ministerioPublico: document.querySelector('input[name="ministerioPublico"]').checked,
+                    menorIdade: document.querySelector('input[name="menorIdade"]').checked,
+                    atestadoMedico: document.querySelector('input[name="atestadoMedico"]').checked,
+                    conselhoTutelar: document.querySelector('input[name="conselhoTutelar"]').checked,
+                    primeiraVisita: document.querySelector('input[name="primeiraVisita"]').checked,
+                    segundaVisita: document.querySelector('input[name="segundaVisita"]').checked,
+                    terceiraVisita: document.querySelector('input[name="terceiraVisita"]').checked,
+                    totalVisitas: parseInt(document.getElementById('totalVisitas').textContent),
+                    observations: document.getElementById('observations').value,
+                    documentLinks: document.getElementById('documentLinks').value,
+                    createdBy: localStorage.getItem('userCPF'),
+                    createdByRole: localStorage.getItem('userRole'),
+                    createdByName: localStorage.getItem('userName'),
+                    createdAt: serverTimestamp(),
+                    recordStatus: 'active'
+                };
+
+                console.log('Dados do formulário:', formData);
+
+                const docRef = await addDoc(collection(db, 'records'), formData);
+                
+                console.log('Documento salvo com ID:', docRef.id);
+                alert('Registro salvo com sucesso! Redirecionando para a página de registros unificados...');
+                
+                // Redirecionar para a página de registros unificados após salvar
+                setTimeout(() => {
+                    window.location.href = '../monitoring-records-unified.html';
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Erro ao salvar:', error);
+                alert('Erro ao salvar o registro: ' + error.message);
+            }
+        });
+
+        // Exportar função de logout
+        window.logout = logout;
+    </script>
+    
+
+</body>
+</html>

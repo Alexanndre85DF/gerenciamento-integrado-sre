@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <title>Aulas Previstas e Aulas Dadas - Supervisão - SRE GURUPI</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../js/schools.js"></script>
+    <script src="../js/municipalities.js"></script>
+</head>
+<body>
+    <div class="header">
+        <h1>Aulas Previstas e Aulas Dadas - Supervisão</h1>
+        <button class="logout-btn" onclick="logout()">Sair</button>
+    </div>
+
+    <div class="main-container">
+        <div class="card">
+            <h2>Formulário de Aulas Previstas e Aulas Dadas</h2>
+            
+            <form id="plannedClassesForm" class="form-container">
+                <!-- Cabeçalho Padrão -->
+                <div class="form-section">
+                    <h3>Informações Gerais</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="school">Nome da Escola:</label>
+                            <select id="school" name="school" required>
+                                <option value="">Selecione a escola</option>
+                                <option value="CENTRO DE ENSINO MEDIO ARY RIBEIRO VALADAO FILHO">CENTRO DE ENSINO MEDIO ARY RIBEIRO VALADAO FILHO</option>
+                                <option value="CENTRO DE ENSINO MEDIO BOM JESUS">CENTRO DE ENSINO MEDIO BOM JESUS</option>
+                                <option value="CENTRO DE ENSINO MEDIO DE GURUPI">CENTRO DE ENSINO MEDIO DE GURUPI</option>                                
+                                <option value="COL DE TECELAGEM ART NSA SENHORA AUXILIADORA">COL DE TECELAGEM ART NSA SENHORA AUXILIADORA</option>
+                                <option value="COL EST ALAIR SENA CONCEICAO">COL EST ALAIR SENA CONCEICAO</option>
+                                <option value="COLÉGIO AGRICOLA DOM BOSCO">COLÉGIO AGRICOLA DOM BOSCO</option>
+                                <option value="COLÉGIO ESTADUAL ADELAIDE FRANCISCO SOARES">COLÉGIO ESTADUAL ADELAIDE FRANCISCO SOARES</option>
+                                <option value="COLÉGIO ESTADUAL ANITA CASSIMIRO MORENO">COLÉGIO ESTADUAL ANITA CASSIMIRO MORENO</option>
+                                <option value="COLÉGIO ESTADUAL BENEDITO PEREIRA BANDEIRA">COLÉGIO ESTADUAL BENEDITO PEREIRA BANDEIRA</option>
+                                <option value="COLÉGIO ESTADUAL CANDIDO FIGUEIRA">COLÉGIO ESTADUAL CANDIDO FIGUEIRA</option>
+                                <option value="COLÉGIO ESTADUAL DE ALVORADA">COLÉGIO ESTADUAL DE ALVORADA</option>
+                                <option value="COLÉGIO ESTADUAL DE TALISMA">COLÉGIO ESTADUAL DE TALISMA</option>
+                                <option value="COLÉGIO ESTADUAL DOM ALANO">COLÉGIO ESTADUAL DOM ALANO</option>
+                                <option value="COLÉGIO ESTADUAL ELSEBAO LIMA">COLÉGIO ESTADUAL ELSEBAO LIMA</option>
+                                <option value="COLÉGIO ESTADUAL FAMILIA AGRICOLA JOSE PORFIRIO DE SOUZA">COLÉGIO ESTADUAL FAMILIA AGRICOLA JOSE PORFIRIO DE SOUZA</option>
+                                <option value="COLÉGIO ESTADUAL GIRASSOL DE TEMPO INTEGRAL JOSE SEABRA LEMOS">COLÉGIO ESTADUAL GIRASSOL DE TEMPO INTEGRAL JOSE SEABRA LEMOS</option>
+                                <option value="COLÉGIO ESTADUAL JOAO TAVARES MARTINS">COLÉGIO ESTADUAL JOAO TAVARES MARTINS</option>
+                                <option value="COLÉGIO ESTADUAL NOSSA SENHORA APARECIDA">COLÉGIO ESTADUAL NOSSA SENHORA APARECIDA</option>
+                                <option value="COLÉGIO ESTADUAL OLAVO BILAC">COLÉGIO ESTADUAL OLAVO BILAC</option>
+                                <option value="COLÉGIO ESTADUAL PORTO DO RIO MARANHAO">COLÉGIO ESTADUAL PORTO DO RIO MARANHAO</option>
+                                <option value="COLÉGIO ESTADUAL POSITIVO DE GURUPI">COLÉGIO ESTADUAL POSITIVO DE GURUPI</option>
+                                <option value="COLÉGIO ESTADUAL PROFESSORA ONEIDES ROSA DE MOURA">COLÉGIO ESTADUAL PROFESSORA ONEIDES ROSA DE MOURA</option>
+                                <option value="COLÉGIO ESTADUAL REGINA SIQUEIRA CAMPOS">COLÉGIO ESTADUAL REGINA SIQUEIRA CAMPOS</option>
+                                <option value="COLÉGIO ESTADUAL TARSO DUTRA">COLÉGIO ESTADUAL TARSO DUTRA</option>
+                                <option value="COLÉGIO ESTADUAL TIRADENTES">COLÉGIO ESTADUAL TIRADENTES</option>
+                                <option value="COLEGIO MILITAR DO ESTADO DO TOCANTINS - ADJULIO BALTHAZAR">COLEGIO MILITAR DO ESTADO DO TOCANTINS - ADJULIO BALTHAZAR</option>
+                                <option value="COLEGIO MILITAR DO ESTADO DO TOCANTINS - PROFESSORA MARIA">COLEGIO MILITAR DO ESTADO DO TOCANTINS - PROFESSORA MARIA</option>
+                                <option value="COLEGIO MILITAR DO ESTADO DO TOCANTINS PRESIDENTE COSTA E SILVA">COLEGIO MILITAR DO ESTADO DO TOCANTINS PRESIDENTE COSTA E SILVA</option>
+                                <option value="ESC DE TEC ART NOSSA SRA AUXILIADORA">ESC DE TEC ART NOSSA SRA AUXILIADORA</option>
+                                <option value="ESC EST RETIRO">ESC EST RETIRO</option>
+                                <option value="ESC EST TANCREDO DE ALMEIDA NEVES">ESC EST TANCREDO DE ALMEIDA NEVES</option>
+                                <option value="ESCOLA ESTADUAL ANA MARIA DE JESUS">ESCOLA ESTADUAL ANA MARIA DE JESUS</option>
+                                <option value="ESCOLA ESTADUAL DR JOAQUIM PEREIRA DA COSTA">ESCOLA ESTADUAL DR JOAQUIM PEREIRA DA COSTA</option>
+                                <option value="ESCOLA ESTADUAL FE E ALEGRIA PAROQUIAL BERNARDO SAYAO">ESCOLA ESTADUAL FE E ALEGRIA PAROQUIAL BERNARDO SAYAO</option>
+                                <option value="ESCOLA ESTADUAL GERCINA BORGES TEIXEIRA">ESCOLA ESTADUAL GERCINA BORGES TEIXEIRA</option>
+                                <option value="ESCOLA ESTADUAL HERCILIA CARVALHO DA SILVA">ESCOLA ESTADUAL HERCILIA CARVALHO DA SILVA</option>
+                                <option value="ESCOLA ESTADUAL NOSSA SENHORA DO CARMO">ESCOLA ESTADUAL NOSSA SENHORA DO CARMO</option>
+                                <option value="ESCOLA ESTADUAL OLAVO BILAC">ESCOLA ESTADUAL OLAVO BILAC</option>
+                                <option value="ESCOLA ESTADUAL PADRE JOSE DE ANCHIETA">ESCOLA ESTADUAL PADRE JOSE DE ANCHIETA</option>
+                                <option value="ESCOLA ESTADUAL PASSO A PASSO">ESCOLA ESTADUAL PASSO A PASSO</option>
+                                <option value="ESCOLA ESTADUAL PRESBITERIANA ARAGUAIA">ESCOLA ESTADUAL PRESBITERIANA ARAGUAIA</option>
+                                <option value="ESCOLA ESTADUAL PRESBITERIANA EDUCACIONAL">ESCOLA ESTADUAL PRESBITERIANA EDUCACIONAL</option>
+                                <option value="ESCOLA ESTADUAL RUI BARBOSA">ESCOLA ESTADUAL RUI BARBOSA</option>
+                                <option value="ESCOLA ESTADUAL SALVADOR CAETANO">ESCOLA ESTADUAL SALVADOR CAETANO</option>
+                                <option value="ESCOLA ESTADUAL VALDIR LINS">ESCOLA ESTADUAL VALDIR LINS</option>
+                                <option value="ESCOLA ESTADUAL VILA GUARACY">ESCOLA ESTADUAL VILA GUARACY</option>
+                                <option value="ESCOLA INDIGENA BARRA DO RIO VERDE">ESCOLA INDIGENA BARRA DO RIO VERDE</option>
+                                <option value="ESCOLA INDIGENA IJANARI">ESCOLA INDIGENA IJANARI</option>
+                                <option value="ESCOLA INDIGENA IJAWALA">ESCOLA INDIGENA IJAWALA</option>
+                                <option value="ESCOLA INDIGENA SANAWE">ESCOLA INDIGENA SANAWE</option>
+                                <option value="ESCOLA INDIGENA TAINA">ESCOLA INDIGENA TAINA</option>
+                                <option value="ESCOLA INDIGENA TEMANARE">ESCOLA INDIGENA TEMANARE</option>
+                                <option value="ESCOLA INDIGENA TEWADURE">ESCOLA INDIGENA TEWADURE</option>
+                                <option value="ESCOLA INDIGENA TXUIRI-HINA">ESCOLA INDIGENA TXUIRI-HINA</option>
+                                <option value="ESCOLA INDIGENA WAHURI">ESCOLA INDIGENA WAHURI</option>
+                                <option value="ESCOLA INDIGENA WATAKURI">ESCOLA INDIGENA WATAKURI</option>
+                                <option value="INSTITUTO EDUCACIONAL PASSO A PASSO">INSTITUTO EDUCACIONAL PASSO A PASSO</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="municipality">Município:</label>
+                            <select id="municipality" name="municipality" required>
+                                <option value="">Selecione o município</option>
+                                <option value="Aliança do Tocantins">Aliança do Tocantins</option>
+                                <option value="Alvorada">Alvorada</option>
+                                <option value="Araguaçu">Araguaçu</option>
+                                <option value="Cariri do Tocantins">Cariri do Tocantins</option>
+                                <option value="Crixás do Tocantins">Crixás do Tocantins</option>
+                                <option value="Dueré">Dueré</option>
+                                <option value="Figueirópolis">Figueirópolis</option>
+                                <option value="Formoso do Araguaia">Formoso do Araguaia</option>
+                                <option value="Gurupi">Gurupi</option>
+                                <option value="Jaú do Tocantins">Jaú do Tocantins</option>
+                                <option value="Palmeirópolis">Palmeirópolis</option>
+                                <option value="Peixe">Peixe</option>
+                                <option value="Sandolândia">Sandolândia</option>
+                                <option value="São Salvador do Tocantins">São Salvador do Tocantins</option>
+                                <option value="São Valério">São Valério</option>
+                                <option value="Sucupira">Sucupira</option>
+                                <option value="Talismã">Talismã</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="technician">Técnico(a):</label>
+                            <input type="text" id="technician" name="technician" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Data do Registro:</label>
+                            <input type="date" id="date" name="date" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Informações do Registro -->
+                <div class="form-section">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="referenceDate">Data de Referência:</label>
+                            <input type="date" id="referenceDate" name="referenceDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="classId">ID da Turma:</label>
+                            <input type="text" id="classId" name="classId" placeholder="ID da turma" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="className">Nome da Turma:</label>
+                            <input type="text" id="className" name="className" placeholder="Nome da turma" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="discipline">Disciplina:</label>
+                            <input type="text" id="discipline" name="discipline" placeholder="Nome da disciplina" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="periodStart">Período Inicial:</label>
+                            <input type="date" id="periodStart" name="periodStart" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="periodEnd">Período Final:</label>
+                            <input type="date" id="periodEnd" name="periodEnd" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="plannedClasses">Aulas Previstas no Período:</label>
+                            <input type="number" id="plannedClasses" name="plannedClasses" min="0" placeholder="Digite o número de aulas previstas" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="givenClasses">Aulas Dadas no Período:</label>
+                            <input type="number" id="givenClasses" name="givenClasses" min="0" placeholder="Digite o número de aulas realizadas" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="professorName">Nome do(a) Professor(a):</label>
+                            <input type="text" id="professorName" name="professorName" placeholder="Nome completo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bimester">Bimestre:</label>
+                            <select id="bimester" name="bimester" required>
+                                <option value="">Selecione</option>
+                                <option value="1º Bimestre">1º Bimestre</option>
+                                <option value="2º Bimestre">2º Bimestre</option>
+                                <option value="3º Bimestre">3º Bimestre</option>
+                                <option value="4º Bimestre">4º Bimestre</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="situation">Situação:</label>
+                            <select id="situation" name="situation" required>
+                                <option value="">Selecione</option>
+                                <option value="Em andamento">Em andamento</option>
+                                <option value="Concluído">Concluído</option>
+                                <option value="Pendente">Pendente</option>
+                                <option value="Suspenso">Suspenso</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Totais e Taxa de Cumprimento -->
+                <div class="form-section">
+                    <h3>Resumo do Período</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Total de Aulas Previstas: <span id="totalPlanned">0</span></label>
+                        </div>
+                        <div class="form-group">
+                            <label>Total de Aulas Realizadas: <span id="totalGiven">0</span></label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Taxa de Cumprimento: <span id="completionRate">0%</span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Motivos de não realização -->
+                <div class="form-section">
+                    <h3>Motivos de não realização/registro:</h3>
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="teacherAbsence" value="true"> Falta do Docente</label>
+                            <label><input type="checkbox" name="schoolEvent" value="true"> Evento Escolar</label>
+                            <label><input type="checkbox" name="holiday" value="true"> Feriado</label>
+                            <label><input type="checkbox" name="strike" value="true"> Greve/Suspensão</label>
+                            <label><input type="checkbox" name="sgeUnavailable" value="true"> Indisponibilidade SGE</label>
+                            <label><input type="checkbox" name="professorNotLaunched" value="true"> Não Lançamento SGE Professor</label>
+                            <label><input type="checkbox" name="others" value="true"> Outros</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Observações -->
+                <div class="form-section">
+                    <h3>Observações:</h3>
+                    <div class="form-group">
+                        <textarea id="observations" name="observations" rows="4" placeholder="Digite suas observações..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Links de Documentos -->
+                <div class="form-section">
+                    <h3>Links de Documentos:</h3>
+                    <p class="form-description">Insira links para Google Drive, Google Docs, Planilhas ou outros documentos online</p>
+                    <div class="form-group">
+                        <textarea id="documentLinks" name="documentLinks" rows="4" placeholder="Ex: https://drive.google.com/...&#10;https://docs.google.com/..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Botões -->
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Salvar Registro</button>
+                    <button type="button" class="btn-secondary" onclick="window.history.back()">Voltar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyABE1oTfC_nT5vfDHpeqYdDjNoPCKwE-Eo",
+            authDomain: "projeto-alex-aaadf.firebaseapp.com",
+            projectId: "projeto-alex-aaadf",
+            storageBucket: "projeto-alex-aaadf.firebasestorage.app",
+            messagingSenderId: "720032595137",
+            appId: "1:720032595137:web:85834232e770a942216840"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Verificar autenticação
+        function checkAuth() {
+            const userRole = localStorage.getItem('userRole');
+            const userCPF = localStorage.getItem('userCPF');
+            const userName = localStorage.getItem('userName');
+            
+            if (!userRole || !userCPF || !userName) {
+                window.location.href = '../index.html';
+            }
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('userCPF');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userId');
+            window.location.href = '../index.html';
+        }
+
+        // Calcular totais e taxa de cumprimento
+        function calculateTotals() {
+            const planned = parseInt(document.getElementById('plannedClasses').value) || 0;
+            const given = parseInt(document.getElementById('givenClasses').value) || 0;
+            
+            document.getElementById('totalPlanned').textContent = planned;
+            document.getElementById('totalGiven').textContent = given;
+            
+            if (planned > 0) {
+                const rate = ((given / planned) * 100).toFixed(1);
+                document.getElementById('completionRate').textContent = rate + '%';
+            } else {
+                document.getElementById('completionRate').textContent = '0%';
+            }
+        }
+
+        // Inicializar
+        checkAuth();
+        
+        // Definir data atual como padrão
+        document.getElementById('date').value = new Date().toISOString().split('T')[0];
+        
+        // Event listeners para cálculo automático
+        const plannedInput = document.getElementById('plannedClasses');
+        const givenInput = document.getElementById('givenClasses');
+        
+        if (plannedInput) {
+            plannedInput.addEventListener('input', calculateTotals);
+        }
+        
+        if (givenInput) {
+            givenInput.addEventListener('input', calculateTotals);
+        }
+        
+        // Form handler
+        document.getElementById('plannedClassesForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            try {
+                const formData = {
+                    department: 'Supervisão',
+                    indicator: 'Aulas Previstas e Aulas Dadas',
+                    school: document.getElementById('school').value,
+                    municipality: document.getElementById('municipality').value,
+                    technician: document.getElementById('technician').value,
+                    date: document.getElementById('date').value,
+                    referenceDate: document.getElementById('referenceDate').value,
+                    classId: document.getElementById('classId').value,
+                    className: document.getElementById('className').value,
+                    discipline: document.getElementById('discipline').value,
+                    periodStart: document.getElementById('periodStart').value,
+                    periodEnd: document.getElementById('periodEnd').value,
+                    plannedClasses: parseInt(document.getElementById('plannedClasses').value),
+                    givenClasses: parseInt(document.getElementById('givenClasses').value),
+                    totalPlanned: parseInt(document.getElementById('totalPlanned').textContent),
+                    totalGiven: parseInt(document.getElementById('totalGiven').textContent),
+                    completionRate: document.getElementById('completionRate').textContent,
+                    professorName: document.getElementById('professorName').value,
+                    bimester: document.getElementById('bimester').value,
+                    situation: document.getElementById('situation').value,
+                    teacherAbsence: document.querySelector('input[name="teacherAbsence"]').checked,
+                    schoolEvent: document.querySelector('input[name="schoolEvent"]').checked,
+                    holiday: document.querySelector('input[name="holiday"]').checked,
+                    strike: document.querySelector('input[name="strike"]').checked,
+                    sgeUnavailable: document.querySelector('input[name="sgeUnavailable"]').checked,
+                    professorNotLaunched: document.querySelector('input[name="professorNotLaunched"]').checked,
+                    others: document.querySelector('input[name="others"]').checked,
+                    observations: document.getElementById('observations').value,
+                    documentLinks: document.getElementById('documentLinks').value,
+                    createdBy: localStorage.getItem('userCPF'),
+                    createdByRole: localStorage.getItem('userRole'),
+                    createdByName: localStorage.getItem('userName'),
+                    createdAt: serverTimestamp(),
+                    status: 'active'
+                };
+
+                await addDoc(collection(db, 'records'), formData);
+                
+                alert('Registro salvo com sucesso! Redirecionando para a página de registros unificados...');
+                
+                // Redirecionar para a página de registros unificados após salvar
+                setTimeout(() => {
+                    window.location.href = '../monitoring-records-unified.html';
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Erro ao salvar:', error);
+                alert('Erro ao salvar o registro: ' + error.message);
+            }
+        });
+    </script>
+    
+    <!-- Script para pesquisa de escola -->
+    <script src="../js/school-search.js"></script>
+</body>
+</html>

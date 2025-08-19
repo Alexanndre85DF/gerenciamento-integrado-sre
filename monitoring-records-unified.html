@@ -1,0 +1,1738 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registros Unificados - SRE GURUPI</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Registros Unificados</h1>
+        <button class="logout-btn" onclick="logout()">Sair</button>
+    </div>
+
+    <div class="main-container">
+        <div class="card">
+            <h2>Sistema de Registros Unificados</h2>
+            <p>Visualize e pesquise todos os registros do sistema com filtros avançados</p>
+            
+            <!-- Filtros Avançados -->
+            <div class="filters-section">
+                <h3>Filtros de Pesquisa</h3>
+                
+                <div class="filters-grid">
+                    <!-- Escola -->
+                    <div class="filter-group">
+                        <label for="schoolFilter">Escola:</label>
+                        <select id="schoolFilter" onchange="filterRecords()">
+                            <option value="">Todas as escolas</option>
+                            <option value="CENTRO DE ENSINO MEDIO ARY RIBEIRO VALADAO FILHO">CENTRO DE ENSINO MEDIO ARY RIBEIRO VALADAO FILHO</option>
+                            <option value="CENTRO DE ENSINO MEDIO BOM JESUS">CENTRO DE ENSINO MEDIO BOM JESUS</option>                            
+                            <option value="CENTRO DE ENSINO MÉDIO DE GURUPI">CENTRO DE ENSINO MÉDIO DE GURUPI</option>
+                            <option value="COL DE TECELAGEM ART NSA SENHORA AUXILIADORA">COL DE TECELAGEM ART NSA SENHORA AUXILIADORA</option>
+                            <option value="COL EST ALAIR SENA CONCEICAO">COL EST ALAIR SENA CONCEICAO</option>
+                            <option value="COLEGIO AGRICOLA DOM BOSCO">COLÉGIO AGRICOLA DOM BOSCO</option>
+                            <option value="COLÉGIO ESTADUAL ADELAIDE FRANCISCO SOARES">COLÉGIO ESTADUAL ADELAIDE FRANCISCO SOARES</option>
+                            <option value="COLÉGIO ESTADUAL ANITA CASSIMIRO MORENO">COLÉGIO ESTADUAL ANITA CASSIMIRO MORENO</option>
+                            <option value="COLÉGIO ESTADUAL BENEDITO PEREIRA BANDEIRA">COLÉGIO ESTADUAL BENEDITO PEREIRA BANDEIRA</option>
+                            <option value="COLÉGIO ESTADUAL CANDIDO FIGUEIRA">COLÉGIO ESTADUAL CANDIDO FIGUEIRA</option>
+                            <option value="COLÉGIO ESTADUAL DE ALVORADA">COLÉGIO ESTADUAL DE ALVORADA</option>
+                            <option value="COLÉGIO ESTADUAL DE TALISMA">COLÉGIO ESTADUAL DE TALISMA</option>
+                            <option value="COLÉGIO ESTADUAL DOM ALANO">COLÉGIO ESTADUAL DOM ALANO</option>
+                            <option value="COLÉGIO ESTADUAL ELSEBAO LIMA">COLÉGIO ESTADUAL ELSEBAO LIMA</option>
+                            <option value="COLÉGIO ESTADUAL FAMILIA AGRICOLA JOSE PORFIRIO DE SOUZA">COLÉGIO ESTADUAL FAMILIA AGRICOLA JOSE PORFIRIO DE SOUZA</option>
+                            <option value="COLÉGIO ESTADUAL GIRASSOL DE TEMPO INTEGRAL JOSE SEABRA LEMOS">COLÉGIO ESTADUAL GIRASSOL DE TEMPO INTEGRAL JOSE SEABRA LEMOS</option>
+                            <option value="COLÉGIO ESTADUAL JOAO TAVARES MARTINS">COLÉGIO ESTADUAL JOAO TAVARES MARTINS</option>
+                            <option value="COLÉGIO ESTADUAL NOSSA SENHORA APARECIDA">COLÉGIO ESTADUAL NOSSA SENHORA APARECIDA</option>
+                            <option value="COLÉGIO ESTADUAL OLAVO BILAC">COLÉGIO ESTADUAL OLAVO BILAC</option>
+                            <option value="COLÉGIO ESTADUAL PORTO DO RIO MARANHAO">COLÉGIO ESTADUAL PORTO DO RIO MARANHAO</option>
+                            <option value="COLÉGIO ESTADUAL POSITIVO DE GURUPI">COLÉGIO ESTADUAL POSITIVO DE GURUPI</option>
+                            <option value="COLÉGIO ESTADUAL PROFESSORA ONEIDES ROSA DE MOURA">COLÉGIO ESTADUAL PROFESSORA ONEIDES ROSA DE MOURA</option>
+                            <option value="COLÉGIO ESTADUAL REGINA SIQUEIRA CAMPOS">COLÉGIO ESTADUAL REGINA SIQUEIRA CAMPOS</option>
+                            <option value="COLÉGIO ESTADUAL TARSO DUTRA">COLÉGIO ESTADUAL TARSO DUTRA</option>
+                            <option value="COLÉGIO ESTADUAL TIRADENTES">COLÉGIO ESTADUAL TIRADENTES</option>
+                            <option value="COLEGIO MILITAR DO ESTADO DO TOCANTINS - ADJULIO BALTHAZAR">COLEGIO MILITAR DO ESTADO DO TOCANTINS - ADJULIO BALTHAZAR</option>
+                            <option value="COLEGIO MILITAR DO ESTADO DO TOCANTINS - PROFESSORA MARIA">COLEGIO MILITAR DO ESTADO DO TOCANTINS - PROFESSORA MARIA</option>
+                            <option value="COLEGIO MILITAR DO ESTADO DO TOCANTINS PRESIDENTE COSTA E SILVA">COLEGIO MILITAR DO ESTADO DO TOCANTINS PRESIDENTE COSTA E SILVA</option>
+                            <option value="ESC DE TEC ART NOSSA SRA AUXILIADORA">ESC DE TEC ART NOSSA SRA AUXILIADORA</option>
+                            <option value="ESC EST RETIRO">ESC EST RETIRO</option>
+                            <option value="ESC EST TANCREDO DE ALMEIDA NEVES">ESC EST TANCREDO DE ALMEIDA NEVES</option>
+                            <option value="ESCOLA ESTADUAL ANA MARIA DE JESUS">ESCOLA ESTADUAL ANA MARIA DE JESUS</option>
+                            <option value="ESCOLA ESTADUAL DR JOAQUIM PEREIRA DA COSTA">ESCOLA ESTADUAL DR JOAQUIM PEREIRA DA COSTA</option>
+                            <option value="ESCOLA ESTADUAL FE E ALEGRIA PAROQUIAL BERNARDO SAYAO">ESCOLA ESTADUAL FE E ALEGRIA PAROQUIAL BERNARDO SAYAO</option>
+                            <option value="ESCOLA ESTADUAL GERCINA BORGES TEIXEIRA">ESCOLA ESTADUAL GERCINA BORGES TEIXEIRA</option>
+                            <option value="ESCOLA ESTADUAL HERCILIA CARVALHO DA SILVA">ESCOLA ESTADUAL HERCILIA CARVALHO DA SILVA</option>
+                            <option value="ESCOLA ESTADUAL NOSSA SENHORA DO CARMO">ESCOLA ESTADUAL NOSSA SENHORA DO CARMO</option>
+                            <option value="ESCOLA ESTADUAL OLAVO BILAC">ESCOLA ESTADUAL OLAVO BILAC</option>
+                            <option value="ESCOLA ESTADUAL PADRE JOSE DE ANCHIETA">ESCOLA ESTADUAL PADRE JOSE DE ANCHIETA</option>
+                            <option value="ESCOLA ESTADUAL PASSO A PASSO">ESCOLA ESTADUAL PASSO A PASSO</option>
+                            <option value="ESCOLA ESTADUAL PRESBITERIANA ARAGUAIA">ESCOLA ESTADUAL PRESBITERIANA ARAGUAIA</option>
+                            <option value="ESCOLA ESTADUAL PRESBITERIANA EDUCACIONAL">ESCOLA ESTADUAL PRESBITERIANA EDUCACIONAL</option>
+                            <option value="ESCOLA ESTADUAL RUI BARBOSA">ESCOLA ESTADUAL RUI BARBOSA</option>
+                            <option value="ESCOLA ESTADUAL SALVADOR CAETANO">ESCOLA ESTADUAL SALVADOR CAETANO</option>
+                            <option value="ESCOLA ESTADUAL VALDIR LINS">ESCOLA ESTADUAL VALDIR LINS</option>
+                            <option value="ESCOLA ESTADUAL VILA GUARACY">ESCOLA ESTADUAL VILA GUARACY</option>
+                            <option value="ESCOLA INDIGENA BARRA DO RIO VERDE">ESCOLA INDIGENA BARRA DO RIO VERDE</option>
+                            <option value="ESCOLA INDIGENA IJANARI">ESCOLA INDIGENA IJANARI</option>
+                            <option value="ESCOLA INDIGENA IJAWALA">ESCOLA INDIGENA IJAWALA</option>
+                            <option value="ESCOLA INDIGENA SANAWE">ESCOLA INDIGENA SANAWE</option>
+                            <option value="ESCOLA INDIGENA TAINA">ESCOLA INDIGENA TAINA</option>
+                            <option value="ESCOLA INDIGENA TEMANARE">ESCOLA INDIGENA TEMANARE</option>
+                            <option value="ESCOLA INDIGENA TEWADURE">ESCOLA INDIGENA TEWADURE</option>
+                            <option value="ESCOLA INDIGENA TXUIRI-HINA">ESCOLA INDIGENA TXUIRI-HINA</option>
+                            <option value="ESCOLA INDIGENA WAHURI">ESCOLA INDIGENA WAHURI</option>
+                            <option value="ESCOLA INDIGENA WATAKURI">ESCOLA INDIGENA WATAKURI</option>
+                            <option value="INSTITUTO EDUCACIONAL PASSO A PASSO">INSTITUTO EDUCACIONAL PASSO A PASSO</option>
+                        </select>
+                    </div>
+
+                    <!-- Município -->
+                    <div class="filter-group">
+                        <label for="municipalityFilter">Município:</label>
+                                                 <select id="municipalityFilter" onchange="filterRecords()">
+                             <option value="">Todos os municípios</option>
+                              <option value="Aliança do Tocantins">Aliança do Tocantins</option>
+                              <option value="Alvorada">Alvorada</option>
+                              <option value="Araguaçu">Araguaçu</option>
+                              <option value="Cariri do Tocantins">Cariri do Tocantins</option>
+                              <option value="Crixás do Tocantins">Crixás do Tocantins</option>
+                              <option value="Dueré">Dueré</option>
+                              <option value="Figueirópolis">Figueirópolis</option>
+                              <option value="Formoso do Araguaia">Formoso do Araguaia</option>
+                              <option value="Gurupi">Gurupi</option>
+                              <option value="Jaú do Tocantins">Jaú do Tocantins</option>
+                              <option value="Palmeirópolis">Palmeirópolis</option>
+                              <option value="Peixe">Peixe</option>
+                              <option value="Sandolândia">Sandolândia</option>
+                              <option value="São Salvador do Tocantins">São Salvador do Tocantins</option>
+                              <option value="São Valério">São Valério</option>
+                              <option value="Sucupira">Sucupira</option>
+                              <option value="Talismã">Talismã</option>
+                         </select>
+                    </div>
+
+                    <!-- Departamento -->
+                    <div class="filter-group">
+                        <label for="departmentFilter">Departamento:</label>
+                        <select id="departmentFilter" onchange="filterRecords()">
+                            <option value="">Todos os departamentos</option>
+                            <option value="Currículo">Currículo</option>
+                            <option value="Equipe Multiprofissional">Equipe Multiprofissional</option>
+                            <option value="Supervisão">Supervisão</option>
+                        </select>
+                    </div>
+
+                    <!-- Indicador -->
+                    <div class="filter-group">
+                        <label for="indicatorFilter">Indicador:</label>
+                        <select id="indicatorFilter" onchange="filterRecords()">
+                            <option value="">Todos os indicadores</option>
+                            <option value="Frequência dos Estudantes">Frequência dos Estudantes</option>
+                            <option value="Busca Ativa">Busca Ativa</option>
+                            <option value="Aulas Previstas e Aulas Dadas">Aulas Previstas e Aulas Dadas</option>
+                            <option value="Estudantes Abaixo da Média">Estudantes Abaixo da Média</option>
+                        </select>
+                    </div>
+
+                    <!-- Data Inicial -->
+                    <div class="filter-group">
+                        <label for="dateStartFilter">Data Inicial:</label>
+                        <input type="date" id="dateStartFilter" onchange="filterRecords()">
+                    </div>
+
+                    <!-- Data Final -->
+                    <div class="filter-group">
+                        <label for="dateEndFilter">Data Final:</label>
+                        <input type="date" id="dateEndFilter" onchange="filterRecords()">
+                    </div>
+
+                    <!-- Técnico -->
+                    <div class="filter-group">
+                        <label for="technicianFilter">Técnico:</label>
+                        <input type="text" id="technicianFilter" placeholder="Nome do técnico" onkeyup="filterRecords()">
+                    </div>
+
+                    <!-- Nome do Estudante -->
+                    <div class="filter-group">
+                        <label for="studentFilter">Estudante:</label>
+                        <input type="text" id="studentFilter" placeholder="Nome do estudante" onkeyup="filterRecords()">
+                    </div>
+                </div>
+
+                <div class="filter-actions">
+                    <button onclick="clearAllFilters()" class="btn btn-secondary">Limpar Todos os Filtros</button>
+                    <button onclick="refreshRecords()" class="btn btn-primary">Atualizar Registros</button>
+                </div>
+            </div>
+
+            <!-- Botões de Ação -->
+            <div class="action-buttons" style="margin: 30px 0; text-align: center; padding: 20px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 10px; border: 1px solid #dee2e6;">
+                <button onclick="downloadExcel()" class="btn btn-primary"> Exportar Excel</button>
+                <button onclick="downloadPDF()" class="btn btn-primary"> Exportar PDF</button>
+                <a href="monitoring-resolved.html" class="btn btn-success"> Ver Registros Resolvidos</a>
+                <a href="user-dashboard.html" class="btn btn-secondary"> Voltar ao Menu</a>
+            </div>
+
+            <!-- Estatísticas -->
+            <div class="stats-section">
+                <div class="stat-card">
+                    <h3>Total de Registros</h3>
+                    <span id="totalRecords">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Registros Filtrados</h3>
+                    <span id="filteredRecords">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Última Atualização</h3>
+                    <span id="lastUpdate">-</span>
+                </div>
+            </div>
+
+            <!-- Lista de Registros -->
+            <div class="records-section">
+                <h3>Registros Encontrados</h3>
+                <div id="recordsList" class="records-container">
+                    <div class="loading">Carregando registros...</div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- Modal para Visualizar Registro -->
+    <div id="viewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Visualizar Registro</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Conteúdo do registro será inserido aqui -->
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal()" class="btn">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, getDocs, orderBy, query, where, deleteDoc, doc, setDoc, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyABEloTfC_nT5vfDHpeqYdDjNoPCKwE-Eo",
+            authDomain: "projeto-alex-aaadf.firebaseapp.com",
+            projectId: "projeto-alex-aaadf",
+            storageBucket: "projeto-alex-aaadf.firebasestorage.app",
+            messagingSenderId: "720032595137",
+            appId: "1:720032595137:web:85834232e770a942216840"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let allRecords = [];
+        let filteredRecords = [];
+
+        // Verificar autenticação
+        function checkAuth() {
+            const userRole = localStorage.getItem('userRole');
+            const userCPF = localStorage.getItem('userCPF');
+            const userName = localStorage.getItem('userName');
+            
+            if (!userRole || !userCPF || !userName) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('userCPF');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userId');
+            window.location.href = 'index.html';
+        }
+
+        // Carregar todos os registros
+        async function loadAllRecords() {
+            try {
+                console.log('Carregando registros...');
+                const q = query(collection(db, 'records'), orderBy('createdAt', 'desc'));
+                const querySnapshot = await getDocs(q);
+                
+                allRecords = [];
+                querySnapshot.forEach((doc) => {
+                    allRecords.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+
+                console.log(`Total de registros carregados: ${allRecords.length}`);
+                filterRecords();
+                updateLastUpdate();
+                
+            } catch (error) {
+                console.error('Erro ao carregar registros:', error);
+                document.getElementById('recordsList').innerHTML = '<div class="error">Erro ao carregar registros: ' + error.message + '</div>';
+            }
+        }
+
+        // Filtrar registros
+        function filterRecords() {
+            const schoolFilter = document.getElementById('schoolFilter').value;
+            const municipalityFilter = document.getElementById('municipalityFilter').value;
+            const departmentFilter = document.getElementById('departmentFilter').value;
+            const indicatorFilter = document.getElementById('indicatorFilter').value;
+            const dateStartFilter = document.getElementById('dateStartFilter').value;
+            const dateEndFilter = document.getElementById('dateEndFilter').value;
+            const technicianFilter = document.getElementById('technicianFilter').value.toLowerCase();
+            const studentFilter = document.getElementById('studentFilter').value.toLowerCase();
+
+            filteredRecords = allRecords.filter(record => {
+                // Filtrar apenas registros pendentes (não resolvidos)
+                if (record.status === 'resolved') return false;
+                
+                // Filtro por escola
+                if (schoolFilter && record.school !== schoolFilter) return false;
+                
+                // Filtro por município
+                if (municipalityFilter && record.municipality !== municipalityFilter) return false;
+                
+                // Filtro por departamento
+                if (departmentFilter && record.department !== departmentFilter) return false;
+                
+                // Filtro por indicador
+                if (indicatorFilter && record.indicator !== indicatorFilter) return false;
+                
+                // Filtro por data
+                if (dateStartFilter && record.date < dateStartFilter) return false;
+                if (dateEndFilter && record.date > dateEndFilter) return false;
+                
+                // Filtro por técnico
+                if (technicianFilter && !record.technician.toLowerCase().includes(technicianFilter)) return false;
+                
+                // Filtro por estudante
+                if (studentFilter && !record.studentName?.toLowerCase().includes(studentFilter)) return false;
+                
+                return true;
+            });
+
+            displayRecords();
+            updateStats();
+        }
+
+        // Exibir registros
+        function displayRecords() {
+            const recordsList = document.getElementById('recordsList');
+            
+            if (filteredRecords.length === 0) {
+                recordsList.innerHTML = '<div class="no-records">Nenhum registro encontrado com os filtros aplicados.</div>';
+                return;
+            }
+
+            let html = '';
+            filteredRecords.forEach(record => {
+                const date = record.date ? new Date(record.date).toLocaleDateString('pt-BR') : 'N/A';
+                const createdAt = record.createdAt ? new Date(record.createdAt.toDate()).toLocaleDateString('pt-BR') : 'N/A';
+                
+                html += `
+                    <div class="record-card">
+                        <div class="record-header">
+                            <h4>${record.indicator}</h4>
+                            <span class="department-badge ${record.department.replace(/\s+/g, '-').toLowerCase()}">${record.department}</span>
+                        </div>
+                        <div class="record-info">
+                            <p><strong>Escola:</strong> ${record.school}</p>
+                            <p><strong>Município:</strong> ${record.municipality}</p>
+                            <p><strong>Técnico:</strong> ${record.technician}</p>
+                            <p><strong>Data:</strong> ${date}</p>
+                            ${record.studentName ? `<p><strong>Estudante:</strong> ${record.studentName}</p>` : ''}
+                            ${record.indicator === 'Busca Ativa' ? `
+                                <p><strong>Faltas:</strong> ${record.absences || 'N/A'}</p>
+                                <p><strong>Total Visitas:</strong> ${record.totalVisitas || 'N/A'}</p>
+                                <p><strong>Status:</strong> ${record.pcd || record.ministerioPublico || record.menorIdade || record.atestadoMedico || record.conselhoTutelar ? 'Com Observações' : 'Sem Observações'}</p>
+                            ` : ''}
+                            ${record.indicator === 'Aulas Previstas e Aulas Dadas' ? `
+                                <p><strong>Turma:</strong> ${record.className || 'N/A'}</p>
+                                <p><strong>Disciplina:</strong> ${record.discipline || 'N/A'}</p>
+                                <p><strong>Professor:</strong> ${record.professorName || 'N/A'}</p>
+                                <p><strong>Status:</strong> ${record.teacherAbsence || record.schoolEvent || record.holiday || record.strike || record.sgeUnavailable || record.professorNotLaunched || record.others ? 'Com Motivos' : 'Sem Motivos'}</p>
+                            ` : ''}
+                            ${record.indicator === 'Estudantes Abaixo da Média' ? `
+                                <p><strong>Estudante:</strong> ${record.studentName || 'N/A'}</p>
+                                <p><strong>Nota:</strong> ${record.studentGrade || 'N/A'}</p>
+                                <p><strong>Série/Turma:</strong> ${record.seriesClass || 'N/A'}</p>
+                                <p><strong>Status:</strong> ${record.subjects?.portuguese || record.subjects?.mathematics || record.subjects?.history || record.subjects?.geography || record.subjects?.science || record.subjects?.physicalEducation || record.subjects?.arts || record.subjects?.english || record.subjects?.philosophy || record.subjects?.sociology || record.subjects?.biology || record.subjects?.physics || record.subjects?.chemistry || record.subjects?.literature || record.subjects?.spanish || record.subjects?.others ? 'Com Disciplinas' : 'Sem Disciplinas'}</p>
+                            ` : ''}
+                            ${record.department === 'Equipe Multiprofissional' ? `
+                                ${record.indicator === 'Busca Ativa' ? `
+                                    <p><strong>Faltas:</strong> ${record.absences || 'N/A'}</p>
+                                    <p><strong>Total Visitas:</strong> ${record.totalVisitas || 'N/A'}</p>
+                                    <p><strong>Status:</strong> ${record.pcd || record.ministerioPublico || record.menorIdade || record.atestadoMedico || record.conselhoTutelar ? 'Com Observações' : 'Sem Observações'}</p>
+                                ` : ''}
+                                ${record.indicator === 'Aulas Previstas e Aulas Dadas' ? `
+                                    <p><strong>Turma:</strong> ${record.className || 'N/A'}</p>
+                                    <p><strong>Disciplina:</strong> ${record.discipline || 'N/A'}</p>
+                                    <p><strong>Professor:</strong> ${record.professorName || 'N/A'}</p>
+                                    <p><strong>Status:</strong> ${record.teacherAbsence || record.schoolEvent || record.holiday || record.strike || record.sgeUnavailable || record.professorNotLaunched || record.others ? 'Com Motivos' : 'Sem Motivos'}</p>
+                                ` : ''}
+                                ${record.indicator === 'Estudantes Abaixo da Média' ? `
+                                    <p><strong>Estudante:</strong> ${record.studentName || 'N/A'}</p>
+                                    <p><strong>Nota:</strong> ${record.studentGrade || 'N/A'}</p>
+                                    <p><strong>Série/Turma:</strong> ${record.seriesClass || 'N/A'}</p>
+                                    <p><strong>Status:</strong> ${record.subjects?.portuguese || record.subjects?.mathematics || record.subjects?.history || record.subjects?.geography || record.subjects?.science || record.subjects?.physicalEducation || record.subjects?.arts || record.subjects?.english || record.subjects?.philosophy || record.subjects?.sociology || record.subjects?.biology || record.subjects?.physics || record.subjects?.chemistry || record.subjects?.literature || record.subjects?.spanish || record.subjects?.others ? 'Com Disciplinas' : 'Sem Disciplinas'}</p>
+                                ` : ''}
+                                ${record.indicator === 'Frequência dos Estudantes' ? `
+                                    <p><strong>Faltas Consecutivas:</strong> ${record.consecutiveAbsences || 'N/A'}</p>
+                                    <p><strong>Etapa:</strong> ${record.etapa || 'N/A'}</p>
+                                    <p><strong>ID Turma:</strong> ${record.turmaId || 'N/A'}</p>
+                                ` : ''}
+                            ` : ''}
+                            ${record.department === 'Supervisão' ? `
+                                ${record.indicator === 'Busca Ativa' ? `
+                                    <p><strong>Faltas:</strong> ${record.absences || 'N/A'}</p>
+                                    <p><strong>Total Visitas:</strong> ${record.totalVisitas || 'N/A'}</p>
+                                    <p><strong>Status:</strong> ${record.pcd || record.ministerioPublico || record.menorIdade || record.atestadoMedico || record.conselhoTutelar ? 'Com Observações' : 'Sem Observações'}</p>
+                                ` : ''}
+                                ${record.indicator === 'Aulas Previstas e Aulas Dadas' ? `
+                                    <p><strong>Turma:</strong> ${record.className || 'N/A'}</p>
+                                    <p><strong>Disciplina:</strong> ${record.discipline || 'N/A'}</p>
+                                    <p><strong>Professor:</strong> ${record.professorName || 'N/A'}</p>
+                                    <p><strong>Status:</strong> ${record.teacherAbsence || record.schoolEvent || record.holiday || record.strike || record.sgeUnavailable || record.professorNotLaunched || record.others ? 'Com Motivos' : 'Sem Motivos'}</p>
+                                ` : ''}
+                                ${record.indicator === 'Estudantes Abaixo da Média' ? `
+                                    <p><strong>Estudante:</strong> ${record.studentName || 'N/A'}</p>
+                                    <p><strong>Nota:</strong> ${record.studentGrade || 'N/A'}</p>
+                                    <p><strong>Série/Turma:</strong> ${record.seriesClass || 'N/A'}</p>
+                                    <p><strong>Status:</strong> ${record.subjects?.portuguese || record.subjects?.mathematics || record.subjects?.history || record.subjects?.geography || record.subjects?.science || record.subjects?.physicalEducation || record.subjects?.arts || record.subjects?.english || record.subjects?.philosophy || record.subjects?.sociology || record.subjects?.biology || record.subjects?.physics || record.subjects?.chemistry || record.subjects?.literature || record.subjects?.spanish || record.subjects?.others ? 'Com Disciplinas' : 'Sem Disciplinas'}</p>
+                                ` : ''}
+                                ${record.indicator === 'Frequência dos Estudantes' ? `
+                                    <p><strong>Faltas Consecutivas:</strong> ${record.consecutiveAbsences || 'N/A'}</p>
+                                    <p><strong>Etapa:</strong> ${record.etapa || 'N/A'}</p>
+                                    <p><strong>ID Turma:</strong> ${record.turmaId || 'N/A'}</p>
+                                ` : ''}
+                            ` : ''}
+                            <p><strong>Criado em:</strong> ${createdAt}</p>
+                        </div>
+                        <div class="record-actions">
+                            <button onclick="viewRecord('${record.id}')" class="btn btn-primary"> Visualizar</button>
+                            <button onclick="markAsResolved('${record.id}')" class="btn btn-success"> Resolvido</button>
+                            <button onclick="deleteRecord('${record.id}')" class="btn btn-danger"> Excluir</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            recordsList.innerHTML = html;
+        }
+
+        // Visualizar registro detalhado
+        async function viewRecord(recordId) {
+            const record = allRecords.find(r => r.id === recordId);
+            if (!record) return;
+
+            const modalBody = document.getElementById('modalBody');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            modalTitle.textContent = `${record.indicator} - ${record.department}`;
+            
+            let html = `
+                <div class="record-details">
+                    <h3>Informações Gerais</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <strong>Escola:</strong> ${record.school}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Município:</strong> ${record.municipality}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Técnico:</strong> ${record.technician}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Data:</strong> ${record.date ? new Date(record.date).toLocaleDateString('pt-BR') : 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Departamento:</strong> ${record.department}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Indicador:</strong> ${record.indicator}
+                        </div>
+                    </div>
+            `;
+
+            // Informações específicas por indicador
+            if (record.indicator === 'Frequência dos Estudantes') {
+                html += `
+                    <h3>Dados do Estudante</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <strong>Nome:</strong> ${record.studentName || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Faltas Consecutivas:</strong> ${record.consecutiveAbsences || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Etapa:</strong> ${record.etapa || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>ID da Turma:</strong> ${record.turmaId || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Status:</strong> ${record.status || 'N/A'}
+                        </div>
+                    </div>
+                `;
+            } else if (record.indicator === 'Busca Ativa') {
+                html += `
+                    <h3>Dados da Busca</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <strong>Nome da Turma:</strong> ${record.className || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Turno:</strong> ${record.shift || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Estudante:</strong> ${record.studentName || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Faltas:</strong> ${record.absences || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Total de Visitas:</strong> ${record.totalVisitas || 'N/A'}
+                        </div>
+                    </div>
+                    
+                    <h3>Informações Adicionais</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <strong>PCD:</strong> ${record.pcd ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Ministério Público:</strong> ${record.ministerioPublico ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Menor de Idade:</strong> ${record.menorIdade ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Atestado Médico:</strong> ${record.atestadoMedico ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Conselho Tutelar:</strong> ${record.conselhoTutelar ? 'Sim' : 'Não'}
+                        </div>
+                    </div>
+                    
+                    <h3>Visitas Realizadas</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <strong>1ª Visita:</strong> ${record.primeiraVisita ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>2ª Visita:</strong> ${record.segundaVisita ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>3ª Visita:</strong> ${record.terceiraVisita ? 'Sim' : 'Não'}
+                        </div>
+                    </div>
+                `;
+            } else if (record.indicator === 'Aulas Previstas e Aulas Dadas') {
+                html += `
+                    <h3>Dados da Turma e Disciplina</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <strong>Data de Referência:</strong> ${record.referenceDate ? new Date(record.referenceDate).toLocaleDateString('pt-BR') : 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>ID da Turma:</strong> ${record.classId || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Nome da Turma:</strong> ${record.className || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Disciplina:</strong> ${record.discipline || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Período Inicial:</strong> ${record.periodStart ? new Date(record.periodStart).toLocaleDateString('pt-BR') : 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Período Final:</strong> ${record.periodEnd ? new Date(record.periodEnd).toLocaleDateString('pt-BR') : 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Nome do(a) Professor(a):</strong> ${record.professorName || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Bimestre:</strong> ${record.bimester || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Situação:</strong> ${record.situation || 'N/A'}
+                        </div>
+                    </div>
+                    
+                    <h3>Motivos de Não Realização/Registro</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <strong>Falta do Docente:</strong> ${record.teacherAbsence ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Evento Escolar:</strong> ${record.schoolEvent ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Feriado:</strong> ${record.holiday ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Greve/Suspensão:</strong> ${record.strike ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Indisponibilidade SGE:</strong> ${record.sgeUnavailable ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Não Lançamento SGE Professor:</strong> ${record.professorNotLaunched ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Outros:</strong> ${record.others ? 'Sim' : 'Não'}
+                        </div>
+                    </div>
+                `;
+            } else if (record.indicator === 'Estudantes Abaixo da Média') {
+                html += `
+                    <h3>Dados do Estudante</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <strong>Nome do(a) Estudante:</strong> ${record.studentName || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Nota:</strong> ${record.studentGrade || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Situação:</strong> ${record.studentSituation || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Série/Turma:</strong> ${record.seriesClass || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Número de Componentes Curriculares Abaixo da Média:</strong> ${record.curricularComponents || 'N/A'}
+                        </div>
+                    </div>
+                    
+                    <h3>Disciplinas Abaixo da Média</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <strong>Língua Portuguesa:</strong> ${record.subjects?.portuguese ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Matemática:</strong> ${record.subjects?.mathematics ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>História:</strong> ${record.subjects?.history ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Geografia:</strong> ${record.subjects?.geography ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Ciências:</strong> ${record.subjects?.science ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Educação Física:</strong> ${record.subjects?.physicalEducation ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Arte:</strong> ${record.subjects?.arts ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Inglês:</strong> ${record.subjects?.english ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Filosofia:</strong> ${record.subjects?.philosophy ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Sociologia:</strong> ${record.subjects?.sociology ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Biologia:</strong> ${record.subjects?.biology ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Física:</strong> ${record.subjects?.physics ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Química:</strong> ${record.subjects?.chemistry ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Literatura:</strong> ${record.subjects?.literature ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Espanhol:</strong> ${record.subjects?.spanish ? 'Sim' : 'Não'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Outros:</strong> ${record.subjects?.others ? 'Sim' : 'Não'}
+                        </div>
+                        ${record.subjects?.others && record.subjects?.otherSubjects ? `
+                        <div class="detail-item">
+                            <strong>Especificação de Outros:</strong> ${record.subjects.otherSubjects}
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+            }
+            
+            // EQUIPE MULTIPROFISSIONAL
+            else if (record.department === 'Equipe Multiprofissional') {
+                if (record.indicator === 'Busca Ativa') {
+                    html += `
+                        <h3>Dados da Busca - Equipe Multiprofissional</h3>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <strong>Nome da Turma:</strong> ${record.className || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Turno:</strong> ${record.shift || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Estudante:</strong> ${record.studentName || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Faltas:</strong> ${record.absences || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Total de Visitas:</strong> ${record.totalVisitas || 'N/A'}
+                            </div>
+                        </div>
+                        
+                        <h3>Informações Adicionais - Equipe Multiprofissional</h3>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <strong>PCD:</strong> ${record.pcd ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Ministério Público:</strong> ${record.ministerioPublico ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Menor de Idade:</strong> ${record.menorIdade ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Atestado Médico:</strong> ${record.atestadoMedico ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Conselho Tutelar:</strong> ${record.conselhoTutelar ? 'Sim' : 'Não'}
+                            </div>
+                        </div>
+                        
+                        <h3>Visitas Realizadas - Equipe Multiprofissional</h3>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <strong>1ª Visita:</strong> ${record.primeiraVisita ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>2ª Visita:</strong> ${record.segundaVisita ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>3ª Visita:</strong> ${record.terceiraVisita ? 'Sim' : 'Não'}
+                            </div>
+                        </div>
+                    `;
+                } else if (record.indicator === 'Aulas Previstas e Aulas Dadas') {
+                    html += `
+                        <h3>Dados da Turma e Disciplina - Equipe Multiprofissional</h3>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <strong>Data de Referência:</strong> ${record.referenceDate ? new Date(record.referenceDate).toLocaleDateString('pt-BR') : 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>ID da Turma:</strong> ${record.classId || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Nome da Turma:</strong> ${record.className || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Disciplina:</strong> ${record.discipline || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Período Inicial:</strong> ${record.periodStart ? new Date(record.periodStart).toLocaleDateString('pt-BR') : 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Período Final:</strong> ${record.periodEnd ? new Date(record.periodEnd).toLocaleDateString('pt-BR') : 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Nome do(a) Professor(a):</strong> ${record.professorName || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Bimestre:</strong> ${record.bimester || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Situação:</strong> ${record.situation || 'N/A'}
+                            </div>
+                        </div>
+                        
+                        <h3>Motivos de Não Realização/Registro - Equipe Multiprofissional</h3>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <strong>Falta do Docente:</strong> ${record.teacherAbsence ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Evento Escolar:</strong> ${record.schoolEvent ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Feriado:</strong> ${record.holiday ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Greve/Suspensão:</strong> ${record.strike ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Indisponibilidade SGE:</strong> ${record.sgeUnavailable ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Não Lançamento SGE Professor:</strong> ${record.professorNotLaunched ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Outros:</strong> ${record.others ? 'Sim' : 'Não'}
+                            </div>
+                        </div>
+                    `;
+                } else if (record.indicator === 'Estudantes Abaixo da Média') {
+                    html += `
+                        <h3>Dados do Estudante - Equipe Multiprofissional</h3>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <strong>Nome do(a) Estudante:</strong> ${record.studentName || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Nota:</strong> ${record.studentGrade || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Situação:</strong> ${record.studentSituation || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Série/Turma:</strong> ${record.seriesClass || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Número de Componentes Curriculares Abaixo da Média:</strong> ${record.curricularComponents || 'N/A'}
+                            </div>
+                        </div>
+                        
+                        <h3>Disciplinas Abaixo da Média - Equipe Multiprofissional</h3>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <strong>Língua Portuguesa:</strong> ${record.subjects?.portuguese ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Matemática:</strong> ${record.subjects?.mathematics ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>História:</strong> ${record.subjects?.history ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Geografia:</strong> ${record.subjects?.geography ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Ciências:</strong> ${record.subjects?.science ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Educação Física:</strong> ${record.subjects?.physicalEducation ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Arte:</strong> ${record.subjects?.arts ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Inglês:</strong> ${record.subjects?.english ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Filosofia:</strong> ${record.subjects?.philosophy ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Sociologia:</strong> ${record.subjects?.sociology ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Biologia:</strong> ${record.subjects?.biology ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Física:</strong> ${record.subjects?.physics ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Química:</strong> ${record.subjects?.chemistry ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Literatura:</strong> ${record.subjects?.literature ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Espanhol:</strong> ${record.subjects?.spanish ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Outros:</strong> ${record.subjects?.others ? 'Sim' : 'Não'}
+                            </div>
+                            ${record.subjects?.others && record.subjects?.otherSubjects ? `
+                            <div class="detail-item">
+                                <strong>Especificação de Outros:</strong> ${record.subjects.otherSubjects}
+                            </div>
+                            ` : ''}
+                        </div>
+                    `;
+                } else if (record.indicator === 'Frequência dos Estudantes') {
+                    html += `
+                        <h3>Dados do Estudante - Equipe Multiprofissional</h3>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <strong>Nome:</strong> ${record.studentName || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Faltas Consecutivas:</strong> ${record.consecutiveAbsences || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Etapa:</strong> ${record.etapa || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>ID da Turma:</strong> ${record.turmaId || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Status:</strong> ${record.status || 'N/A'}
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            
+            // SUPERVISÃO
+            else if (record.department === 'Supervisão') {
+                if (record.indicator === 'Busca Ativa') {
+                    html += `
+                        <h3>Dados da Busca - Supervisão</h3>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <strong>Nome da Turma:</strong> ${record.className || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Turno:</strong> ${record.shift || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Estudante:</strong> ${record.studentName || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Faltas:</strong> ${record.absences || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Total de Visitas:</strong> ${record.totalVisitas || 'N/A'}
+                            </div>
+                        </div>
+                        
+                        <h3>Informações Adicionais - Supervisão</h3>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <strong>PCD:</strong> ${record.pcd ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Ministério Público:</strong> ${record.ministerioPublico ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Menor de Idade:</strong> ${record.menorIdade ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Atestado Médico:</strong> ${record.atestadoMedico ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Conselho Tutelar:</strong> ${record.conselhoTutelar ? 'Sim' : 'Não'}
+                            </div>
+                        </div>
+                        
+                        <h3>Visitas Realizadas - Supervisão</h3>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <strong>1ª Visita:</strong> ${record.primeiraVisita ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>2ª Visita:</strong> ${record.segundaVisita ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>3ª Visita:</strong> ${record.terceiraVisita ? 'Sim' : 'Não'}
+                            </div>
+                        </div>
+                    `;
+                } else if (record.indicator === 'Aulas Previstas e Aulas Dadas') {
+                    html += `
+                        <h3>Dados da Turma e Disciplina - Supervisão</h3>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <strong>Data de Referência:</strong> ${record.referenceDate ? new Date(record.referenceDate).toLocaleDateString('pt-BR') : 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>ID da Turma:</strong> ${record.classId || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Nome da Turma:</strong> ${record.className || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Disciplina:</strong> ${record.discipline || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Período Inicial:</strong> ${record.periodStart ? new Date(record.periodStart).toLocaleDateString('pt-BR') : 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Período Final:</strong> ${record.periodEnd ? new Date(record.periodEnd).toLocaleDateString('pt-BR') : 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Nome do(a) Professor(a):</strong> ${record.professorName || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Bimestre:</strong> ${record.bimester || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Situação:</strong> ${record.situation || 'N/A'}
+                            </div>
+                        </div>
+                        
+                        <h3>Motivos de Não Realização/Registro - Supervisão</h3>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <strong>Falta do Docente:</strong> ${record.teacherAbsence ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Evento Escolar:</strong> ${record.schoolEvent ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Feriado:</strong> ${record.holiday ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Greve/Suspensão:</strong> ${record.strike ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Indisponibilidade SGE:</strong> ${record.sgeUnavailable ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Não Lançamento SGE Professor:</strong> ${record.professorNotLaunched ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Outros:</strong> ${record.others ? 'Sim' : 'Não'}
+                            </div>
+                        </div>
+                    `;
+                } else if (record.indicator === 'Estudantes Abaixo da Média') {
+                    html += `
+                        <h3>Dados do Estudante - Supervisão</h3>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <strong>Nome do(a) Estudante:</strong> ${record.studentName || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Nota:</strong> ${record.studentGrade || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Situação:</strong> ${record.studentSituation || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Série/Turma:</strong> ${record.seriesClass || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Número de Componentes Curriculares Abaixo da Média:</strong> ${record.curricularComponents || 'N/A'}
+                            </div>
+                        </div>
+                        
+                        <h3>Disciplinas Abaixo da Média - Supervisão</h3>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <strong>Língua Portuguesa:</strong> ${record.subjects?.portuguese ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Matemática:</strong> ${record.subjects?.mathematics ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>História:</strong> ${record.subjects?.history ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Geografia:</strong> ${record.subjects?.geography ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Ciências:</strong> ${record.subjects?.science ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Educação Física:</strong> ${record.subjects?.physicalEducation ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Arte:</strong> ${record.subjects?.arts ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Inglês:</strong> ${record.subjects?.english ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Filosofia:</strong> ${record.subjects?.philosophy ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Sociologia:</strong> ${record.subjects?.sociology ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Biologia:</strong> ${record.subjects?.biology ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Física:</strong> ${record.subjects?.physics ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Química:</strong> ${record.subjects?.chemistry ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Literatura:</strong> ${record.subjects?.literature ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Espanhol:</strong> ${record.subjects?.spanish ? 'Sim' : 'Não'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Outros:</strong> ${record.subjects?.others ? 'Sim' : 'Não'}
+                            </div>
+                            ${record.subjects?.others && record.subjects?.otherSubjects ? `
+                            <div class="detail-item">
+                                <strong>Especificação de Outros:</strong> ${record.subjects.otherSubjects}
+                            </div>
+                            ` : ''}
+                        </div>
+                    `;
+                } else if (record.indicator === 'Frequência dos Estudantes') {
+                    html += `
+                        <h3>Dados do Estudante - Supervisão</h3>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <strong>Nome:</strong> ${record.studentName || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Faltas Consecutivas:</strong> ${record.consecutiveAbsences || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Etapa:</strong> ${record.etapa || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>ID da Turma:</strong> ${record.turmaId || 'N/A'}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Status:</strong> ${record.status || 'N/A'}
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            // Observações e Links
+            if (record.observations) {
+                html += `
+                    <h3>Observações</h3>
+                    <p>${record.observations}</p>
+                `;
+            }
+
+            if (record.documentLinks) {
+                html += `
+                    <h3>Links de Documentos</h3>
+                    <p>${record.documentLinks}</p>
+                `;
+            }
+
+            html += `
+                    <h3>Informações do Sistema</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <strong>Criado por:</strong> ${record.createdByName || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Função:</strong> ${record.createdByRole || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Data de Criação:</strong> ${record.createdAt ? new Date(record.createdAt.toDate()).toLocaleString('pt-BR') : 'N/A'}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            modalBody.innerHTML = html;
+            document.getElementById('viewModal').style.display = 'block';
+        }
+
+        // Fechar modal
+        function closeModal() {
+            document.getElementById('viewModal').style.display = 'none';
+        }
+
+        // Limpar todos os filtros
+        function clearAllFilters() {
+            document.getElementById('schoolFilter').value = '';
+            document.getElementById('municipalityFilter').value = '';
+            document.getElementById('departmentFilter').value = '';
+            document.getElementById('indicatorFilter').value = '';
+            document.getElementById('dateStartFilter').value = '';
+            document.getElementById('dateEndFilter').value = '';
+            document.getElementById('technicianFilter').value = '';
+            document.getElementById('studentFilter').value = '';
+            filterRecords();
+        }
+
+        // Atualizar registros
+        function refreshRecords() {
+            loadAllRecords();
+        }
+
+        // Atualizar estatísticas
+        function updateStats() {
+            document.getElementById('totalRecords').textContent = allRecords.length;
+            document.getElementById('filteredRecords').textContent = filteredRecords.length;
+        }
+
+        // Atualizar última atualização
+        function updateLastUpdate() {
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent = now.toLocaleString('pt-BR');
+        }
+
+        // Excluir registro
+        async function deleteRecord(recordId) {
+            if (confirm('Tem certeza que deseja excluir este registro?')) {
+                try {
+                    await deleteDoc(doc(db, 'records', recordId));
+                    alert('Registro excluído com sucesso!');
+                    loadAllRecords(); // Recarrega todos os registros para refletir a exclusão
+                } catch (error) {
+                    console.error('Erro ao excluir registro:', error);
+                    alert('Erro ao excluir registro: ' + error.message);
+                }
+            }
+        }
+
+        // Marcar como resolvido
+        async function markAsResolved(recordId) {
+            if (confirm('Tem certeza que deseja marcar este registro como resolvido?')) {
+                const record = allRecords.find(r => r.id === recordId);
+                if (!record) return;
+
+                try {
+                    console.log('Tentando marcar como resolvido:', recordId);
+                    
+                    // Atualizar o registro existente com status 'resolved' e informações de resolução
+                    const updateData = {
+                        status: 'resolved',
+                        resolvedAt: serverTimestamp(),
+                        resolvedBy: localStorage.getItem('userCPF') || 'Usuário não identificado',
+                        resolvedByRole: localStorage.getItem('userRole') || 'N/A',
+                        resolvedByName: localStorage.getItem('userName') || 'N/A'
+                    };
+
+                    // Atualizar o documento na coleção records
+                    await updateDoc(doc(db, 'records', recordId), updateData);
+                    
+                    console.log('Registro atualizado com sucesso no Firebase');
+                    
+                    // Verificar se realmente foi atualizado
+                    const updatedDoc = await getDocs(query(collection(db, 'records'), where('__name__', '==', recordId)));
+                    if (updatedDoc.empty) {
+                        throw new Error('Documento não encontrado após atualização');
+                    }
+                    
+                    const updatedData = updatedDoc.docs[0].data();
+                    if (updatedData.status !== 'resolved') {
+                        throw new Error('Status não foi atualizado corretamente');
+                    }
+                    
+                    console.log('Verificação confirmada - status atualizado para resolved');
+                    
+                    alert('Registro marcado como resolvido com sucesso!');
+                    
+                    // Recarregar todos os registros para refletir a mudança
+                    await loadAllRecords();
+                    
+                } catch (error) {
+                    console.error('Erro ao marcar como resolvido:', error);
+                    alert('Erro ao marcar como resolvido: ' + error.message);
+                }
+            }
+        }
+
+        // Download Excel com múltiplas abas organizadas
+        async function downloadExcel() {
+            if (filteredRecords.length === 0) {
+                alert('Nenhum registro para exportar!');
+                return;
+            }
+
+            try {
+                // Carregar a biblioteca SheetJS
+                const script = document.createElement('script');
+                script.src = 'https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js';
+                document.head.appendChild(script);
+
+                script.onload = async () => {
+                    // Separar registros por departamento
+                    const curriculumRecords = filteredRecords.filter(record => record.department === 'Currículo');
+                    const multiprofessionalRecords = filteredRecords.filter(record => record.department === 'Equipe Multiprofissional');
+                    const supervisionRecords = filteredRecords.filter(record => record.department === 'Supervisão');
+
+                    // Criar workbook com múltiplas abas
+                    const workbook = XLSX.utils.book_new();
+
+                    // Aba 1: Currículo
+                    if (curriculumRecords.length > 0) {
+                        const curriculumData = curriculumRecords.map(record => ({
+                            'Departamento': record.department,
+                            'Indicador': record.indicator,
+                            'Escola': record.school,
+                            'Município': record.municipality,
+                            'Técnico': record.technician,
+                            'Data': record.date ? new Date(record.date).toLocaleDateString('pt-BR') : 'N/A',
+                            'Estudante': record.studentName || 'N/A',
+                            'Observações': record.observations || 'N/A',
+                            'Data Referência': record.referenceDate ? new Date(record.referenceDate).toLocaleDateString('pt-BR') : 'N/A',
+                            'ID Turma': record.classId || 'N/A',
+                            'Nome Turma': record.className || 'N/A',
+                            'Disciplina': record.discipline || 'N/A',
+                            'Período Inicial': record.periodStart ? new Date(record.periodStart).toLocaleDateString('pt-BR') : 'N/A',
+                            'Período Final': record.periodEnd ? new Date(record.periodEnd).toLocaleDateString('pt-BR') : 'N/A',
+                            'Professor': record.professorName || 'N/A',
+                            'Bimestre': record.bimester || 'N/A',
+                            'Situação': record.situation || 'N/A',
+                            'Falta Docente': record.teacherAbsence ? 'Sim' : 'Não',
+                            'Evento Escolar': record.schoolEvent ? 'Sim' : 'Não',
+                            'Feriado': record.holiday ? 'Sim' : 'Não',
+                            'Greve': record.strike ? 'Sim' : 'Não',
+                            'Indisponibilidade SGE': record.sgeUnavailable ? 'Sim' : 'Não',
+                            'Não Lançamento SGE': record.professorNotLaunched ? 'Sim' : 'Não',
+                            'Outros': record.others ? 'Sim' : 'Não',
+                            'Nota': record.studentGrade || 'N/A',
+                            'Situação Estudante': record.studentSituation || 'N/A',
+                            'Série/Turma': record.seriesClass || 'N/A',
+                            'Componentes Curriculares Abaixo da Média': record.curricularComponents || 'N/A',
+                            'Língua Portuguesa': record.subjects?.portuguese ? 'Sim' : 'Não',
+                            'Matemática': record.subjects?.mathematics ? 'Sim' : 'Não',
+                            'História': record.subjects?.history ? 'Sim' : 'Não',
+                            'Geografia': record.subjects?.geography ? 'Sim' : 'Não',
+                            'Ciências': record.subjects?.science ? 'Sim' : 'Não',
+                            'Educação Física': record.subjects?.physicalEducation ? 'Sim' : 'Não',
+                            'Arte': record.subjects?.arts ? 'Sim' : 'Não',
+                            'Inglês': record.subjects?.english ? 'Sim' : 'Não',
+                            'Filosofia': record.subjects?.philosophy ? 'Sim' : 'Não',
+                            'Sociologia': record.subjects?.sociology ? 'Sim' : 'Não',
+                            'Biologia': record.subjects?.biology ? 'Sim' : 'Não',
+                            'Física': record.subjects?.physics ? 'Sim' : 'Não',
+                            'Química': record.subjects?.chemistry ? 'Sim' : 'Não',
+                            'Literatura': record.subjects?.literature ? 'Sim' : 'Não',
+                            'Espanhol': record.subjects?.spanish ? 'Sim' : 'Não',
+                            'Outros': record.subjects?.others ? 'Sim' : 'Não',
+                            'Especificação de Outros': record.subjects?.otherSubjects || 'N/A',
+                            'Faltas': record.absences || 'N/A',
+                            'Total Visitas': record.totalVisits || 'N/A',
+                            'PCD': record.pcd ? 'Sim' : 'Não',
+                            'Ministério Público': record.ministerioPublico ? 'Sim' : 'Não',
+                            'Menor de Idade': record.menorIdade ? 'Sim' : 'Não',
+                            'Atestado Médico': record.atestadoMedico ? 'Sim' : 'Não',
+                            'Conselho Tutelar': record.conselhoTutelar ? 'Sim' : 'Não'
+                        }));
+
+                        const curriculumSheet = XLSX.utils.json_to_sheet(curriculumData);
+                        XLSX.utils.book_append_sheet(workbook, curriculumSheet, 'Currículo');
+                    }
+
+                    // Aba 2: Equipe Multiprofissional
+                    if (multiprofessionalRecords.length > 0) {
+                        const multiprofessionalData = multiprofessionalRecords.map(record => ({
+                            'Departamento': record.department,
+                            'Indicador': record.indicator,
+                            'Escola': record.school,
+                            'Município': record.municipality,
+                            'Técnico': record.technician,
+                            'Data': record.date ? new Date(record.date).toLocaleDateString('pt-BR') : 'N/A',
+                            'Estudante': record.studentName || 'N/A',
+                            'Observações': record.observations || 'N/A',
+                            'Data Referência': record.referenceDate ? new Date(record.referenceDate).toLocaleDateString('pt-BR') : 'N/A',
+                            'ID Turma': record.classId || 'N/A',
+                            'Nome Turma': record.className || 'N/A',
+                            'Disciplina': record.discipline || 'N/A',
+                            'Período Inicial': record.periodStart ? new Date(record.periodStart).toLocaleDateString('pt-BR') : 'N/A',
+                            'Período Final': record.periodEnd ? new Date(record.periodEnd).toLocaleDateString('pt-BR') : 'N/A',
+                            'Professor': record.professorName || 'N/A',
+                            'Bimestre': record.bimester || 'N/A',
+                            'Situação': record.situation || 'N/A',
+                            'Falta Docente': record.teacherAbsence ? 'Sim' : 'Não',
+                            'Evento Escolar': record.schoolEvent ? 'Sim' : 'Não',
+                            'Feriado': record.holiday ? 'Sim' : 'Não',
+                            'Greve': record.strike ? 'Sim' : 'Não',
+                            'Indisponibilidade SGE': record.sgeUnavailable ? 'Sim' : 'Não',
+                            'Não Lançamento SGE': record.professorNotLaunched ? 'Sim' : 'Não',
+                            'Outros': record.others ? 'Sim' : 'Não',
+                            'Nota': record.studentGrade || 'N/A',
+                            'Situação Estudante': record.studentSituation || 'N/A',
+                            'Série/Turma': record.seriesClass || 'N/A',
+                            'Componentes Curriculares Abaixo da Média': record.curricularComponents || 'N/A',
+                            'Língua Portuguesa': record.subjects?.portuguese ? 'Sim' : 'Não',
+                            'Matemática': record.subjects?.mathematics ? 'Sim' : 'Não',
+                            'História': record.subjects?.history ? 'Sim' : 'Não',
+                            'Geografia': record.subjects?.geography ? 'Sim' : 'Não',
+                            'Ciências': record.subjects?.science ? 'Sim' : 'Não',
+                            'Educação Física': record.subjects?.physicalEducation ? 'Sim' : 'Não',
+                            'Arte': record.subjects?.arts ? 'Sim' : 'Não',
+                            'Inglês': record.subjects?.english ? 'Sim' : 'Não',
+                            'Filosofia': record.subjects?.philosophy ? 'Sim' : 'Não',
+                            'Sociologia': record.subjects?.sociology ? 'Sim' : 'Não',
+                            'Biologia': record.subjects?.biology ? 'Sim' : 'Não',
+                            'Física': record.subjects?.physics ? 'Sim' : 'Não',
+                            'Química': record.subjects?.chemistry ? 'Sim' : 'Não',
+                            'Literatura': record.subjects?.literature ? 'Sim' : 'Não',
+                            'Espanhol': record.subjects?.spanish ? 'Sim' : 'Não',
+                            'Outros': record.subjects?.others ? 'Sim' : 'Não',
+                            'Especificação de Outros': record.subjects?.otherSubjects || 'N/A',
+                            'Faltas': record.absences || 'N/A',
+                            'Total Visitas': record.totalVisits || 'N/A',
+                            'PCD': record.pcd ? 'Sim' : 'Não',
+                            'Ministério Público': record.ministerioPublico ? 'Sim' : 'Não',
+                            'Menor de Idade': record.menorIdade ? 'Sim' : 'Não',
+                            'Atestado Médico': record.atestadoMedico ? 'Sim' : 'Não',
+                            'Conselho Tutelar': record.conselhoTutelar ? 'Sim' : 'Não'
+                        }));
+
+                        const multiprofessionalSheet = XLSX.utils.json_to_sheet(multiprofessionalData);
+                        XLSX.utils.book_append_sheet(workbook, multiprofessionalSheet, 'Equipe Multiprofissional');
+                    }
+
+                    // Aba 3: Supervisão
+                    if (supervisionRecords.length > 0) {
+                        const supervisionData = supervisionRecords.map(record => ({
+                            'Departamento': record.department,
+                            'Indicador': record.indicator,
+                            'Escola': record.school,
+                            'Município': record.municipality,
+                            'Técnico': record.technician,
+                            'Data': record.date ? new Date(record.date).toLocaleDateString('pt-BR') : 'N/A',
+                            'Estudante': record.studentName || 'N/A',
+                            'Observações': record.observations || 'N/A',
+                            'Data Referência': record.referenceDate ? new Date(record.referenceDate).toLocaleDateString('pt-BR') : 'N/A',
+                            'ID Turma': record.classId || 'N/A',
+                            'Nome Turma': record.className || 'N/A',
+                            'Disciplina': record.discipline || 'N/A',
+                            'Período Inicial': record.periodStart ? new Date(record.periodStart).toLocaleDateString('pt-BR') : 'N/A',
+                            'Período Final': record.periodEnd ? new Date(record.periodEnd).toLocaleDateString('pt-BR') : 'N/A',
+                            'Professor': record.professorName || 'N/A',
+                            'Bimestre': record.bimester || 'N/A',
+                            'Situação': record.situation || 'N/A',
+                            'Falta Docente': record.teacherAbsence ? 'Sim' : 'Não',
+                            'Evento Escolar': record.schoolEvent ? 'Sim' : 'Não',
+                            'Feriado': record.holiday ? 'Sim' : 'Não',
+                            'Greve': record.strike ? 'Sim' : 'Não',
+                            'Indisponibilidade SGE': record.sgeUnavailable ? 'Sim' : 'Não',
+                            'Não Lançamento SGE': record.professorNotLaunched ? 'Sim' : 'Não',
+                            'Outros': record.others ? 'Sim' : 'Não',
+                            'Nota': record.studentGrade || 'N/A',
+                            'Situação Estudante': record.studentSituation || 'N/A',
+                            'Série/Turma': record.seriesClass || 'N/A',
+                            'Componentes Curriculares Abaixo da Média': record.curricularComponents || 'N/A',
+                            'Língua Portuguesa': record.subjects?.portuguese ? 'Sim' : 'Não',
+                            'Matemática': record.subjects?.mathematics ? 'Sim' : 'Não',
+                            'História': record.subjects?.history ? 'Sim' : 'Não',
+                            'Geografia': record.subjects?.geography ? 'Sim' : 'Não',
+                            'Ciências': record.subjects?.science ? 'Sim' : 'Não',
+                            'Educação Física': record.subjects?.physicalEducation ? 'Sim' : 'Não',
+                            'Arte': record.subjects?.arts ? 'Sim' : 'Não',
+                            'Inglês': record.subjects?.english ? 'Sim' : 'Não',
+                            'Filosofia': record.subjects?.philosophy ? 'Sim' : 'Não',
+                            'Sociologia': record.subjects?.sociology ? 'Sim' : 'Não',
+                            'Biologia': record.subjects?.biology ? 'Sim' : 'Não',
+                            'Física': record.subjects?.physics ? 'Sim' : 'Não',
+                            'Química': record.subjects?.chemistry ? 'Sim' : 'Não',
+                            'Literatura': record.subjects?.literature ? 'Sim' : 'Não',
+                            'Espanhol': record.subjects?.spanish ? 'Sim' : 'Não',
+                            'Outros': record.subjects?.others ? 'Sim' : 'Não',
+                            'Especificação de Outros': record.subjects?.otherSubjects || 'N/A',
+                            'Faltas': record.absences || 'N/A',
+                            'Total Visitas': record.totalVisits || 'N/A',
+                            'PCD': record.pcd ? 'Sim' : 'Não',
+                            'Ministério Público': record.ministerioPublico ? 'Sim' : 'Não',
+                            'Menor de Idade': record.menorIdade ? 'Sim' : 'Não',
+                            'Atestado Médico': record.atestadoMedico ? 'Sim' : 'Não',
+                            'Conselho Tutelar': record.conselhoTutelar ? 'Sim' : 'Não'
+                        }));
+
+                        const supervisionSheet = XLSX.utils.json_to_sheet(supervisionData);
+                        XLSX.utils.book_append_sheet(workbook, supervisionSheet, 'Supervisão');
+                    }
+
+                    // Aba 4: Resumo Geral
+                    const summaryData = filteredRecords.map(record => ({
+                        'Departamento': record.department,
+                        'Indicador': record.indicator,
+                        'Escola': record.school,
+                        'Município': record.municipality,
+                        'Técnico': record.technician,
+                        'Data': record.date ? new Date(record.date).toLocaleDateString('pt-BR') : 'N/A',
+                        'Estudante': record.studentName || 'N/A',
+                        'Observações': record.observations || 'N/A'
+                    }));
+
+                    const summarySheet = XLSX.utils.json_to_sheet(summaryData);
+                    XLSX.utils.book_append_sheet(workbook, summarySheet, 'Resumo Geral');
+
+                    // Ajustar largura das colunas automaticamente
+                    workbook.SheetNames.forEach(sheetName => {
+                        const worksheet = workbook.Sheets[sheetName];
+                        const columnWidths = [];
+                        
+                        // Calcular largura máxima para cada coluna
+                        XLSX.utils.sheet_to_json(worksheet, { header: 1 }).forEach(row => {
+                            row.forEach((cell, index) => {
+                                const cellLength = cell ? cell.toString().length : 0;
+                                columnWidths[index] = Math.max(columnWidths[index] || 0, cellLength);
+                            });
+                        });
+
+                        // Aplicar largura das colunas
+                        worksheet['!cols'] = columnWidths.map(width => ({ width: Math.min(Math.max(width + 2, 10), 50) }));
+                    });
+
+                    // Gerar e baixar o arquivo Excel
+                    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+                    const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `registros_unificados_${new Date().toISOString().split('T')[0]}.xlsx`;
+                    link.click();
+                    URL.revokeObjectURL(url);
+
+                    // Remover o script após o uso
+                    document.head.removeChild(script);
+                };
+
+                script.onerror = () => {
+                    alert('Erro ao carregar a biblioteca de exportação Excel. Tente novamente.');
+                };
+
+            } catch (error) {
+                console.error('Erro na exportação Excel:', error);
+                alert('Erro ao exportar para Excel. Tente novamente.');
+            }
+        }
+
+        // Download PDF profissional com todas as informações
+        async function downloadPDF() {
+            if (filteredRecords.length === 0) {
+                alert('Nenhum registro para exportar!');
+                return;
+            }
+
+            try {
+                // Carregar a biblioteca jsPDF
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+                document.head.appendChild(script);
+
+                script.onload = async () => {
+                    const { jsPDF } = window.jspdf;
+                    
+                    // Criar novo documento PDF
+                    const doc = new jsPDF('p', 'mm', 'a4');
+                    const pageWidth = doc.internal.pageSize.width;
+                    const pageHeight = doc.internal.pageSize.height;
+                    const margin = 20;
+                    const contentWidth = pageWidth - (2 * margin);
+                    
+                    let yPosition = 30;
+                    let currentPage = 1;
+
+                    // Função para adicionar nova página
+                    const addNewPage = () => {
+                        doc.addPage();
+                        currentPage++;
+                        yPosition = 30;
+                        
+                        // Cabeçalho da nova página
+                        doc.setFontSize(16);
+                        doc.setFont('helvetica', 'bold');
+                        doc.text('SRE GURUPI - Sistema de Registros', pageWidth / 2, 20, { align: 'center' });
+                        
+                        doc.setFontSize(12);
+                        doc.setFont('helvetica', 'normal');
+                        doc.text(`Página ${currentPage}`, pageWidth - margin, 20, { align: 'right' });
+                    };
+
+                    // Cabeçalho principal
+                    doc.setFontSize(18);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('RELATÓRIO DE REGISTROS UNIFICADOS', pageWidth / 2, yPosition, { align: 'center' });
+                    yPosition += 15;
+
+                    // Informações do relatório
+                    doc.setFontSize(12);
+                    doc.setFont('helvetica', 'normal');
+                    doc.text(`Total de registros: ${filteredRecords.length}`, margin, yPosition);
+                    yPosition += 8;
+                    doc.text(`Data de geração: ${new Date().toLocaleString('pt-BR')}`, margin, yPosition);
+                    yPosition += 15;
+
+                    // Separar registros por departamento
+                    const curriculumRecords = filteredRecords.filter(record => record.department === 'Currículo');
+                    const multiprofessionalRecords = filteredRecords.filter(record => record.department === 'Equipe Multiprofissional');
+                    const supervisionRecords = filteredRecords.filter(record => record.department === 'Supervisão');
+
+                    // Função para verificar se precisa de nova página
+                    const checkPageBreak = (requiredSpace) => {
+                        if (yPosition + requiredSpace > pageHeight - margin) {
+                            addNewPage();
+                        }
+                    };
+
+                    // Função para adicionar título de seção
+                    const addSectionTitle = (title) => {
+                        checkPageBreak(15);
+                        doc.setFontSize(14);
+                        doc.setFont('helvetica', 'bold');
+                        doc.text(title, margin, yPosition);
+                        yPosition += 10;
+                        doc.setFontSize(10);
+                        doc.setFont('helvetica', 'normal');
+                    };
+
+                    // Função para adicionar registro detalhado
+                    const addDetailedRecord = (record, index) => {
+                        const recordHeight = 80; // Altura estimada para cada registro
+                        checkPageBreak(recordHeight);
+
+                        // Número do registro
+                        doc.setFontSize(11);
+                        doc.setFont('helvetica', 'bold');
+                        doc.text(`${index + 1}. ${record.indicator}`, margin, yPosition);
+                        yPosition += 6;
+
+                        // Informações básicas
+                        doc.setFontSize(10);
+                        doc.setFont('helvetica', 'normal');
+                        doc.text(`Departamento: ${record.department}`, margin, yPosition);
+                        yPosition += 5;
+                        doc.text(`Escola: ${record.school}`, margin, yPosition);
+                        yPosition += 5;
+                        doc.text(`Município: ${record.municipality}`, margin, yPosition);
+                        yPosition += 5;
+                        doc.text(`Técnico: ${record.technician}`, margin, yPosition);
+                        yPosition += 5;
+                        doc.text(`Data: ${record.date ? new Date(record.date).toLocaleDateString('pt-BR') : 'N/A'}`, margin, yPosition);
+                        yPosition += 5;
+
+                        // Estudante se existir
+                        if (record.studentName) {
+                            doc.text(`Estudante: ${record.studentName}`, margin, yPosition);
+                            yPosition += 5;
+                        }
+
+                        // Observações se existir
+                        if (record.observations && record.observations !== 'N/A') {
+                            doc.text(`Observações: ${record.observations}`, margin, yPosition);
+                            yPosition += 5;
+                        }
+
+                        // Informações específicas por indicador
+                        if (record.indicator === 'Busca Ativa') {
+                            if (record.pcd || record.ministerioPublico || record.menorIdade || record.atestadoMedico || record.conselhoTutelar) {
+                                doc.text('Informações Específicas:', margin, yPosition);
+                                yPosition += 5;
+                                if (record.pcd) doc.text('• PCD: Sim', margin + 5, yPosition), yPosition += 4;
+                                if (record.ministerioPublico) doc.text('• Ministério Público: Sim', margin + 5, yPosition), yPosition += 4;
+                                if (record.menorIdade) doc.text('• Menor de Idade: Sim', margin + 5, yPosition), yPosition += 4;
+                                if (record.atestadoMedico) doc.text('• Atestado Médico: Sim', margin + 5, yPosition), yPosition += 4;
+                                if (record.conselhoTutelar) doc.text('• Conselho Tutelar: Sim', margin + 5, yPosition), yPosition += 4;
+                            }
+                            if (record.totalVisits) {
+                                doc.text(`Total de Visitas: ${record.totalVisits}`, margin, yPosition);
+                                yPosition += 5;
+                            }
+                            if (record.absences) {
+                                doc.text(`Faltas: ${record.absences}`, margin, yPosition);
+                                yPosition += 5;
+                            }
+                        }
+
+                        if (record.indicator === 'Aulas Previstas e Aulas Dadas') {
+                            if (record.referenceDate || record.classId || record.discipline) {
+                                doc.text('Detalhes das Aulas:', margin, yPosition);
+                                yPosition += 5;
+                                if (record.referenceDate) doc.text(`• Data Referência: ${new Date(record.referenceDate).toLocaleDateString('pt-BR')}`, margin + 5, yPosition), yPosition += 4;
+                                if (record.classId) doc.text(`• ID Turma: ${record.classId}`, margin + 5, yPosition), yPosition += 4;
+                                if (record.discipline) doc.text(`• Disciplina: ${record.discipline}`, margin + 5, yPosition), yPosition += 4;
+                                if (record.professorName) doc.text(`• Professor: ${record.professorName}`, margin + 5, yPosition), yPosition += 4;
+                                if (record.bimester) doc.text(`• Bimestre: ${record.bimester}`, margin + 5, yPosition), yPosition += 4;
+                            }
+                        }
+
+                        if (record.indicator === 'Estudantes Abaixo da Média') {
+                            if (record.studentGrade || record.studentSituation) {
+                                doc.text('Informações do Estudante:', margin, yPosition);
+                                yPosition += 5;
+                                if (record.studentGrade) doc.text(`• Nota: ${record.studentGrade}`, margin + 5, yPosition), yPosition += 4;
+                                if (record.studentSituation) doc.text(`• Situação: ${record.studentSituation}`, margin + 5, yPosition), yPosition += 4;
+                                if (record.seriesClass) doc.text(`• Série/Turma: ${record.seriesClass}`, margin + 5, yPosition), yPosition += 4;
+                            }
+                        }
+
+                        yPosition += 8; // Espaço entre registros
+                    };
+
+                    // Seção Currículo
+                    if (curriculumRecords.length > 0) {
+                        addSectionTitle('CURRÍCULO');
+                        curriculumRecords.forEach((record, index) => {
+                            addDetailedRecord(record, index);
+                        });
+                    }
+
+                    // Seção Equipe Multiprofissional
+                    if (multiprofessionalRecords.length > 0) {
+                        addSectionTitle('EQUIPE MULTIPROFISSIONAL');
+                        multiprofessionalRecords.forEach((record, index) => {
+                            addDetailedRecord(record, index);
+                        });
+                    }
+
+                    // Seção Supervisão
+                    if (supervisionRecords.length > 0) {
+                        addSectionTitle('SUPERVISÃO');
+                        supervisionRecords.forEach((record, index) => {
+                            addDetailedRecord(record, index);
+                        });
+                    }
+
+                    // Rodapé na última página
+                    doc.setFontSize(10);
+                    doc.setFont('helvetica', 'italic');
+                    doc.text('Relatório gerado automaticamente pelo Sistema SRE GURUPI', pageWidth / 2, pageHeight - 10, { align: 'center' });
+
+                    // Salvar o PDF
+                    doc.save(`relatorio_registros_unificados_${new Date().toISOString().split('T')[0]}.pdf`);
+
+                    // Remover o script após o uso
+                    document.head.removeChild(script);
+                };
+
+                script.onerror = () => {
+                    alert('Erro ao carregar a biblioteca de exportação PDF. Tente novamente.');
+                };
+
+            } catch (error) {
+                console.error('Erro na exportação PDF:', error);
+                alert('Erro ao exportar para PDF. Tente novamente.');
+            }
+        }
+
+        // Inicializar
+        checkAuth();
+        loadAllRecords();
+
+        // Fechar modal ao clicar fora
+        window.onclick = function(event) {
+            const modal = document.getElementById('viewModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Exportar funções para o escopo global
+        window.logout = logout;
+        window.viewRecord = viewRecord;
+        window.closeModal = closeModal;
+        window.clearAllFilters = clearAllFilters;
+        window.refreshRecords = refreshRecords;
+        window.downloadExcel = downloadExcel;
+        window.downloadPDF = downloadPDF;
+        window.deleteRecord = deleteRecord; // Adiciona a função deleteRecord ao escopo global
+        window.markAsResolved = markAsResolved; // Adiciona a função markAsResolved ao escopo global
+    </script>
+</body>
+</html>

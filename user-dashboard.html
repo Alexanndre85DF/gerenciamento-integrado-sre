@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Monitoramento Integrado - SRE GURUPI</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .admin-menu {
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .admin-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-admin {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+        
+        .btn-admin:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+            background: linear-gradient(135deg, #218838 0%, #1ea085 100%);
+        }
+        
+        @media (max-width: 768px) {
+            .admin-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn-admin {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Sistema de Monitoramento Integrado</h1>
+        <button class="logout-btn" onclick="logout()">Sair</button>
+    </div>
+
+    <div class="main-container">
+        <div class="notification-area">
+            <div class="notification-icon">🔔</div>
+            <span>Notificações do Sistema</span>
+            <div class="notification-badge">0</div>
+        </div>
+
+        <!-- Menu Principal -->
+        <div class="main-menu">
+            <a href="monitoring-generate.html" class="btn btn-primary">Gerar Monitoramento</a>
+            <a href="monitoring-records-unified.html" class="btn btn-primary">Registros Unificados</a>
+            <a href="monitoring-resolved.html" class="btn btn-primary">Resolvidos</a>
+        </div>
+
+        <!-- Menu de Administração (apenas para super admins) -->
+        <div id="adminMenu" class="admin-menu" style="display: none;">
+            <h3 style="text-align: center; margin: 30px 0 20px 0; color: #333; border-top: 2px solid #007bff; padding-top: 20px;">Administração do Sistema</h3>
+            <div class="admin-buttons">
+                <a href="user-management-new.html" class="btn btn-admin">👥 Gerenciar Usuários</a>
+                <a href="user-list-new.html" class="btn btn-admin">📋 Listar Usuários</a>
+                <a href="notice-management-new.html" class="btn btn-admin">📢 Gerenciar Avisos</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyABEloTfC_nT5vfDHpeqYdDjNoPCKwE-Eo",
+            authDomain: "projeto-alex-aaadf.firebaseapp.com",
+            projectId: "projeto-alex-aaadf",
+            storageBucket: "projeto-alex-aaadf.firebasestorage.app",
+            messagingSenderId: "720032595137",
+            appId: "1:720032595137:web:85834232e770a942216840"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Verificar se está logado
+        if (!localStorage.getItem('userRole')) {
+            window.location.href = 'index.html';
+        }
+
+        // Função de logout
+        window.logout = function() {
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('userCPF');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userId');
+            window.location.href = 'index.html';
+        }
+
+        // Função para carregar avisos ativos
+        async function loadActiveNotices() {
+            try {
+                const noticesSnapshot = await getDocs(collection(db, 'notices'));
+                let activeNoticesCount = 0;
+                let noticesList = '';
+                
+                noticesSnapshot.forEach((doc) => {
+                    const notice = doc.data();
+                    if (notice.status === 'active') {
+                        activeNoticesCount++;
+                        
+                        // Verificar se o aviso é para todos os departamentos ou para o departamento do usuário
+                        const userDepartment = localStorage.getItem('userDepartment');
+                        if (notice.department === 'all' || notice.department === userDepartment) {
+                            noticesList += `
+                                <div class="notice-item">
+                                    <div class="notice-header">
+                                        <span class="notice-priority ${notice.priority}">${getPriorityLabel(notice.priority)}</span>
+                                        <span class="notice-date">${new Date(notice.createdAt.toDate()).toLocaleDateString('pt-BR')}</span>
+                                    </div>
+                                    <h4 class="notice-title">${notice.title}</h4>
+                                    <p class="notice-content">${notice.content}</p>
+                                </div>
+                            `;
+                        }
+                    }
+                });
+                
+                // Atualizar contador de notificações
+                document.querySelector('.notification-badge').textContent = activeNoticesCount;
+                
+                // Se há avisos, mostrar na área de notificações
+                if (noticesList) {
+                    document.querySelector('.notification-area').innerHTML = `
+                        <div class="notification-icon">🔔</div>
+                        <span>Notificações do Sistema</span>
+                        <div class="notification-badge">${activeNoticesCount}</div>
+                        <div class="notices-dropdown">
+                            ${noticesList}
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                console.error('Erro ao carregar avisos:', error);
+            }
+        }
+
+        // Função para obter label da prioridade
+        function getPriorityLabel(priority) {
+            const labels = {
+                'low': 'Baixa',
+                'medium': 'Média',
+                'high': 'Alta',
+                'urgent': 'Urgente'
+            };
+            return labels[priority] || priority;
+        }
+
+        // Verificar se é super admin e mostrar menu de administração
+        if (localStorage.getItem('userRole') === 'super_admin') {
+            document.getElementById('adminMenu').style.display = 'block';
+        }
+
+        // Carregar avisos ao carregar a página
+        loadActiveNotices();
+    </script>
+</body>
+</html>

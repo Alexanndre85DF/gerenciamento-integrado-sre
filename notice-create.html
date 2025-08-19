@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Novo Aviso - SRE GURUPI</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Criar Novo Aviso</h1>
+        <button class="logout-btn" onclick="logout()">Sair</button>
+    </div>
+
+    <div class="main-container">
+        <div class="card">
+            <h2>Formulário de Aviso</h2>
+            
+            <form id="noticeForm" class="form-container">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="title">Título do Aviso</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="priority">Prioridade</label>
+                        <select id="priority" name="priority" required>
+                            <option value="">Selecione a prioridade</option>
+                            <option value="low">Baixa</option>
+                            <option value="medium">Média</option>
+                            <option value="high">Alta</option>
+                            <option value="urgent">Urgente</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="department">Departamento</label>
+                        <select id="department" name="department" required>
+                            <option value="">Selecione um departamento</option>
+                            <option value="all">Todos os Departamentos</option>
+                            <option value="curriculum">Currículo</option>
+                            <option value="supervision">Supervisão</option>
+                            <option value="multiprofessional">Equipe Multiprofissional</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="expiryDate">Data de Expiração</label>
+                        <input type="date" id="expiryDate" name="expiryDate" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="content">Conteúdo do Aviso</label>
+                    <textarea id="content" name="content" rows="6" required></textarea>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <button type="submit" class="btn">Criar Aviso</button>
+                    <a href="admin-panel.html" class="btn btn-secondary">Voltar ao Painel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyABEloTfC_nT5vfDHpeqYdDjNoPCKwE-Eo",
+            authDomain: "projeto-alex-aaadf.firebaseapp.com",
+            projectId: "projeto-alex-aaadf",
+            storageBucket: "projeto-alex-aaadf.firebasestorage.app",
+            messagingSenderId: "720032595137",
+            appId: "1:720032595137:web:85834232e770a942216840"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Verificar se é super admin
+        if (localStorage.getItem('userRole') !== 'super_admin') {
+            window.location.href = 'index.html';
+        }
+
+        // Função de logout
+        window.logout = function() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        };
+
+        // Form handler
+        document.getElementById('noticeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const noticeData = {
+                title: formData.get('title'),
+                priority: formData.get('priority'),
+                department: formData.get('department'),
+                expiryDate: formData.get('expiryDate'),
+                content: formData.get('content'),
+                createdAt: new Date(),
+                createdBy: localStorage.getItem('userCPF'),
+                status: 'active'
+            };
+            
+            try {
+                // Salvar aviso no Firestore
+                await addDoc(collection(db, 'notices'), noticeData);
+                
+                alert('Aviso criado com sucesso!');
+                e.target.reset();
+                
+            } catch (error) {
+                console.error('Erro ao criar aviso:', error);
+                alert('Erro ao criar aviso: ' + error.message);
+            }
+        });
+
+        // Definir data mínima como hoje
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('expiryDate').min = today;
+    </script>
+</body>
+</html>

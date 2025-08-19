@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerar Monitoramento - SRE GURUPI</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Gerar Monitoramento</h1>
+        <button class="logout-btn" onclick="logout()">Sair</button>
+    </div>
+
+    <div class="main-container">
+        <div class="card">
+            <h2>Monitoramento por Departamento</h2>
+            <p>Selecione o departamento para acessar os indicadores específicos:</p>
+            
+            <div class="department-buttons">
+                <a href="monitoring-curriculum.html" class="btn btn-primary">Currículo</a>
+                <a href="monitoring-supervision.html" class="btn btn-primary">Supervisão</a>
+                <a href="monitoring-multiprofessional.html" class="btn btn-primary">Equipe Multiprofissional</a>
+            </div>
+            
+            <div class="back-button">
+                <a href="user-dashboard.html" class="btn btn-secondary">Voltar ao Menu</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyABEloTfC_nT5vfDHpeqYdDjNoPCKwE-Eo",
+            authDomain: "projeto-alex-aaadf.firebaseapp.com",
+            projectId: "projeto-alex-aaadf",
+            storageBucket: "projeto-alex-aaadf.firebasestorage.app",
+            messagingSenderId: "720032595137",
+            appId: "1:720032595137:web:85834232e770a942216840"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Verificar se está logado
+        if (!localStorage.getItem('userRole')) {
+            window.location.href = 'index.html';
+        }
+
+        // Função de logout
+        window.logout = function() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        };
+    </script>
+</body>
+</html>

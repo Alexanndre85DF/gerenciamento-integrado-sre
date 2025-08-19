@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registros Resolvidos - SRE GURUPI</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Registros Resolvidos</h1>
+        <button class="logout-btn" onclick="logout()">Sair</button>
+    </div>
+
+    <div class="main-container">
+        <div class="card">
+            <h2>Sistema de Registros Resolvidos</h2>
+            <p>Visualize todos os registros que foram marcados como resolvidos</p>
+            
+            <!-- Filtros de Pesquisa -->
+            <div class="filters-section">
+                
+                <div class="filters-grid">
+                    <!-- Escola -->
+                    <div class="filter-group">
+                        <label for="schoolFilter">Escola:</label>
+                        <select id="schoolFilter" onchange="filterRecords()">
+                            <option value="">Todas as escolas</option>
+                        </select>
+                    </div>
+
+                    <!-- Município -->
+                    <div class="filter-group">
+                        <label for="municipalityFilter">Município:</label>
+                        <select id="municipalityFilter" onchange="filterRecords()">
+                            <option value="">Todos os municípios</option>
+                        </select>
+                    </div>
+
+                    <!-- Departamento -->
+                    <div class="filter-group">
+                        <label for="departmentFilter">Departamento:</label>
+                        <select id="departmentFilter" onchange="filterRecords()">
+                            <option value="">Todos os departamentos</option>
+                            <option value="Currículo">Currículo</option>
+                            <option value="Equipe Multiprofissional">Equipe Multiprofissional</option>
+                            <option value="Supervisão">Supervisão</option>
+                        </select>
+                    </div>
+
+                    <!-- Indicador -->
+                    <div class="filter-group">
+                        <label for="indicatorFilter">Indicador:</label>
+                        <select id="indicatorFilter" onchange="filterRecords()">
+                            <option value="">Todos os indicadores</option>
+                            <option value="Frequência dos Estudantes">Frequência dos Estudantes</option>
+                            <option value="Busca Ativa">Busca Ativa</option>
+                            <option value="Aulas Previstas e Aulas Dadas">Aulas Previstas e Aulas Dadas</option>
+                            <option value="Estudantes Abaixo da Média">Estudantes Abaixo da Média</option>
+                        </select>
+                    </div>
+
+                    <!-- Data de Resolução -->
+                    <div class="filter-group">
+                        <label for="resolvedDateFilter">Data de Resolução:</label>
+                        <input type="date" id="resolvedDateFilter" onchange="filterRecords()">
+                    </div>
+
+                    <!-- Resolvido por -->
+                    <div class="filter-group">
+                        <label for="resolvedByFilter">Resolvido por:</label>
+                        <input type="text" id="resolvedByFilter" placeholder="Nome do usuário" onkeyup="filterRecords()">
+                    </div>
+                </div>
+
+                <div class="filter-actions">
+                    <button onclick="clearAllFilters()" class="btn btn-secondary">Limpar Todos os Filtros</button>
+                    <button onclick="refreshRecords()" class="btn btn-primary">Atualizar Registros</button>
+                </div>
+            </div>
+
+            <!-- Botões de Ação -->
+            <div class="action-buttons" style="margin: 30px 0; text-align: center; padding: 20px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 10px; border: 1px solid #dee2e6;">
+                <button onclick="downloadExcel()" class="btn btn-primary"> Exportar Excel</button>
+                <button onclick="downloadPDF()" class="btn btn-primary"> Exportar PDF</button>
+                <a href="monitoring-records-unified.html" class="btn btn-secondary"> Voltar aos Registros</a>
+                <a href="user-dashboard.html" class="btn btn-secondary"> Voltar ao Menu</a>
+            </div>
+
+            <!-- Estatísticas -->
+            <div class="stats-section">
+                <div class="stat-card">
+                    <h3>Total de Resolvidos</h3>
+                    <span id="totalResolved">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Resolvidos Filtrados</h3>
+                    <span id="filteredResolved">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Última Atualização</h3>
+                    <span id="lastUpdate">-</span>
+                </div>
+            </div>
+
+            <!-- Lista de Registros Resolvidos -->
+            <div class="records-section">
+                <h3>Registros Resolvidos</h3>
+                <div id="resolvedRecordsList" class="records-container">
+                    <div class="loading">Carregando registros resolvidos...</div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- Modal para Visualizar Registro Resolvido -->
+    <div id="viewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Visualizar Registro Resolvido</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Conteúdo do registro será inserido aqui -->
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal()" class="btn">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, getDocs, orderBy, query, where, deleteDoc, doc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyABEloTfC_nT5vfDHpeqYdDjNoPCKwE-Eo",
+            authDomain: "projeto-alex-aaadf.firebaseapp.com",
+            projectId: "projeto-alex-aaadf",
+            storageBucket: "projeto-alex-aaadf.firebasestorage.app",
+            messagingSenderId: "720032595137",
+            appId: "1:720032595137:web:85834232e770a942216840"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let allResolvedRecords = [];
+        let filteredResolvedRecords = [];
+
+        // Verificar autenticação
+        function checkAuth() {
+            const userRole = localStorage.getItem('userRole');
+            const userCPF = localStorage.getItem('userCPF');
+            const userName = localStorage.getItem('userName');
+            
+            if (!userRole || !userCPF || !userName) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('userCPF');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userId');
+            window.location.href = 'index.html';
+        }
+
+        // Carregar todos os registros resolvidos
+        async function loadResolvedRecords() {
+            try {
+                console.log('Carregando registros resolvidos...');
+                
+                try {
+                    // Carregar registros com status 'resolved' da coleção records
+                    // Removendo orderBy para evitar erro de índice
+                    const q = query(
+                        collection(db, 'records'), 
+                        where('status', '==', 'resolved')
+                    );
+                    const querySnapshot = await getDocs(q);
+                    
+                    allResolvedRecords = [];
+                    querySnapshot.forEach((doc) => {
+                        allResolvedRecords.push({
+                            id: doc.id,
+                            ...doc.data()
+                        });
+                    });
+                    
+                    // Ordenar localmente por data de resolução (mais recente primeiro)
+                    allResolvedRecords.sort((a, b) => {
+                        const dateA = a.resolvedAt ? (a.resolvedAt.toDate ? a.resolvedAt.toDate() : new Date(a.resolvedAt)) : new Date(0);
+                        const dateB = b.resolvedAt ? (b.resolvedAt.toDate ? b.resolvedAt.toDate() : new Date(b.resolvedAt)) : new Date(0);
+                        return dateB - dateA; // Ordem decrescente
+                    });
+                    
+                    console.log(`Total de registros resolvidos carregados: ${allResolvedRecords.length}`);
+                    
+                } catch (firebaseError) {
+                    console.error('Erro ao carregar registros resolvidos:', firebaseError);
+                    allResolvedRecords = [];
+                }
+                
+                populateFilterOptions();
+                filterRecords();
+                updateLastUpdate();
+                
+            } catch (error) {
+                console.error('Erro ao carregar registros resolvidos:', error);
+                document.getElementById('resolvedRecordsList').innerHTML = '<div class="error">Erro ao carregar registros resolvidos: ' + error.message + '</div>';
+            }
+        }
+
+        // Popular opções dos filtros
+        function populateFilterOptions() {
+            const schools = [...new Set(allResolvedRecords.map(r => r.school).filter(Boolean))];
+            const municipalities = [...new Set(allResolvedRecords.map(r => r.municipality).filter(Boolean))];
+
+            // Popular escolas
+            const schoolFilter = document.getElementById('schoolFilter');
+            schoolFilter.innerHTML = '<option value="">Todas as escolas</option>';
+            schools.forEach(school => {
+                schoolFilter.innerHTML += `<option value="${school}">${school}</option>`;
+            });
+
+            // Popular municípios
+            const municipalityFilter = document.getElementById('municipalityFilter');
+            municipalityFilter.innerHTML = '<option value="">Todos os municípios</option>';
+            municipalities.forEach(municipality => {
+                municipalityFilter.innerHTML += `<option value="${municipality}">${municipality}</option>`;
+            });
+        }
+
+        // Filtrar registros resolvidos
+        function filterRecords() {
+            const schoolFilter = document.getElementById('schoolFilter').value;
+            const municipalityFilter = document.getElementById('municipalityFilter').value;
+            const departmentFilter = document.getElementById('departmentFilter').value;
+            const indicatorFilter = document.getElementById('indicatorFilter').value;
+            const resolvedDateFilter = document.getElementById('resolvedDateFilter').value;
+            const resolvedByFilter = document.getElementById('resolvedByFilter').value.toLowerCase();
+
+            filteredResolvedRecords = allResolvedRecords.filter(record => {
+                // Filtro por escola
+                if (schoolFilter && record.school !== schoolFilter) return false;
+                
+                // Filtro por município
+                if (municipalityFilter && record.municipality !== municipalityFilter) return false;
+                
+                // Filtro por departamento
+                if (departmentFilter && record.department !== departmentFilter) return false;
+                
+                // Filtro por indicador
+                if (indicatorFilter && record.indicator !== indicatorFilter) return false;
+                
+                // Filtro por data de resolução
+                if (resolvedDateFilter && record.resolvedAt) {
+                    let resolvedDate;
+                    if (record.resolvedAt.toDate) {
+                        // Firebase Timestamp
+                        resolvedDate = new Date(record.resolvedAt.toDate()).toISOString().split('T')[0];
+                    } else {
+                        // String de data
+                        resolvedDate = new Date(record.resolvedAt).toISOString().split('T')[0];
+                    }
+                    if (resolvedDate !== resolvedDateFilter) return false;
+                }
+                
+                // Filtro por quem resolveu
+                if (resolvedByFilter && !record.resolvedByName?.toLowerCase().includes(resolvedByFilter)) return false;
+                
+                return true;
+            });
+
+            displayResolvedRecords();
+            updateStats();
+        }
+
+        // Exibir registros resolvidos
+        function displayResolvedRecords() {
+            const recordsList = document.getElementById('resolvedRecordsList');
+            
+            if (filteredResolvedRecords.length === 0) {
+                recordsList.innerHTML = '<div class="no-records">Nenhum registro resolvido encontrado com os filtros aplicados.</div>';
+                return;
+            }
+
+            let html = '';
+            filteredResolvedRecords.forEach(record => {
+                const date = record.date ? new Date(record.date).toLocaleDateString('pt-BR') : 'N/A';
+                const createdAt = record.createdAt ? new Date(record.createdAt.toDate()).toLocaleDateString('pt-BR') : 'N/A';
+                
+                let resolvedAt = 'N/A';
+                if (record.resolvedAt) {
+                    if (record.resolvedAt.toDate) {
+                        // Firebase Timestamp
+                        resolvedAt = new Date(record.resolvedAt.toDate()).toLocaleDateString('pt-BR');
+                    } else {
+                        // String de data
+                        resolvedAt = new Date(record.resolvedAt).toLocaleDateString('pt-BR');
+                    }
+                }
+                
+                html += `
+                    <div class="record-card resolved">
+                        <div class="record-header">
+                            <h4>${record.indicator}</h4>
+                            <span class="department-badge ${record.department.replace(/\s+/g, '-').toLowerCase()}">${record.department}</span>
+                            <span class="status-badge resolved">✅ Resolvido</span>
+                        </div>
+                        <div class="record-info">
+                            <p><strong>Escola:</strong> ${record.school}</p>
+                            <p><strong>Município:</strong> ${record.municipality}</p>
+                            <p><strong>Técnico:</strong> ${record.technician}</p>
+                            <p><strong>Data:</strong> ${date}</p>
+                            ${record.studentName ? `<p><strong>Estudante:</strong> ${record.studentName}</p>` : ''}
+                            <p><strong>Criado em:</strong> ${createdAt}</p>
+                            <p><strong>Resolvido em:</strong> ${resolvedAt}</p>
+                            <p><strong>Resolvido por:</strong> ${record.resolvedByName || 'N/A'}</p>
+                        </div>
+                        <div class="record-actions">
+                            <button onclick="viewResolvedRecord('${record.id}')" class="btn btn-primary">👁️ Visualizar</button>
+                            <button onclick="deleteResolvedRecord('${record.id}')" class="btn btn-danger">🗑️ Excluir</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            recordsList.innerHTML = html;
+        }
+
+        // Visualizar registro resolvido detalhado
+        async function viewResolvedRecord(recordId) {
+            const record = allResolvedRecords.find(r => r.id === recordId);
+            if (!record) return;
+
+            const modalBody = document.getElementById('modalBody');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            modalTitle.textContent = `${record.indicator} - ${record.department} (RESOLVIDO)`;
+            
+            let html = `
+                <div class="record-details">
+                    <h3>Informações Gerais</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <strong>Escola:</strong> ${record.school}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Município:</strong> ${record.municipality}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Técnico:</strong> ${record.technician}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Data:</strong> ${record.date ? new Date(record.date).toLocaleDateString('pt-BR') : 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Departamento:</strong> ${record.department}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Indicador:</strong> ${record.indicator}
+                        </div>
+                    </div>
+
+                    <h3>Informações de Resolução</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <strong>Status:</strong> <span class="status-badge resolved">✅ Resolvido</span>
+                        </div>
+                        <div class="detail-item">
+                            <strong>Resolvido em:</strong> ${record.resolvedAt ? new Date(record.resolvedAt.toDate()).toLocaleString('pt-BR') : 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Resolvido por:</strong> ${record.resolvedByName || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Função:</strong> ${record.resolvedByRole || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>CPF:</strong> ${record.resolvedBy || 'N/A'}
+                        </div>
+                    </div>
+            `;
+
+            // Informações específicas por indicador
+            if (record.indicator === 'Frequência dos Estudantes') {
+                html += `
+                    <h3>Dados do Estudante</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <strong>Nome:</strong> ${record.studentName || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Faltas Consecutivas:</strong> ${record.consecutiveAbsences || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Etapa:</strong> ${record.etapa || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>ID da Turma:</strong> ${record.turmaId || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Status:</strong> ${record.status || 'N/A'}
+                        </div>
+                    </div>
+                `;
+            } else if (record.indicator === 'Busca Ativa') {
+                html += `
+                    <h3>Dados da Busca</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <strong>Nome da Turma:</strong> ${record.className || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Turno:</strong> ${record.shift || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Estudante:</strong> ${record.studentName || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Faltas:</strong> ${record.absences || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Total de Visitas:</strong> ${record.totalVisitas || 'N/A'}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Observações e Links
+            if (record.observations) {
+                html += `
+                    <h3>Observações</h3>
+                    <p>${record.observations}</p>
+                `;
+            }
+
+            if (record.documentLinks) {
+                html += `
+                    <h3>Links de Documentos</h3>
+                    <p>${record.documentLinks}</p>
+                `;
+            }
+
+            html += `
+                    <h3>Informações do Sistema</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <strong>Criado por:</strong> ${record.createdByName || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Função:</strong> ${record.createdByRole || 'N/A'}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Data de Criação:</strong> ${record.createdAt ? new Date(record.createdAt.toDate()).toLocaleString('pt-BR') : 'N/A'}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            modalBody.innerHTML = html;
+            document.getElementById('viewModal').style.display = 'block';
+        }
+
+        // Fechar modal
+        function closeModal() {
+            document.getElementById('viewModal').style.display = 'none';
+        }
+
+        // Limpar todos os filtros
+        function clearAllFilters() {
+            document.getElementById('schoolFilter').value = '';
+            document.getElementById('municipalityFilter').value = '';
+            document.getElementById('departmentFilter').value = '';
+            document.getElementById('indicatorFilter').value = '';
+            document.getElementById('resolvedDateFilter').value = '';
+            document.getElementById('resolvedByFilter').value = '';
+            filterRecords();
+        }
+
+        // Atualizar registros
+        function refreshRecords() {
+            loadResolvedRecords();
+        }
+
+        // Atualizar estatísticas
+        function updateStats() {
+            document.getElementById('totalResolved').textContent = allResolvedRecords.length;
+            document.getElementById('filteredResolved').textContent = filteredResolvedRecords.length;
+        }
+
+        // Atualizar última atualização
+        function updateLastUpdate() {
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent = now.toLocaleString('pt-BR');
+        }
+
+        // Excluir registro resolvido
+        async function deleteResolvedRecord(recordId) {
+            if (confirm('Tem certeza que deseja excluir este registro resolvido?')) {
+                try {
+                    await deleteDoc(doc(db, 'records', recordId));
+                    alert('Registro resolvido excluído com sucesso!');
+                    loadResolvedRecords(); // Recarrega todos os registros para refletir a exclusão
+                } catch (error) {
+                    console.error('Erro ao excluir registro resolvido:', error);
+                    alert('Erro ao excluir registro resolvido: ' + error.message);
+                }
+            }
+        }
+
+        // Download Excel com múltiplas abas organizadas por indicadores
+        async function downloadExcel() {
+            if (filteredResolvedRecords.length === 0) {
+                alert('Nenhum registro resolvido para exportar!');
+                return;
+            }
+
+            try {
+                // Carregar a biblioteca SheetJS
+                const script = document.createElement('script');
+                script.src = 'https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js';
+                document.head.appendChild(script);
+
+                script.onload = async () => {
+                    // Separar registros por indicadores
+                    const frequencyRecords = filteredResolvedRecords.filter(record => record.indicator === 'Frequência dos Estudantes');
+                    const activeSearchRecords = filteredResolvedRecords.filter(record => record.indicator === 'Busca Ativa');
+                    const plannedClassesRecords = filteredResolvedRecords.filter(record => record.indicator === 'Aulas Previstas e Aulas Dadas');
+                    const belowAverageRecords = filteredResolvedRecords.filter(record => record.indicator === 'Estudantes Abaixo da Média');
+
+                    // Criar workbook com múltiplas abas
+                    const workbook = XLSX.utils.book_new();
+
+                    // Aba 1: Frequência dos Estudantes
+                    if (frequencyRecords.length > 0) {
+                        const frequencyData = frequencyRecords.map(record => ({
+                            'Departamento': record.department,
+                            'Indicador': record.indicator,
+                            'Escola': record.school,
+                            'Município': record.municipality,
+                            'Técnico': record.technician,
+                            'Data': record.date ? new Date(record.date).toLocaleDateString('pt-BR') : 'N/A',
+                            'Estudante': record.studentName || 'N/A',
+                            'Etapa': record.etapa || 'N/A',
+                            'ID da Turma': record.turmaId || 'N/A',
+                            'Faltas Consecutivas': record.consecutiveAbsences || 'N/A',
+                            'Status': record.status || 'N/A',
+                            'Observações': record.observations || 'N/A',
+                            'Links de Documentos': record.documentLinks || 'N/A',
+                            'Resolvido em': record.resolvedAt ? new Date(record.resolvedAt.toDate()).toLocaleDateString('pt-BR') : 'N/A',
+                            'Resolvido por': record.resolvedByName || 'N/A',
+                            'Função': record.resolvedByRole || 'N/A',
+                            'CPF': record.resolvedBy || 'N/A',
+                            'Criado por': record.createdByName || 'N/A',
+                            'Data de Criação': record.createdAt ? new Date(record.createdAt.toDate()).toLocaleString('pt-BR') : 'N/A'
+                        }));
+
+                        const frequencySheet = XLSX.utils.json_to_sheet(frequencyData);
+                        XLSX.utils.book_append_sheet(workbook, frequencySheet, 'Frequência dos Estudantes');
+                    }
+
+                    // Aba 2: Busca Ativa
+                    if (activeSearchRecords.length > 0) {
+                        const activeSearchData = activeSearchRecords.map(record => ({
+                            'Departamento': record.department,
+                            'Indicador': record.indicator,
+                            'Escola': record.school,
+                            'Município': record.municipality,
+                            'Técnico': record.technician,
+                            'Data': record.date ? new Date(record.date).toLocaleDateString('pt-BR') : 'N/A',
+                            'Estudante': record.studentName || 'N/A',
+                            'Nome da Turma': record.className || 'N/A',
+                            'Turno': record.shift || 'N/A',
+                            'Faltas': record.absences || 'N/A',
+                            'Total de Visitas': record.totalVisitas || 'N/A',
+                            'Observações': record.observations || 'N/A',
+                            'Links de Documentos': record.documentLinks || 'N/A',
+                            'Resolvido em': record.resolvedAt ? new Date(record.resolvedAt.toDate()).toLocaleDateString('pt-BR') : 'N/A',
+                            'Resolvido por': record.resolvedByName || 'N/A',
+                            'Função': record.resolvedByRole || 'N/A',
+                            'CPF': record.resolvedBy || 'N/A',
+                            'Criado por': record.createdByName || 'N/A',
+                            'Data de Criação': record.createdAt ? new Date(record.createdAt.toDate()).toLocaleString('pt-BR') : 'N/A'
+                        }));
+
+                        const activeSearchSheet = XLSX.utils.json_to_sheet(activeSearchData);
+                        XLSX.utils.book_append_sheet(workbook, activeSearchSheet, 'Busca Ativa');
+                    }
+
+                    // Aba 3: Aulas Previstas e Aulas Dadas
+                    if (plannedClassesRecords.length > 0) {
+                        const plannedClassesData = plannedClassesRecords.map(record => ({
+                            'Departamento': record.department,
+                            'Indicador': record.indicator,
+                            'Escola': record.school,
+                            'Município': record.municipality,
+                            'Técnico': record.technician,
+                            'Data': record.date ? new Date(record.date).toLocaleDateString('pt-BR') : 'N/A',
+                            'Estudante': record.studentName || 'N/A',
+                            'Data Referência': record.referenceDate ? new Date(record.referenceDate).toLocaleDateString('pt-BR') : 'N/A',
+                            'ID Turma': record.classId || 'N/A',
+                            'Disciplina': record.discipline || 'N/A',
+                            'Professor': record.professorName || 'N/A',
+                            'Bimestre': record.bimester || 'N/A',
+                            'Observações': record.observations || 'N/A',
+                            'Links de Documentos': record.documentLinks || 'N/A',
+                            'Resolvido em': record.resolvedAt ? new Date(record.resolvedAt.toDate()).toLocaleDateString('pt-BR') : 'N/A',
+                            'Resolvido por': record.resolvedByName || 'N/A',
+                            'Função': record.resolvedByRole || 'N/A',
+                            'CPF': record.resolvedBy || 'N/A',
+                            'Criado por': record.createdByName || 'N/A',
+                            'Data de Criação': record.createdAt ? new Date(record.createdAt.toDate()).toLocaleString('pt-BR') : 'N/A'
+                        }));
+
+                        const plannedClassesSheet = XLSX.utils.json_to_sheet(plannedClassesData);
+                        XLSX.utils.book_append_sheet(workbook, plannedClassesSheet, 'Aulas Previstas e Dadas');
+                    }
+
+                    // Aba 4: Estudantes Abaixo da Média
+                    if (belowAverageRecords.length > 0) {
+                        const belowAverageData = belowAverageRecords.map(record => ({
+                            'Departamento': record.department,
+                            'Indicador': record.indicator,
+                            'Escola': record.school,
+                            'Município': record.municipality,
+                            'Técnico': record.technician,
+                            'Data': record.date ? new Date(record.date).toLocaleDateString('pt-BR') : 'N/A',
+                            'Estudante': record.studentName || 'N/A',
+                            'Nota': record.studentGrade || 'N/A',
+                            'Situação': record.studentSituation || 'N/A',
+                            'Série/Turma': record.seriesClass || 'N/A',
+                            'Observações': record.observations || 'N/A',
+                            'Links de Documentos': record.documentLinks || 'N/A',
+                            'Resolvido em': record.resolvedAt ? new Date(record.resolvedAt.toDate()).toLocaleDateString('pt-BR') : 'N/A',
+                            'Resolvido por': record.resolvedByName || 'N/A',
+                            'Função': record.resolvedByRole || 'N/A',
+                            'CPF': record.resolvedBy || 'N/A',
+                            'Criado por': record.createdByName || 'N/A',
+                            'Data de Criação': record.createdAt ? new Date(record.createdAt.toDate()).toLocaleString('pt-BR') : 'N/A'
+                        }));
+
+                        const belowAverageSheet = XLSX.utils.json_to_sheet(belowAverageData);
+                        XLSX.utils.book_append_sheet(workbook, belowAverageSheet, 'Estudantes Abaixo da Média');
+                    }
+
+                    // Aba 5: Resumo Geral
+                    const summaryData = filteredResolvedRecords.map(record => ({
+                        'Departamento': record.department,
+                        'Indicador': record.indicator,
+                        'Escola': record.school,
+                        'Município': record.municipality,
+                        'Técnico': record.technician,
+                        'Data': record.date ? new Date(record.date).toLocaleDateString('pt-BR') : 'N/A',
+                        'Estudante': record.studentName || 'N/A',
+                        'Observações': record.observations || 'N/A',
+                        'Resolvido em': record.resolvedAt ? new Date(record.resolvedAt.toDate()).toLocaleDateString('pt-BR') : 'N/A',
+                        'Resolvido por': record.resolvedByName || 'N/A'
+                    }));
+
+                    const summarySheet = XLSX.utils.json_to_sheet(summaryData);
+                    XLSX.utils.book_append_sheet(workbook, summarySheet, 'Resumo Geral');
+
+                    // Ajustar largura das colunas automaticamente
+                    workbook.SheetNames.forEach(sheetName => {
+                        const worksheet = workbook.Sheets[sheetName];
+                        const columnWidths = [];
+                        
+                        // Calcular largura máxima para cada coluna
+                        XLSX.utils.sheet_to_json(worksheet, { header: 1 }).forEach(row => {
+                            row.forEach((cell, index) => {
+                                const cellLength = cell ? cell.toString().length : 0;
+                                columnWidths[index] = Math.max(columnWidths[index] || 0, cellLength);
+                            });
+                        });
+
+                        // Aplicar largura das colunas
+                        worksheet['!cols'] = columnWidths.map(width => ({ width: Math.min(Math.max(width + 2, 10), 50) }));
+                    });
+
+                    // Gerar e baixar o arquivo Excel
+                    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+                    const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `registros_resolvidos_${new Date().toISOString().split('T')[0]}.xlsx`;
+                    link.click();
+                    URL.revokeObjectURL(url);
+
+                    // Remover o script após o uso
+                    document.head.removeChild(script);
+                };
+
+                script.onerror = () => {
+                    alert('Erro ao carregar a biblioteca de exportação Excel. Tente novamente.');
+                };
+
+            } catch (error) {
+                console.error('Erro na exportação Excel:', error);
+                alert('Erro ao exportar para Excel. Tente novamente.');
+            }
+        }
+
+        // Download PDF profissional com todas as informações
+        async function downloadPDF() {
+            if (filteredResolvedRecords.length === 0) {
+                alert('Nenhum registro resolvido para exportar!');
+                return;
+            }
+
+            try {
+                // Carregar a biblioteca jsPDF
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+                document.head.appendChild(script);
+
+                script.onload = async () => {
+                    const { jsPDF } = window.jspdf;
+                    
+                    // Criar novo documento PDF
+                    const doc = new jsPDF('p', 'mm', 'a4');
+                    const pageWidth = doc.internal.pageSize.width;
+                    const pageHeight = doc.internal.pageSize.height;
+                    const margin = 20;
+                    const contentWidth = pageWidth - (2 * margin);
+                    
+                    let yPosition = 50; // Aumentado para dar espaço ao cabeçalho
+                    let currentPage = 1;
+
+                    // Função para adicionar cabeçalho com imagem em todas as páginas
+                    const addHeaderWithImage = () => {
+                        try {
+                            // Adicionar imagem do cabeçalho
+                            const img = new Image();
+                            img.src = 'images/cabecalho.png';
+                            
+                            // Aguardar o carregamento da imagem
+                            img.onload = () => {
+                                // Calcular dimensões da imagem (largura máxima de 80mm)
+                                const maxWidth = 80;
+                                const aspectRatio = img.width / img.height;
+                                const imgWidth = maxWidth;
+                                const imgHeight = maxWidth / aspectRatio;
+                                
+                                // Centralizar a imagem horizontalmente
+                                const imgX = (pageWidth - imgWidth) / 2;
+                                
+                                // Adicionar a imagem no topo
+                                doc.addImage(img, 'PNG', imgX, 10, imgWidth, imgHeight);
+                                
+                                // Adicionar linha separadora abaixo da imagem
+                                doc.setDrawColor(200, 200, 200);
+                                doc.setLineWidth(0.5);
+                                doc.line(margin, 10 + imgHeight + 5, pageWidth - margin, 10 + imgHeight + 5);
+                            };
+                            
+                            // Se a imagem não carregar, continuar sem ela
+                            img.onerror = () => {
+                                console.log('Imagem do cabeçalho não carregou, continuando sem ela');
+                            };
+                        } catch (error) {
+                            console.log('Erro ao carregar imagem do cabeçalho:', error);
+                        }
+                    };
+
+                    // Adicionar cabeçalho na primeira página
+                    addHeaderWithImage();
+
+                    // Função para adicionar nova página
+                    const addNewPage = () => {
+                        doc.addPage();
+                        currentPage++;
+                        yPosition = 50;
+                        
+                        // Adicionar cabeçalho com imagem na nova página
+                        addHeaderWithImage();
+                        
+                        // Número da página no canto superior direito
+                        doc.setFontSize(12);
+                        doc.setFont('helvetica', 'normal');
+                        doc.text(`Página ${currentPage}`, pageWidth - margin, 20, { align: 'right' });
+                    };
+
+                    // Título principal
+                    doc.setFontSize(18);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('RELATÓRIO DE REGISTROS RESOLVIDOS', pageWidth / 2, yPosition, { align: 'center' });
+                    yPosition += 15;
+
+                    // Informações do relatório
+                    doc.setFontSize(12);
+                    doc.setFont('helvetica', 'normal');
+                    doc.text(`Total de registros resolvidos: ${filteredResolvedRecords.length}`, margin, yPosition);
+                    yPosition += 8;
+                    doc.text(`Data de geração: ${new Date().toLocaleString('pt-BR')}`, margin, yPosition);
+                    yPosition += 15;
+
+                    // Separar registros por indicadores
+                    const frequencyRecords = filteredResolvedRecords.filter(record => record.indicator === 'Frequência dos Estudantes');
+                    const activeSearchRecords = filteredResolvedRecords.filter(record => record.indicator === 'Busca Ativa');
+                    const plannedClassesRecords = filteredResolvedRecords.filter(record => record.indicator === 'Aulas Previstas e Aulas Dadas');
+                    const belowAverageRecords = filteredResolvedRecords.filter(record => record.indicator === 'Estudantes Abaixo da Média');
+
+                    // Função para verificar se precisa de nova página
+                    const checkPageBreak = (requiredSpace) => {
+                        if (yPosition + requiredSpace > pageHeight - margin) {
+                            addNewPage();
+                        }
+                    };
+
+                    // Função para adicionar título de seção
+                    const addSectionTitle = (title) => {
+                        checkPageBreak(15);
+                        doc.setFontSize(14);
+                        doc.setFont('helvetica', 'bold');
+                        doc.text(title, margin, yPosition);
+                        yPosition += 10;
+                        doc.setFontSize(10);
+                        doc.setFont('helvetica', 'normal');
+                    };
+
+                    // Função para adicionar registro detalhado
+                    const addDetailedRecord = (record, index) => {
+                        const recordHeight = 80; // Altura estimada para cada registro
+                        checkPageBreak(recordHeight);
+
+                        // Número do registro
+                        doc.setFontSize(11);
+                        doc.setFont('helvetica', 'bold');
+                        doc.text(`${index + 1}. ${record.indicator}`, margin, yPosition);
+                        yPosition += 6;
+
+                        // Informações básicas
+                        doc.setFontSize(10);
+                        doc.setFont('helvetica', 'normal');
+                        doc.text(`Departamento: ${record.department}`, margin, yPosition);
+                        yPosition += 5;
+                        doc.text(`Escola: ${record.school}`, margin, yPosition);
+                        yPosition += 5;
+                        doc.text(`Município: ${record.municipality}`, margin, yPosition);
+                        yPosition += 5;
+                        doc.text(`Técnico: ${record.technician}`, margin, yPosition);
+                        yPosition += 5;
+                        doc.text(`Data: ${record.date ? new Date(record.date).toLocaleDateString('pt-BR') : 'N/A'}`, margin, yPosition);
+                        yPosition += 5;
+                        doc.text(`Resolvido em: ${record.resolvedAt ? new Date(record.resolvedAt.toDate()).toLocaleDateString('pt-BR') : 'N/A'}`, margin, yPosition);
+                        yPosition += 5;
+                        doc.text(`Resolvido por: ${record.resolvedByName || 'N/A'}`, margin, yPosition);
+                        yPosition += 5;
+
+                        // Informações específicas por indicador
+                        if (record.indicator === 'Frequência dos Estudantes') {
+                            if (record.studentName || record.etapa || record.turmaId) {
+                                doc.text('Dados do Estudante:', margin, yPosition);
+                                yPosition += 5;
+                                if (record.studentName) doc.text(`• Nome: ${record.studentName}`, margin + 5, yPosition), yPosition += 4;
+                                if (record.etapa) doc.text(`• Etapa: ${record.etapa}`, margin + 5, yPosition), yPosition += 4;
+                                if (record.turmaId) doc.text(`• ID da Turma: ${record.turmaId}`, margin + 5, yPosition), yPosition += 4;
+                                if (record.consecutiveAbsences) doc.text(`• Faltas Consecutivas: ${record.consecutiveAbsences}`, margin + 5, yPosition), yPosition += 4;
+                                if (record.status) doc.text(`• Status: ${record.status}`, margin + 5, yPosition), yPosition += 4;
+                            }
+                        }
+
+                        if (record.indicator === 'Busca Ativa') {
+                            if (record.className || record.shift || record.absences) {
+                                doc.text('Dados da Busca:', margin, yPosition);
+                                yPosition += 5;
+                                if (record.className) doc.text(`• Nome da Turma: ${record.className}`, margin + 5, yPosition), yPosition += 4;
+                                if (record.shift) doc.text(`• Turno: ${record.shift}`, margin + 5, yPosition), yPosition += 4;
+                                if (record.studentName) doc.text(`• Estudante: ${record.studentName}`, margin + 5, yPosition), yPosition += 4;
+                                if (record.absences) doc.text(`• Faltas: ${record.absences}`, margin + 5, yPosition), yPosition += 4;
+                                if (record.totalVisitas) doc.text(`• Total de Visitas: ${record.totalVisitas}`, margin + 5, yPosition), yPosition += 4;
+                            }
+                        }
+
+                        if (record.indicator === 'Aulas Previstas e Aulas Dadas') {
+                            if (record.referenceDate || record.classId || record.discipline) {
+                                doc.text('Detalhes das Aulas:', margin, yPosition);
+                                yPosition += 5;
+                                if (record.referenceDate) doc.text(`• Data Referência: ${new Date(record.referenceDate).toLocaleDateString('pt-BR')}`, margin + 5, yPosition), yPosition += 4;
+                                if (record.classId) doc.text(`• ID Turma: ${record.classId}`, margin + 5, yPosition), yPosition += 4;
+                                if (record.discipline) doc.text(`• Disciplina: ${record.discipline}`, margin + 5, yPosition), yPosition += 4;
+                                if (record.professorName) doc.text(`• Professor: ${record.professorName}`, margin + 5, yPosition), yPosition += 4;
+                                if (record.bimester) doc.text(`• Bimestre: ${record.bimester}`, margin + 5, yPosition), yPosition += 4;
+                            }
+                        }
+
+                        if (record.indicator === 'Estudantes Abaixo da Média') {
+                            if (record.studentGrade || record.studentSituation) {
+                                doc.text('Informações do Estudante:', margin, yPosition);
+                                yPosition += 5;
+                                if (record.studentGrade) doc.text(`• Nota: ${record.studentGrade}`, margin + 5, yPosition), yPosition += 4;
+                                if (record.studentSituation) doc.text(`• Situação: ${record.studentSituation}`, margin + 5, yPosition), yPosition += 4;
+                                if (record.seriesClass) doc.text(`• Série/Turma: ${record.seriesClass}`, margin + 5, yPosition), yPosition += 4;
+                            }
+                        }
+
+                        // Observações e Links
+                        if (record.observations) {
+                            doc.text(`Observações: ${record.observations}`, margin, yPosition);
+                            yPosition += 5;
+                        }
+
+                        if (record.documentLinks) {
+                            doc.text(`Links de Documentos: ${record.documentLinks}`, margin, yPosition);
+                            yPosition += 5;
+                        }
+
+                        yPosition += 8; // Espaço entre registros
+                    };
+
+                    // Seção Frequência dos Estudantes
+                    if (frequencyRecords.length > 0) {
+                        addSectionTitle('FREQUÊNCIA DOS ESTUDANTES');
+                        frequencyRecords.forEach((record, index) => {
+                            addDetailedRecord(record, index);
+                        });
+                    }
+
+                    // Seção Busca Ativa
+                    if (activeSearchRecords.length > 0) {
+                        addSectionTitle('BUSCA ATIVA');
+                        activeSearchRecords.forEach((record, index) => {
+                            addDetailedRecord(record, index);
+                        });
+                    }
+
+                    // Seção Aulas Previstas e Aulas Dadas
+                    if (plannedClassesRecords.length > 0) {
+                        addSectionTitle('AULAS PREVISTAS E AULAS DADAS');
+                        plannedClassesRecords.forEach((record, index) => {
+                            addDetailedRecord(record, index);
+                        });
+                    }
+
+                    // Seção Estudantes Abaixo da Média
+                    if (belowAverageRecords.length > 0) {
+                        addSectionTitle('ESTUDANTES ABAIXO DA MÉDIA');
+                        belowAverageRecords.forEach((record, index) => {
+                            addDetailedRecord(record, index);
+                        });
+                    }
+
+                    // Rodapé na última página
+                    doc.setFontSize(10);
+                    doc.setFont('helvetica', 'italic');
+                    doc.text('Relatório gerado automaticamente pelo Sistema SRE GURUPI', pageWidth / 2, pageHeight - 10, { align: 'center' });
+
+                    // Salvar o PDF
+                    doc.save(`relatorio_registros_resolvidos_${new Date().toISOString().split('T')[0]}.pdf`);
+
+                    // Remover o script após o uso
+                    document.head.removeChild(script);
+                };
+
+                script.onerror = () => {
+                    alert('Erro ao carregar a biblioteca de exportação PDF. Tente novamente.');
+                };
+
+            } catch (error) {
+                console.error('Erro na exportação PDF:', error);
+                alert('Erro ao exportar para PDF. Tente novamente.');
+            }
+        }
+
+        // Inicializar
+        checkAuth();
+        loadResolvedRecords();
+
+        // Fechar modal ao clicar fora
+        window.onclick = function(event) {
+            const modal = document.getElementById('viewModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Exportar funções para o escopo global
+        window.logout = logout;
+        window.viewResolvedRecord = viewResolvedRecord;
+        window.closeModal = closeModal;
+        window.clearAllFilters = clearAllFilters;
+        window.refreshRecords = refreshRecords;
+        window.downloadExcel = downloadExcel;
+        window.downloadPDF = downloadPDF;
+        window.deleteResolvedRecord = deleteResolvedRecord;
+    </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste LocalStorage</title>
+</head>
+<body>
+    <h1>Teste de LocalStorage</h1>
+    
+    <h2>Dados de Autenticação</h2>
+    <div id="authData"></div>
+    
+    <h2>Teste de Gravação</h2>
+    <button onclick="testWrite()">Testar Gravação</button>
+    <button onclick="testRead()">Testar Leitura</button>
+    <button onclick="clearData()">Limpar Dados</button>
+    
+    <div id="result"></div>
+
+    <script>
+        // Simular dados de autenticação
+        function simulateAuth() {
+            localStorage.setItem('userRole', 'Técnico');
+            localStorage.setItem('userCPF', '123.456.789-00');
+            localStorage.setItem('userName', 'Alexandre Tolentino');
+            localStorage.setItem('userId', 'user123');
+            
+            updateAuthDisplay();
+        }
+        
+        // Atualizar exibição dos dados de autenticação
+        function updateAuthDisplay() {
+            const authDiv = document.getElementById('authData');
+            authDiv.innerHTML = `
+                <p><strong>Role:</strong> ${localStorage.getItem('userRole') || 'Não definido'}</p>
+                <p><strong>CPF:</strong> ${localStorage.getItem('userCPF') || 'Não definido'}</p>
+                <p><strong>Nome:</strong> ${localStorage.getItem('userName') || 'Não definido'}</p>
+                <p><strong>ID:</strong> ${localStorage.getItem('userId') || 'Não definido'}</p>
+            `;
+        }
+        
+        // Testar gravação
+        function testWrite() {
+            try {
+                const testData = {
+                    test: true,
+                    timestamp: new Date().toISOString(),
+                    message: 'Teste de localStorage'
+                };
+                
+                const records = JSON.parse(localStorage.getItem('testRecords') || '[]');
+                records.push(testData);
+                localStorage.setItem('testRecords', JSON.stringify(records));
+                
+                document.getElementById('result').innerHTML = '<p style="color: green;">✅ Dados gravados com sucesso!</p>';
+            } catch (error) {
+                document.getElementById('result').innerHTML = `<p style="color: red;">❌ Erro ao gravar: ${error.message}</p>`;
+            }
+        }
+        
+        // Testar leitura
+        function testRead() {
+            try {
+                const records = JSON.parse(localStorage.getItem('testRecords') || '[]');
+                document.getElementById('result').innerHTML = `
+                    <p style="color: blue;">📖 Dados lidos com sucesso!</p>
+                    <p>Total de registros: ${records.length}</p>
+                    <pre>${JSON.stringify(records, null, 2)}</pre>
+                `;
+            } catch (error) {
+                document.getElementById('result').innerHTML = `<p style="color: red;">❌ Erro ao ler: ${error.message}</p>`;
+            }
+        }
+        
+        // Limpar dados
+        function clearData() {
+            localStorage.removeItem('testRecords');
+            document.getElementById('result').innerHTML = '<p style="color: orange;">🗑️ Dados de teste removidos!</p>';
+        }
+        
+        // Inicializar
+        simulateAuth();
+        updateAuthDisplay();
+    </script>
+</body>
+</html>

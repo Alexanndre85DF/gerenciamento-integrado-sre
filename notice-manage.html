@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Avisos - SRE GURUPI</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Gerenciar Avisos</h1>
+        <button class="logout-btn" onclick="logout()">Sair</button>
+    </div>
+
+    <div class="main-container">
+        <div class="card">
+            <h2>Avisos do Sistema</h2>
+            
+            <div style="margin-bottom: 20px;">
+                <input type="text" id="searchInput" placeholder="Buscar avisos..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+            </div>
+            
+            <div id="noticesList">
+                <p>Carregando avisos...</p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="admin-panel.html" class="btn btn-secondary">Voltar ao Painel</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyABEloTfC_nT5vfDHpeqYdDjNoPCKwE-Eo",
+            authDomain: "projeto-alex-aaadf.firebaseapp.com",
+            projectId: "projeto-alex-aaadf",
+            storageBucket: "projeto-alex-aaadf.firebasestorage.app",
+            messagingSenderId: "720032595137",
+            appId: "1:720032595137:web:85834232e770a942216840"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Verificar se é super admin
+        if (localStorage.getItem('userRole') !== 'super_admin') {
+            window.location.href = 'index.html';
+        }
+
+        // Função de logout
+        window.logout = function() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        };
+
+        // Função para carregar avisos
+        async function loadNotices() {
+            try {
+                const noticesSnapshot = await getDocs(collection(db, 'notices'));
+                const notices = [];
+                
+                noticesSnapshot.forEach((doc) => {
+                    notices.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+                
+                // Ordenar por data de criação (mais recentes primeiro)
+                notices.sort((a, b) => b.createdAt.toDate() - a.createdAt.toDate());
+                
+                displayNotices(notices);
+            } catch (error) {
+                console.error('Erro ao carregar avisos:', error);
+                document.getElementById('noticesList').innerHTML = '<p>Erro ao carregar avisos.</p>';
+            }
+        }
+
+        // Função para exibir avisos
+        function displayNotices(notices) {
+            const noticesList = document.getElementById('noticesList');
+            
+            if (notices.length === 0) {
+                noticesList.innerHTML = '<p>Nenhum aviso encontrado.</p>';
+                return;
+            }
+            
+            let html = '';
+            
+            notices.forEach(notice => {
+                const priorityColor = getPriorityColor(notice.priority);
+                const priorityLabel = getPriorityLabel(notice.priority);
+                const departmentLabel = getDepartmentLabel(notice.department);
+                const createdAt = notice.createdAt.toDate().toLocaleDateString('pt-BR');
+                const expiryDate = new Date(notice.expiryDate).toLocaleDateString('pt-BR');
+                
+                html += '<div class="card" style="margin-bottom: 15px;">';
+                html += `<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">`;
+                html += `<h3 style="margin: 0; color: #333;">${notice.title}</h3>`;
+                html += `<span style="background-color: ${priorityColor}; color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px;">${priorityLabel}</span>`;
+                html += '</div>';
+                
+                html += `<p style="margin-bottom: 10px; color: #666;"><strong>Departamento:</strong> ${departmentLabel}</p>`;
+                html += `<p style="margin-bottom: 10px; color: #666;"><strong>Criado em:</strong> ${createdAt}</p>`;
+                html += `<p style="margin-bottom: 10px; color: #666;"><strong>Expira em:</strong> ${expiryDate}</p>`;
+                html += `<p style="margin-bottom: 15px; line-height: 1.6;">${notice.content}</p>`;
+                
+                html += '<div style="display: flex; gap: 10px;">';
+                if (notice.status === 'active') {
+                    html += `<button onclick="toggleNoticeStatus('${notice.id}', 'inactive')" class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px;">Desativar</button>`;
+                } else {
+                    html += `<button onclick="toggleNoticeStatus('${notice.id}', 'active')" class="btn" style="padding: 5px 10px; font-size: 12px;">Ativar</button>`;
+                }
+                html += `<button onclick="deleteNotice('${notice.id}')" class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;">Excluir</button>`;
+                html += '</div>';
+                
+                html += '</div>';
+            });
+            
+            noticesList.innerHTML = html;
+        }
+
+        // Função para obter cor da prioridade
+        function getPriorityColor(priority) {
+            const colors = {
+                'low': '#28a745',
+                'medium': '#ffc107',
+                'high': '#fd7e14',
+                'urgent': '#dc3545'
+            };
+            return colors[priority] || '#6c757d';
+        }
+
+        // Função para obter label da prioridade
+        function getPriorityLabel(priority) {
+            const labels = {
+                'low': 'Baixa',
+                'medium': 'Média',
+                'high': 'Alta',
+                'urgent': 'Urgente'
+            };
+            return labels[priority] || priority;
+        }
+
+        // Função para obter label do departamento
+        function getDepartmentLabel(department) {
+            const departments = {
+                'all': 'Todos os Departamentos',
+                'curriculum': 'Currículo',
+                'supervision': 'Supervisão',
+                'multiprofessional': 'Equipe Multiprofissional'
+            };
+            return departments[department] || department;
+        }
+
+        // Função para alternar status do aviso
+        window.toggleNoticeStatus = async function(noticeId, newStatus) {
+            try {
+                await updateDoc(doc(db, 'notices', noticeId), {
+                    status: newStatus
+                });
+                
+                alert(`Aviso ${newStatus === 'active' ? 'ativado' : 'desativado'} com sucesso!`);
+                loadNotices();
+                
+            } catch (error) {
+                console.error('Erro ao alterar status do aviso:', error);
+                alert('Erro ao alterar status do aviso.');
+            }
+        };
+
+        // Função para excluir aviso
+        window.deleteNotice = async function(noticeId) {
+            if (confirm('Tem certeza que deseja excluir este aviso?')) {
+                try {
+                    await deleteDoc(doc(db, 'notices', noticeId));
+                    alert('Aviso excluído com sucesso!');
+                    loadNotices();
+                } catch (error) {
+                    console.error('Erro ao excluir aviso:', error);
+                    alert('Erro ao excluir aviso.');
+                }
+            }
+        };
+
+        // Função de busca
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            // Implementar busca em tempo real aqui
+        });
+
+        // Carregar avisos ao carregar a página
+        loadNotices();
+    </script>
+</body>
+</html>

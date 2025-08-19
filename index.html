@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SRE GURUPI - Login</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .password-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #666;
+            padding: 5px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .password-toggle:hover {
+            color: #333;
+        }
+        
+        .eye-icon {
+            width: 16px;
+            height: 16px;
+            position: relative;
+        }
+        
+        .eye-icon::before {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 10px;
+            border: 2px solid currentColor;
+            border-radius: 10px 10px 0 0;
+            top: 0;
+            left: 0;
+        }
+        
+        .eye-icon::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: currentColor;
+            border-radius: 50%;
+            top: 3px;
+            left: 6px;
+        }
+        
+        .eye-slash-icon {
+            width: 16px;
+            height: 16px;
+            position: relative;
+        }
+        
+        .eye-slash-icon::before {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 10px;
+            border: 2px solid currentColor;
+            border-radius: 10px 10px 0 0;
+            top: 0;
+            left: 0;
+        }
+        
+        .eye-slash-icon::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: currentColor;
+            border-radius: 50%;
+            top: 3px;
+            left: 6px;
+        }
+        
+        .eye-slash-icon .slash {
+            position: absolute;
+            width: 18px;
+            height: 2px;
+            background: currentColor;
+            top: 7px;
+            left: -1px;
+            transform: rotate(-45deg);
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            min-width: 400px;
+            max-width: 90%;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <h1 class="login-title">SRE GURUPI</h1>
+            <p class="login-subtitle">Sistema de Monitoramento Integrado</p>
+            
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="cpfEmail">CPF ou E-mail</label>
+                    <input type="text" id="cpfEmail" name="cpfEmail" placeholder="Digite seu CPF ou e-mail" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <div class="password-container">
+                        <input type="password" id="password" name="password" required>
+                        <button type="button" class="password-toggle" id="passwordToggle" onclick="togglePassword()">
+                            <div class="eye-icon"></div>
+                        </button>
+                    </div>
+                </div>
+                
+                <button type="submit" class="login-btn">Entrar</button>
+            </form>
+            
+            <div style="text-align: center; margin-top: 15px;">
+                <a href="#" onclick="showChangePasswordModal()" style="color: #007bff; text-decoration: none; font-size: 14px;">Alterar Senha</a>
+            </div>
+            
+            <div class="copyright">
+                © 2025 Alexandre Tolentino
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para alterar senha -->
+    <div id="changePasswordModal" class="modal">
+        <div class="modal-content">
+            <h3>Alterar Senha</h3>
+            <p style="color: #666; font-size: 14px; margin-bottom: 20px;">Digite seu CPF ou e-mail e sua senha atual para alterar a senha.</p>
+            
+            <form id="changePasswordForm">
+                <div class="form-group">
+                    <label for="changeCpfEmail">CPF ou E-mail</label>
+                    <input type="text" id="changeCpfEmail" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="currentPassword">Senha Atual</label>
+                    <div class="password-container">
+                        <input type="password" id="currentPassword" required>
+                        <button type="button" class="password-toggle" onclick="toggleChangePasswordVisibility('currentPassword')">
+                            <div class="eye-icon"></div>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="newPassword">Nova Senha</label>
+                    <div class="password-container">
+                        <input type="password" id="newPassword" required>
+                        <button type="button" class="password-toggle" onclick="toggleChangePasswordVisibility('newPassword')">
+                            <div class="eye-icon"></div>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmNewPassword">Confirmar Nova Senha</label>
+                    <div class="password-container">
+                        <input type="password" id="confirmNewPassword" required>
+                        <button type="button" class="password-toggle" onclick="toggleChangePasswordVisibility('confirmNewPassword')">
+                            <div class="eye-icon"></div>
+                        </button>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <button type="submit" class="login-btn">Alterar Senha</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeChangePasswordModal()" style="margin-left: 10px;">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Função para mostrar/ocultar senha
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const passwordToggle = document.getElementById('passwordToggle');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordToggle.innerHTML = '<div class="eye-slash-icon"><div class="slash"></div></div>';
+            } else {
+                passwordInput.type = 'password';
+                passwordToggle.innerHTML = '<div class="eye-icon"></div>';
+            }
+        }
+
+        // Função para mostrar modal de alterar senha
+        function showChangePasswordModal() {
+            document.getElementById('changePasswordModal').style.display = 'block';
+            document.getElementById('changePasswordForm').reset();
+        }
+
+        // Função para fechar modal de alterar senha
+        function closeChangePasswordModal() {
+            document.getElementById('changePasswordModal').style.display = 'none';
+            document.getElementById('changePasswordForm').reset();
+        }
+
+        // Função para alternar visibilidade da senha no modal
+        function toggleChangePasswordVisibility(inputId) {
+            const input = document.getElementById(inputId);
+            const button = input.nextElementSibling;
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                button.innerHTML = '<div class="eye-slash-icon"><div class="slash"></div></div>';
+            } else {
+                input.type = 'password';
+                button.innerHTML = '<div class="eye-icon"></div>';
+            }
+        }
+    </script>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, query, where, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyABE1oTfC_nT5vfDHpeqYdDjNoPCKwE-Eo",
+            authDomain: "projeto-alex-aaadf.firebaseapp.com",
+            projectId: "projeto-alex-aaadf",
+            storageBucket: "projeto-alex-aaadf.firebasestorage.app",
+            messagingSenderId: "720032595137",
+            appId: "1:720032595137:web:85834232e770a942216840"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const cpfEmail = document.getElementById('cpfEmail').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                console.log('Tentativa de login com:', cpfEmail);
+                
+                // Check if it's the super admin
+                if (cpfEmail === '01099080150' && password === 'brasilia85') {
+                    localStorage.setItem('userRole', 'super_admin');
+                    localStorage.setItem('userCPF', cpfEmail);
+                    localStorage.setItem('userName', 'Super Administrador');
+                    window.location.href = 'user-dashboard.html';
+                    return;
+                }
+                
+                // Check if it's Alex FVG (super admin)
+                if (cpfEmail === '89990064253' && password === '81706809') {
+                    localStorage.setItem('userRole', 'super_admin');
+                    localStorage.setItem('userCPF', cpfEmail);
+                    localStorage.setItem('userName', 'Alex FVG - Super Administrador');
+                    window.location.href = 'user-dashboard.html';
+                    return;
+                }
+                
+                // Buscar usuário no Firestore por CPF ou email
+                let userQuery;
+                if (cpfEmail.includes('@')) {
+                    // Se contém @, é email
+                    userQuery = query(collection(db, 'users'), where('email', '==', cpfEmail));
+                } else {
+                    // Se não contém @, é CPF
+                    userQuery = query(collection(db, 'users'), where('cpf', '==', cpfEmail));
+                }
+                
+                console.log('Buscando usuário com:', cpfEmail);
+                const userSnapshot = await getDocs(userQuery);
+                
+                if (userSnapshot.empty) {
+                    console.log('Usuário não encontrado');
+                    alert('Usuário não encontrado no sistema');
+                    return;
+                }
+                
+                const userDoc = userSnapshot.docs[0];
+                const userData = userDoc.data();
+                
+                console.log('Usuário encontrado:', userData);
+                console.log('Senha digitada:', password);
+                console.log('Senha armazenada:', userData.password);
+                console.log('Senhas são iguais?', userData.password === password);
+                
+                // Verificar senha
+                if (userData.password === password) {
+                    localStorage.setItem('userRole', userData.role || 'user');
+                    localStorage.setItem('userCPF', userData.cpf);
+                    localStorage.setItem('userName', userData.name);
+                    localStorage.setItem('userId', userDoc.id);
+                    
+                    // Redirecionar baseado no papel do usuário
+                    if (userData.role === 'admin') {
+                        window.location.href = 'admin-panel.html';
+                    } else {
+                        window.location.href = 'user-dashboard.html';
+                    }
+                } else {
+                    alert('Senha incorreta');
+                }
+                
+            } catch (error) {
+                console.error('Erro no login:', error);
+                alert('Erro no login. Verifique suas credenciais.');
+            }
+        });
+
+        // Handler do formulário de alterar senha
+        document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const cpfEmail = document.getElementById('changeCpfEmail').value;
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+            
+            // Validações
+            if (newPassword !== confirmNewPassword) {
+                alert('As novas senhas não coincidem!');
+                return;
+            }
+            
+            if (newPassword.length < 6) {
+                alert('A nova senha deve ter pelo menos 6 caracteres!');
+                return;
+            }
+            
+            try {
+                // Buscar usuário no Firestore por CPF ou email
+                let userQuery;
+                if (cpfEmail.includes('@')) {
+                    userQuery = query(collection(db, 'users'), where('email', '==', cpfEmail));
+                } else {
+                    userQuery = query(collection(db, 'users'), where('cpf', '==', cpfEmail));
+                }
+                
+                const userSnapshot = await getDocs(userQuery);
+                
+                if (userSnapshot.empty) {
+                    alert('Usuário não encontrado no sistema!');
+                    return;
+                }
+                
+                const userDoc = userSnapshot.docs[0];
+                const userData = userDoc.data();
+                
+                // Verificar se a senha atual está correta
+                if (userData.password !== currentPassword) {
+                    alert('Senha atual incorreta!');
+                    return;
+                }
+                
+                // Atualizar senha
+                await updateDoc(doc(db, 'users', userDoc.id), {
+                    password: newPassword
+                });
+                
+                alert('Senha alterada com sucesso!');
+                closeChangePasswordModal();
+                
+            } catch (error) {
+                console.error('Erro ao alterar senha:', error);
+                alert('Erro ao alterar senha: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerar Monitoramento - Currículo - SRE GURUPI</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Gerar Monitoramento - Currículo</h1>
+        <button class="logout-btn" onclick="logout()">Sair</button>
+    </div>
+
+    <div class="main-container">
+        <div class="card">
+            <h2>Selecione o tipo de questionário</h2>
+            <p>Escolha um dos questionários abaixo para preencher</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 30px 0;">
+                <a href="forms/student-frequency-curriculum.html" class="btn">Frequência dos Estudantes</a>
+                <a href="forms/active-search-curriculum.html" class="btn">Busca Ativa</a>
+                <a href="forms/planned-vs-given-classes-curriculum.html" class="btn">Aulas Previstas e Aulas Dadas</a>
+                <a href="forms/below-average-grades-curriculum.html" class="btn">Estudantes Abaixo da Média</a>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="javascript:history.back()" class="btn btn-secondary">Voltar ao Menu</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyABEloTfC_nT5vfDHpeqYdDjNoPCKwE-Eo",
+            authDomain: "projeto-alex-aaadf.firebaseapp.com",
+            projectId: "projeto-alex-aaadf",
+            storageBucket: "projeto-alex-aaadf.firebasestorage.app",
+            messagingSenderId: "720032595137",
+            appId: "1:720032595137:web:85834232e770a942216840"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Verificar se está logado
+        if (!localStorage.getItem('userRole')) {
+            window.location.href = 'index.html';
+        }
+
+        // Função de logout
+        window.logout = function() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Firebase</title>
+</head>
+<body>
+    <h1>Teste de Conexão Firebase</h1>
+    <button id="testBtn">Testar Conexão</button>
+    <div id="result"></div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyABEloTfC_nT5vfDHpeqYdDjNoPCKwE-Eo",
+            authDomain: "projeto-alex-aaadf.firebaseapp.com",
+            projectId: "projeto-alex-aaadf",
+            storageBucket: "projeto-alex-aaadf.firebasestorage.app",
+            messagingSenderId: "720032595137",
+            appId: "1:720032595137:web:85834232e770a942216840"
+        };
+
+        try {
+            const app = initializeApp(firebaseConfig);
+            const db = getFirestore(app);
+            
+            document.getElementById('testBtn').addEventListener('click', async () => {
+                try {
+                    const testData = {
+                        test: true,
+                        timestamp: serverTimestamp(),
+                        message: 'Teste de conexão'
+                    };
+                    
+                    const docRef = await addDoc(collection(db, 'test'), testData);
+                    document.getElementById('result').innerHTML = `
+                        <p style="color: green;">✅ Conexão bem-sucedida!</p>
+                        <p>Documento criado com ID: ${docRef.id}</p>
+                    `;
+                } catch (error) {
+                    document.getElementById('result').innerHTML = `
+                        <p style="color: red;">❌ Erro na conexão: ${error.message}</p>
+                    `;
+                }
+            });
+            
+            document.getElementById('result').innerHTML = '<p style="color: blue;">Firebase inicializado com sucesso. Clique no botão para testar a conexão.</p>';
+            
+        } catch (error) {
+            document.getElementById('result').innerHTML = `
+                <p style="color: red;">❌ Erro ao inicializar Firebase: ${error.message}</p>
+            `;
+        }
+    </script>
+</body>
+</html>

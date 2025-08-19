@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Usuários - SRE GURUPI</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .form-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #007bff;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+        }
+        
+        .password-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #666;
+            padding: 5px;
+        }
+        
+        .password-toggle:hover {
+            color: #333;
+        }
+        
+        .btn-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-success:hover {
+            background: linear-gradient(135deg, #218838 0%, #1ea085 100%);
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #545b62 0%, #4e555b 100%);
+            transform: translateY(-1px);
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Gerenciar Usuários</h1>
+        <button class="logout-btn" onclick="logout()">Sair</button>
+    </div>
+
+    <div class="main-container">
+        <div class="form-container">
+            <div class="form-section">
+                <h3>📝 Cadastrar Novo Usuário</h3>
+                
+                <form id="userForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Nome Completo *</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cpf">CPF *</label>
+                            <input type="text" id="cpf" name="cpf" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">E-mail *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="role">Função *</label>
+                            <select id="role" name="role" required>
+                                <option value="">Selecione uma função</option>
+                                <option value="admin">Administrador</option>
+                                <option value="coordinator">Coordenador</option>
+                                <option value="teacher">Professor</option>
+                                <option value="supervisor">Supervisor</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="school">Escola *</label>
+                            <input type="text" id="school" name="school" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="department">Departamento *</label>
+                            <select id="department" name="department" required>
+                                <option value="">Selecione um departamento</option>
+                                <option value="curriculum">Currículo</option>
+                                <option value="supervision">Supervisão</option>
+                                <option value="multiprofessional">Equipe Multiprofissional</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="password">Senha *</label>
+                            <div class="password-container">
+                                <input type="password" id="password" name="password" required>
+                                <button type="button" class="password-toggle" onclick="togglePassword('password')">👁️</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirmar Senha *</label>
+                            <div class="password-container">
+                                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                                <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword')">👁️</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="btn-actions">
+                        <button type="submit" class="btn-success">✅ Cadastrar Usuário</button>
+                        <a href="user-dashboard.html" class="btn-secondary">🔙 Voltar ao Menu</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyABEloTfC_nT5vfDHpeqYdDjNoPCKwE-Eo",
+            authDomain: "projeto-alex-aaadf.firebaseapp.com",
+            projectId: "projeto-alex-aaadf",
+            storageBucket: "projeto-alex-aaadf.firebasestorage.app",
+            messagingSenderId: "720032595137",
+            appId: "1:720032595137:web:85834232e770a942216840"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Verificar se é super admin
+        if (localStorage.getItem('userRole') !== 'super_admin') {
+            window.location.href = 'index.html';
+        }
+
+        // Função de logout
+        window.logout = async function() {
+            try {
+                await signOut(auth);
+                localStorage.clear();
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Erro no logout:', error);
+                localStorage.clear();
+                window.location.href = 'index.html';
+            }
+        };
+
+        // Função para alternar visibilidade da senha
+        window.togglePassword = function(inputId) {
+            const input = document.getElementById(inputId);
+            const button = input.nextElementSibling;
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                button.innerHTML = '🙈';
+            } else {
+                input.type = 'password';
+                button.innerHTML = '👁️';
+            }
+        };
+
+        // Form handler
+        document.getElementById('userForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const userData = {
+                name: formData.get('name'),
+                cpf: formData.get('cpf'),
+                email: formData.get('email'),
+                role: formData.get('role'),
+                school: formData.get('school'),
+                department: formData.get('department'),
+                password: formData.get('password'),
+                confirmPassword: formData.get('confirmPassword')
+            };
+            
+            // Validações
+            if (userData.password !== userData.confirmPassword) {
+                alert('❌ As senhas não coincidem!');
+                return;
+            }
+            
+            if (userData.password.length < 6) {
+                alert('❌ A senha deve ter pelo menos 6 caracteres!');
+                return;
+            }
+            
+            try {
+                // Verificar se CPF já existe
+                const cpfQuery = query(collection(db, 'users'), where('cpf', '==', userData.cpf));
+                const cpfSnapshot = await getDocs(cpfQuery);
+                
+                if (!cpfSnapshot.empty) {
+                    alert('❌ Este CPF já está cadastrado no sistema!');
+                    return;
+                }
+                
+                // Verificar se email já existe
+                const emailQuery = query(collection(db, 'users'), where('email', '==', userData.email));
+                const emailSnapshot = await getDocs(emailQuery);
+                
+                if (!emailSnapshot.empty) {
+                    alert('❌ Este e-mail já está cadastrado no sistema!');
+                    return;
+                }
+                
+                // Criar ID único para o usuário
+                const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                
+                // Salvar dados do usuário no Firestore
+                await setDoc(doc(db, 'users', userId), {
+                    id: userId,
+                    name: userData.name,
+                    cpf: userData.cpf,
+                    email: userData.email,
+                    role: userData.role,
+                    school: userData.school,
+                    department: userData.department,
+                    password: userData.password,
+                    createdAt: new Date(),
+                    createdBy: localStorage.getItem('userCPF'),
+                    status: 'active'
+                });
+                
+                alert('✅ Usuário cadastrado com sucesso!');
+                e.target.reset();
+                
+            } catch (error) {
+                console.error('Erro ao cadastrar usuário:', error);
+                alert('❌ Erro ao cadastrar usuário: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>
+

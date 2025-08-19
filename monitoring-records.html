@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registros por Departamento - SRE GURUPI</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Registros por Departamento</h1>
+        <button class="logout-btn" onclick="logout()">Sair</button>
+    </div>
+
+    <div class="main-container">
+        <div class="card">
+            <!-- Tabs dos Departamentos -->
+            <div class="tabs">
+                <button class="tab active" onclick="showDepartment('Currículo')">Currículo</button>
+                <button class="tab" onclick="showDepartment('Equipe Multiprofissional')">Equipe Multiprofissional</button>
+                <button class="tab" onclick="showDepartment('Supervisão')">Supervisão</button>
+            </div>
+
+            <!-- Conteúdo do Departamento Selecionado -->
+            <div id="departmentContent">
+                <!-- Currículo (padrão) -->
+                <div id="Currículo" class="department-section active">
+                    <h2>Registros de Currículo</h2>
+                    
+                    <!-- Botões dos Indicadores -->
+                    <div class="indicators">
+                        <button class="indicator-btn active" onclick="showIndicator('Frequência dos Estudantes')">Frequência dos Estudantes</button>
+                        <button class="indicator-btn" onclick="showIndicator('Busca Ativa')">Busca Ativa</button>
+                        <button class="indicator-btn" onclick="showIndicator('Aulas Previstas e Aulas Dadas')">Aulas Previstas e Aulas Dadas</button>
+                        <button class="indicator-btn" onclick="showIndicator('Estudantes Abaixo da Média')">Estudantes Abaixo da Média</button>
+                    </div>
+
+                    <!-- Pesquisa por Escola -->
+                    <div class="search-section">
+                        <div class="search-box">
+                            <div class="combobox-container">
+                                <input type="text" id="schoolSearch" placeholder="Digite o nome da escola para pesquisar...">
+                                <button class="dropdown-btn">▼</button>
+                                <ul class="dropdown-list" id="schoolSearchList"></ul>
+                            </div>
+                            <button onclick="searchBySchool()" class="btn">Pesquisar</button>
+                        </div>
+                        <button onclick="clearSearch()" class="btn btn-secondary">Limpar Pesquisa</button>
+                    </div>
+
+                    <!-- Lista de Registros -->
+                    <div id="recordsList" class="records-container">
+                        <div class="loading">Carregando registros...</div>
+                    </div>
+                </div>
+
+                <!-- Equipe Multiprofissional -->
+                <div id="Equipe Multiprofissional" class="department-section">
+                    <h2>Registros de Equipe Multiprofissional</h2>
+                    
+                    <div class="indicators">
+                        <button class="indicator-btn active" onclick="showIndicator('Frequência dos Estudantes')">Frequência dos Estudantes</button>
+                        <button class="indicator-btn" onclick="showIndicator('Busca Ativa')">Busca Ativa</button>
+                        <button class="indicator-btn" onclick="showIndicator('Aulas Previstas e Aulas Dadas')">Aulas Previstas e Aulas Dadas</button>
+                        <button class="indicator-btn" onclick="showIndicator('Estudantes Abaixo da Média')">Estudantes Abaixo da Média</button>
+                    </div>
+
+                    <div class="search-section">
+                        <div class="search-box">
+                            <div class="combobox-container">
+                                <input type="text" id="schoolSearch2" placeholder="Digite o nome da escola para pesquisar...">
+                                <button class="dropdown-btn">▼</button>
+                                <ul class="dropdown-list" id="schoolSearchList2"></ul>
+                            </div>
+                            <button onclick="searchBySchool()" class="btn">Pesquisar</button>
+                        </div>
+                        <button onclick="clearSearch()" class="btn btn-secondary">Limpar Pesquisa</button>
+                    </div>
+
+                    <div id="recordsList2" class="records-container">
+                        <div class="loading">Carregando registros...</div>
+                    </div>
+                </div>
+
+                <!-- Supervisão -->
+                <div id="Supervisão" class="department-section">
+                    <h2>Registros de Supervisão</h2>
+                    
+                    <div class="indicators">
+                        <button class="indicator-btn active" onclick="showIndicator('Frequência dos Estudantes')">Frequência dos Estudantes</button>
+                        <button class="indicator-btn" onclick="showIndicator('Busca Ativa')">Busca Ativa</button>
+                        <button class="indicator-btn" onclick="showIndicator('Aulas Previstas e Aulas Dadas')">Aulas Previstas e Aulas Dadas</button>
+                        <button class="indicator-btn" onclick="showIndicator('Estudantes Abaixo da Média')">Estudantes Abaixo da Média</button>
+                    </div>
+
+                    <div class="search-section">
+                        <div class="search-box">
+                            <div class="combobox-container">
+                                <input type="text" id="schoolSearch3" placeholder="Digite o nome da escola para pesquisar...">
+                                <button class="dropdown-btn">▼</button>
+                                <ul class="dropdown-list" id="schoolSearchList3"></ul>
+                            </div>
+                            <button onclick="searchBySchool()" class="btn">Pesquisar</button>
+                        </div>
+                        <button onclick="clearSearch()" class="btn btn-secondary">Limpar Pesquisa</button>
+                    </div>
+
+                    <div id="recordsList3" class="records-container">
+                        <div class="loading">Carregando registros...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="user-dashboard.html" class="btn btn-secondary">Voltar ao Menu</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Visualização -->
+    <div id="viewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Visualizar Registro</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Conteúdo do registro será inserido aqui -->
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal()" class="btn">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBvOkcHqHqHqHqHqHqHqHqHqHqHqHqHqHq",
+            authDomain: "sre-gurupi.firebaseapp.com",
+            projectId: "sre-gurupi",
+            storageBucket: "sre-gurupi.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef123456789"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Variáveis globais
+        let currentDepartment = 'Currículo';
+        let currentIndicator = 'Frequência dos Estudantes';
+        let allRecords = [];
+        let filteredRecords = [];
+
+        // Lista de escolas
+        const schools = [
+            "CENTRO DE ENSINO MEDIO ARY RIBEIRO VALADAO FILHO",
+            "CENTRO DE ENSINO MEDIO BOM JESUS",
+            "CENTRO DE ENSINO MEDIO DE GURUPI",            
+            "COL DE TECELAGEM ART NSA SENHORA AUXILIADORA",
+            "COL EST ALAIR SENA CONCEICAO",
+            "COLEGIO AGRICOLA DOM BOSCO",
+            "COLÉGIO ESTADUAL ADELAIDE FRANCISCO SOARES",
+            "COLEGIO ESTADUAL ANITA CASSIMIRO MORENO",
+            "COLEGIO ESTADUAL BENEDITO PEREIRA BANDEIRA",
+            "COLEGIO ESTADUAL CANDIDO FIGUEIRA",
+            "COLEGIO ESTADUAL DE ALVORADA",
+            "COLEGIO ESTADUAL DE TALISMA",
+            "COLEGIO ESTADUAL DOM ALANO",
+            "COLEGIO ESTADUAL ELSEBAO LIMA",
+            "COLEGIO ESTADUAL FAMILIA AGRICOLA JOSE PORFIRIO DE SOUZA",
+            "COLEGIO ESTADUAL GIRASSOL DE TEMPO INTEGRAL JOSE SEABRA LEMOS",
+            "COLEGIO ESTADUAL JOAO TAVARES MARTINS",
+            "COLEGIO ESTADUAL NOSSA SENHORA APARECIDA",
+            "COLEGIO ESTADUAL OLAVO BILAC",
+            "COLEGIO ESTADUAL PORTO DO RIO MARANHAO",
+            "COLEGIO ESTADUAL POSITIVO DE GURUPI",
+            "COLEGIO ESTADUAL PROFESSORA ONEIDES ROSA DE MOURA",
+            "COLEGIO ESTADUAL REGINA SIQUEIRA CAMPOS",
+            "COLEGIO ESTADUAL TARSO DUTRA",
+            "COLEGIO ESTADUAL TIRADENTES",
+            "COLEGIO MILITAR DO ESTADO DO TOCANTINS - ADJULIO BALTHAZAR",
+            "COLEGIO MILITAR DO ESTADO DO TOCANTINS - PROFESSORA MARIA",
+            "COLEGIO MILITAR DO ESTADO DO TOCANTINS PRESIDENTE COSTA E SILVA",
+            "ESC DE TEC ART NOSSA SRA AUXILIADORA",
+            "ESC EST RETIRO",
+            "ESC EST TANCREDO DE ALMEIDA NEVES",
+            "ESCOLA ESTADUAL ANA MARIA DE JESUS",
+            "ESCOLA ESTADUAL DR JOAQUIM PEREIRA DA COSTA",
+            "ESCOLA ESTADUAL FE E ALEGRIA PAROQUIAL BERNARDO SAYAO",
+            "ESCOLA ESTADUAL GERCINA BORGES TEIXEIRA",
+            "ESCOLA ESTADUAL HERCILIA CARVALHO DA SILVA",
+            "ESCOLA ESTADUAL NOSSA SENHORA DO CARMO",
+            "ESCOLA ESTADUAL OLAVO BILAC",
+            "ESCOLA ESTADUAL PADRE JOSE DE ANCHIETA",
+            "ESCOLA ESTADUAL PASSO A PASSO",
+            "ESCOLA ESTADUAL PRESBITERIANA ARAGUAIA",
+            "ESCOLA ESTADUAL PRESBITERIANA EDUCACIONAL",
+            "ESCOLA ESTADUAL RUI BARBOSA",
+            "ESCOLA ESTADUAL SALVADOR CAETANO",
+            "ESCOLA ESTADUAL VALDIR LINS",
+            "ESCOLA ESTADUAL VILA GUARACY",
+            "ESCOLA INDIGENA BARRA DO RIO VERDE",
+            "ESCOLA INDIGENA IJANARI",
+            "ESCOLA INDIGENA IJAWALA",
+            "ESCOLA INDIGENA SANAWE",
+            "ESCOLA INDIGENA TAINA",
+            "ESCOLA INDIGENA TEMANARE",
+            "ESCOLA INDIGENA TEWADURE",
+            "ESCOLA INDIGENA TXUIRI-HINA",
+            "ESCOLA INDIGENA WAHURI",
+            "ESCOLA INDIGENA WATAKURI",
+            "INSTITUTO EDUCACIONAL PASSO A PASSO"
+        ];
+
+        // Verificar se está logado
+        if (!localStorage.getItem('userRole')) {
+            window.location.href = 'index.html';
+        }
+
+        // Função de logout
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+
+        // Mostrar departamento
+        function showDepartment(department) {
+            console.log('Mudando para departamento:', department);
+            
+            // Atualizar tabs
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Atualizar seções
+            document.querySelectorAll('.department-section').forEach(section => {
+                section.classList.remove('active');
+                console.log('Removendo active de:', section.id);
+            });
+            
+            const targetSection = document.getElementById(department);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                console.log('Adicionando active para:', targetSection.id);
+            } else {
+                console.error('Seção não encontrada:', department);
+            }
+            
+            currentDepartment = department;
+            currentIndicator = 'Frequência dos Estudantes'; // Reset para primeiro indicador
+            
+            // Resetar indicadores ativos
+            document.querySelectorAll('.indicator-btn').forEach(btn => btn.classList.remove('active'));
+            const firstIndicator = document.querySelector('.department-section.active .indicator-btn:first-child');
+            if (firstIndicator) {
+                firstIndicator.classList.add('active');
+            }
+            
+            console.log('Departamento atual:', currentDepartment);
+            console.log('Indicador atual:', currentIndicator);
+            
+            // Reinicializar comboboxes para o novo departamento
+            setTimeout(() => {
+                forceReinitializeComboboxes();
+            }, 100);
+            
+            loadRecords();
+        }
+
+        // Mostrar indicador
+        function showIndicator(indicator) {
+            console.log('Mudando para indicador:', indicator);
+            
+            // Atualizar botões dos indicadores
+            const activeSection = document.querySelector('.department-section.active');
+            if (activeSection) {
+                activeSection.querySelectorAll('.indicator-btn').forEach(btn => btn.classList.remove('active'));
+                event.target.classList.add('active');
+                
+                currentIndicator = indicator;
+                console.log('Indicador atual:', currentIndicator);
+                
+                filterRecords();
+            } else {
+                console.error('Nenhuma seção ativa encontrada');
+            }
+        }
+
+        // Carregar registros
+        async function loadRecords() {
+            try {
+                const recordsRef = collection(db, 'records');
+                const q = query(
+                    recordsRef,
+                    where('department', '==', currentDepartment),
+                    orderBy('createdAt', 'desc')
+                );
+                
+                const querySnapshot = await getDocs(q);
+                allRecords = [];
+                
+                querySnapshot.forEach((doc) => {
+                    allRecords.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+                
+                filterRecords();
+            } catch (error) {
+                console.error('Erro ao carregar registros:', error);
+                // Remover a chamada para showMessage que não existe
+                console.log('Erro ao carregar registros:', error.message);
+            }
+        }
+
+        // Filtrar registros por indicador
+        function filterRecords() {
+            filteredRecords = allRecords.filter(record => 
+                record.indicator === currentIndicator
+            );
+            
+            displayRecords();
+        }
+
+        // Pesquisar por escola
+        function searchBySchool() {
+            const searchTerm = document.querySelector('.department-section.active input[type="text"]').value.toLowerCase();
+            
+            if (searchTerm.trim() === '') {
+                filteredRecords = allRecords.filter(record => 
+                    record.indicator === currentIndicator
+                );
+            } else {
+                filteredRecords = allRecords.filter(record => 
+                    record.indicator === currentIndicator &&
+                    record.school.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            displayRecords();
+        }
+
+        // Limpar pesquisa
+        function clearSearch() {
+            document.querySelector('.department-section.active input[type="text"]').value = '';
+            filterRecords();
+        }
+
+        // Exibir registros
+        function displayRecords() {
+            const recordsContainer = document.querySelector('.department-section.active .records-container');
+            
+            if (filteredRecords.length === 0) {
+                recordsContainer.innerHTML = `
+                    <div class="no-records">
+                        <h3>${currentIndicator} - ${currentDepartment}</h3>
+                        <p>Nenhum registro encontrado para este indicador.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '<div class="records-grid">';
+            
+            filteredRecords.forEach(record => {
+                const date = record.createdAt ? new Date(record.createdAt.toDate()).toLocaleDateString('pt-BR') : 'Data não informada';
+                
+                html += `
+                    <div class="record-card">
+                        <div class="record-header">
+                            <h4>${record.school}</h4>
+                            <span class="record-date">${date}</span>
+                        </div>
+                        <div class="record-info">
+                            <p><strong>Município:</strong> ${record.municipality || 'Não informado'}</p>
+                            <p><strong>Técnico:</strong> ${record.technician || 'Não informado'}</p>
+                            <p><strong>Criado por:</strong> ${record.createdByName || 'Não informado'}</p>
+                        </div>
+                        <div class="record-actions">
+                            <button onclick="viewRecord('${record.id}')" class="btn btn-primary">Visualizar</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            recordsContainer.innerHTML = html;
+        }
+
+        // Visualizar registro
+        async function viewRecord(recordId) {
+            try {
+                const record = allRecords.find(r => r.id === recordId);
+                if (!record) return;
+                
+                // Preencher modal
+                document.getElementById('modalTitle').textContent = `${record.indicator} - ${record.school}`;
+                
+                let modalContent = `
+                    <div class="record-details">
+                        <div class="detail-section">
+                            <h3>Informações Gerais</h3>
+                            <p><strong>Escola:</strong> ${record.school}</p>
+                            <p><strong>Município:</strong> ${record.municipality || 'Não informado'}</p>
+                            <p><strong>Técnico:</strong> ${record.technician || 'Não informado'}</p>
+                            <p><strong>Data:</strong> ${record.date || 'Não informada'}</p>
+                            <p><strong>Criado por:</strong> ${record.createdByName || 'Não informado'}</p>
+                            <p><strong>Data de criação:</strong> ${record.createdAt ? new Date(record.createdAt.toDate()).toLocaleDateString('pt-BR') : 'Não informada'}</p>
+                        </div>
+                `;
+                
+                // Adicionar campos específicos por indicador
+                if (record.indicator === 'Frequência dos Estudantes') {
+                    modalContent += `
+                        <div class="detail-section">
+                            <h3>Dados do Estudante</h3>
+                            <p><strong>Nome:</strong> ${record.studentName || 'Não informado'}</p>
+                            <p><strong>Número de faltas:</strong> ${record.consecutiveAbsences || 'Não informado'}</p>
+                            <p><strong>Status:</strong> ${record.status || 'Não informado'}</p>
+                            <p><strong>Etapa:</strong> ${record.stage || 'Não informado'}</p>
+                            <p><strong>ID da Turma:</strong> ${record.classId || 'Não informado'}</p>
+                        </div>
+                    `;
+                } else if (record.indicator === 'Busca Ativa') {
+                    modalContent += `
+                        <div class="detail-section">
+                            <h3>Dados da Busca Ativa</h3>
+                            <p><strong>Nome da Turma:</strong> ${record.className || 'Não informado'}</p>
+                            <p><strong>Turno:</strong> ${record.shift || 'Não informado'}</p>
+                            <p><strong>Nome do Estudante:</strong> ${record.studentName || 'Não informado'}</p>
+                            <p><strong>Número de faltas:</strong> ${record.absences || 'Não informado'}</p>
+                            <p><strong>Total de visitas:</strong> ${record.totalVisits || 'Não informado'}</p>
+                        </div>
+                    `;
+                } else if (record.indicator === 'Aulas Previstas e Aulas Dadas') {
+                    modalContent += `
+                        <div class="detail-section">
+                            <h3>Dados das Aulas</h3>
+                            <p><strong>ID da Turma:</strong> ${record.classId || 'Não informado'}</p>
+                            <p><strong>Nome da Turma:</strong> ${record.className || 'Não informado'}</p>
+                            <p><strong>Disciplina:</strong> ${record.discipline || 'Não informado'}</p>
+                            <p><strong>Período Inicial:</strong> ${record.periodStart || 'Não informado'}</p>
+                            <p><strong>Período Final:</strong> ${record.periodEnd || 'Não informado'}</p>
+                            <p><strong>Total de Aulas Previstas:</strong> ${record.totalPlanned || 'Não informado'}</p>
+                            <p><strong>Total de Aulas Realizadas:</strong> ${record.totalGiven || 'Não informado'}</p>
+                            <p><strong>Taxa de Cumprimento:</strong> ${record.completionRate || 'Não informado'}</p>
+                        </div>
+                    `;
+                } else if (record.indicator === 'Estudantes Abaixo da Média') {
+                    modalContent += `
+                        <div class="detail-section">
+                            <h3>Dados do Estudante</h3>
+                            <p><strong>Nome:</strong> ${record.studentName || 'Não informado'}</p>
+                            <p><strong>Nota:</strong> ${record.studentGrade || 'Não informado'}</p>
+                            <p><strong>Situação:</strong> ${record.studentSituation || 'Não informado'}</p>
+                            <p><strong>Série/Turma:</strong> ${record.seriesClass || 'Não informado'}</p>
+                            <p><strong>Componentes Curriculares:</strong> ${record.curricularComponents || 'Não informado'}</p>
+                        </div>
+                    `;
+                }
+                
+                // Adicionar observações e links
+                if (record.observations) {
+                    modalContent += `
+                        <div class="detail-section">
+                            <h3>Observações</h3>
+                            <p>${record.observations}</p>
+                        </div>
+                    `;
+                }
+                
+                if (record.documentLinks) {
+                    modalContent += `
+                        <div class="detail-section">
+                            <h3>Links de Documentos</h3>
+                            <p>${record.documentLinks}</p>
+                        </div>
+                    `;
+                }
+                
+                modalContent += '</div>';
+                document.getElementById('modalBody').innerHTML = modalContent;
+                
+                // Mostrar modal
+                document.getElementById('viewModal').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Erro ao visualizar registro:', error);
+                alert('Erro ao visualizar registro');
+            }
+        }
+
+        // Fechar modal
+        function closeModal() {
+            document.getElementById('viewModal').style.display = 'none';
+        }
+
+        // Fechar modal ao clicar fora
+        window.onclick = function(event) {
+            const modal = document.getElementById('viewModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Funções do combobox de escolas
+        function filterSchools(searchTerm, inputId) {
+            console.log('filterSchools chamada:', searchTerm, inputId);
+            
+            const dropdownList = document.getElementById(inputId + 'List');
+            console.log('Dropdown list encontrada:', dropdownList);
+            
+            if (!dropdownList) {
+                console.error('Dropdown list não encontrada para:', inputId + 'List');
+                return;
+            }
+            
+            const filteredSchools = schools.filter(school => 
+                school.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            
+            console.log('Escolas filtradas:', filteredSchools.length);
+            
+            dropdownList.innerHTML = '';
+            
+            if (searchTerm.trim() === '') {
+                dropdownList.style.display = 'none';
+                return;
+            }
+            
+            filteredSchools.forEach(school => {
+                const li = document.createElement('li');
+                li.textContent = school;
+                li.onclick = () => selectSchool(school, inputId);
+                dropdownList.appendChild(li);
+            });
+            
+            dropdownList.style.display = filteredSchools.length > 0 ? 'block' : 'none';
+            console.log('Dropdown display:', dropdownList.style.display);
+        }
+
+        function selectSchool(schoolName, inputId) {
+            console.log('selectSchool chamada:', schoolName, inputId);
+            
+            const input = document.getElementById(inputId);
+            const dropdownList = document.getElementById(inputId + 'List');
+            
+            if (input) {
+                input.value = schoolName;
+                console.log('Valor do input atualizado:', input.value);
+            }
+            
+            if (dropdownList) {
+                dropdownList.style.display = 'none';
+                console.log('Dropdown fechado');
+            }
+        }
+
+        function toggleSchoolDropdown(inputId) {
+            console.log('toggleSchoolDropdown chamada:', inputId);
+            
+            const dropdownList = document.getElementById(inputId + 'List');
+            const currentValue = document.getElementById(inputId).value;
+            
+            console.log('Dropdown list:', dropdownList);
+            console.log('Valor atual:', currentValue);
+            
+            if (!dropdownList) {
+                console.error('Dropdown list não encontrada para:', inputId + 'List');
+                return;
+            }
+            
+            if (dropdownList.style.display === 'block') {
+                dropdownList.style.display = 'none';
+                console.log('Dropdown fechado');
+            } else {
+                if (currentValue.trim() === '') {
+                    // Mostrar todas as escolas se o campo estiver vazio
+                    dropdownList.innerHTML = '';
+                    schools.forEach(school => {
+                        const li = document.createElement('li');
+                        li.textContent = school;
+                        li.onclick = () => selectSchool(school, inputId);
+                        dropdownList.appendChild(li);
+                    });
+                    console.log('Todas as escolas carregadas:', schools.length);
+                }
+                dropdownList.style.display = 'block';
+                console.log('Dropdown aberto');
+            }
+        }
+
+        // Fechar dropdowns ao clicar fora
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.combobox-container')) {
+                document.querySelectorAll('.dropdown-list').forEach(list => {
+                    list.style.display = 'none';
+                });
+            }
+        });
+
+        // Função de debug detalhada para comboboxes
+        function debugComboboxes() {
+            console.log('=== DEBUG DETALHADO DE COMBOBOXES ===');
+            
+            const inputs = ['schoolSearch', 'schoolSearch2', 'schoolSearch3'];
+            inputs.forEach(inputId => {
+                const input = document.getElementById(inputId);
+                const dropdown = document.getElementById(inputId + 'List');
+                const dropdownBtn = input?.parentElement?.querySelector('.dropdown-btn');
+                
+                console.log(`\n--- ${inputId} ---`);
+                console.log('Input encontrado:', !!input);
+                console.log('Dropdown encontrado:', !!dropdown);
+                console.log('Dropdown button encontrado:', !!dropdownBtn);
+                
+                if (input && dropdown && dropdownBtn) {
+                    console.log('Input value:', input.value);
+                    console.log('Input visible:', input.offsetParent !== null);
+                    console.log('Input parent section:', input.closest('.department-section')?.id);
+                    console.log('Parent section active:', input.closest('.department-section')?.classList.contains('active'));
+                    console.log('Input data-initialized:', input.hasAttribute('data-initialized'));
+                    console.log('Dropdown display:', dropdown.style.display);
+                    console.log('Dropdown button onclick:', dropdownBtn.onclick);
+                    
+                    // Testar se os event listeners estão funcionando
+                    console.log('Testando event listeners...');
+                    
+                    // Simular keyup
+                    const keyupEvent = new KeyboardEvent('keyup', { key: 'a' });
+                    input.dispatchEvent(keyupEvent);
+                    
+                    // Simular click no dropdown
+                    const clickEvent = new MouseEvent('click');
+                    dropdownBtn.dispatchEvent(clickEvent);
+                }
+            });
+            
+            console.log('=== FIM DO DEBUG ===');
+        }
+
+        // Função de teste para comboboxes
+        function testComboboxes() {
+            console.log('=== TESTE DE COMBOBOXES ===');
+            
+            const inputs = ['schoolSearch', 'schoolSearch2', 'schoolSearch3'];
+            inputs.forEach(inputId => {
+                const input = document.getElementById(inputId);
+                const dropdown = document.getElementById(inputId + 'List');
+                
+                console.log(`\n--- ${inputId} ---`);
+                console.log('Input encontrado:', !!input);
+                console.log('Dropdown encontrado:', !!dropdown);
+                
+                if (input && dropdown) {
+                    console.log('Input value:', input.value);
+                    console.log('Input visible:', input.offsetParent !== null);
+                    console.log('Dropdown display:', dropdown.style.display);
+                    console.log('Input parent section:', input.closest('.department-section')?.id);
+                    console.log('Parent section active:', input.closest('.department-section')?.classList.contains('active'));
+                }
+            });
+            
+            console.log('=== FIM DO TESTE ===');
+        }
+
+        // Função para verificar elementos com retry
+        function checkElementsWithRetry(maxAttempts = 5, delay = 200) {
+            let attempts = 0;
+            
+            function checkElements() {
+                attempts++;
+                console.log(`Tentativa ${attempts} de verificar elementos...`);
+                
+                const inputs = ['schoolSearch', 'schoolSearch2', 'schoolSearch3'];
+                let allFound = true;
+                
+                inputs.forEach(inputId => {
+                    const input = document.getElementById(inputId);
+                    const dropdown = document.getElementById(inputId + 'List');
+                    const dropdownBtn = input?.parentElement?.querySelector('.dropdown-btn');
+                    
+                    if (!input || !dropdown || !dropdownBtn) {
+                        allFound = false;
+                        console.error(`Elemento não encontrado na tentativa ${attempts}:`, inputId, {
+                            input: !!input,
+                            dropdown: !!dropdown,
+                            dropdownBtn: !!dropdownBtn
+                        });
+                    }
+                });
+                
+                if (allFound) {
+                    console.log('Todos os elementos encontrados! Inicializando comboboxes...');
+                    initializeComboboxes();
+                    return;
+                }
+                
+                if (attempts < maxAttempts) {
+                    console.log(`Tentativa ${attempts} falhou. Tentando novamente em ${delay}ms...`);
+                    setTimeout(checkElements, delay);
+                } else {
+                    console.error('Máximo de tentativas atingido. Elementos não encontrados.');
+                }
+            }
+            
+            checkElements();
+        }
+
+        // Função para forçar reinicialização dos comboboxes
+        function forceReinitializeComboboxes() {
+            console.log('Forçando reinicialização dos comboboxes...');
+            
+            // Remover atributos de inicialização
+            const inputs = ['schoolSearch', 'schoolSearch2', 'schoolSearch3'];
+            inputs.forEach(inputId => {
+                const input = document.getElementById(inputId);
+                if (input) {
+                    input.removeAttribute('data-initialized');
+                }
+            });
+            
+            // Reinicializar
+            initializeComboboxes();
+        }
+
+        // Inicializar comboboxes
+        function initializeComboboxes() {
+            console.log('Inicializando comboboxes...');
+            
+            // Verificar se todos os elementos existem
+            const inputs = ['schoolSearch', 'schoolSearch2', 'schoolSearch3'];
+            inputs.forEach(inputId => {
+                const input = document.getElementById(inputId);
+                const dropdown = document.getElementById(inputId + 'List');
+                const dropdownBtn = input?.parentElement?.querySelector('.dropdown-btn');
+                
+                if (input && dropdown && dropdownBtn) {
+                    console.log('Combobox OK:', inputId);
+                    
+                    // Verificar se o input está visível (dentro de uma seção ativa)
+                    const isVisible = input.closest('.department-section.active') !== null;
+                    console.log('Combobox visível:', inputId, isVisible);
+                    
+                    // Adicionar event listeners se não existirem
+                    if (!input.hasAttribute('data-initialized')) {
+                        input.setAttribute('data-initialized', 'true');
+                        
+                        // Adicionar event listener para digitação
+                        input.addEventListener('keyup', function(e) {
+                            console.log('Keyup event em:', inputId, e.target.value);
+                            filterSchools(e.target.value, inputId);
+                        });
+                        
+                        // Adicionar event listener para o botão dropdown
+                        dropdownBtn.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            console.log('Dropdown button click em:', inputId);
+                            toggleSchoolDropdown(inputId);
+                        });
+                        
+                        console.log('Event listeners adicionados para:', inputId);
+                    }
+                } else {
+                    console.error('Combobox não encontrado:', inputId, {
+                        input: !!input,
+                        dropdown: !!dropdown,
+                        dropdownBtn: !!dropdownBtn
+                    });
+                }
+            });
+        }
+
+        // Carregar registros iniciais
+        loadRecords();
+
+        // Aguardar DOM estar completamente carregado
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM completamente carregado');
+            
+            // Aguardar um pouco mais para garantir que tudo esteja pronto
+            setTimeout(() => {
+                console.log('Inicializando comboboxes após delay...');
+                checkElementsWithRetry();
+            }, 1000);
+        });
+
+        // Fallback: também tentar inicializar quando a página estiver carregada
+        window.addEventListener('load', function() {
+            console.log('Página completamente carregada');
+            
+            setTimeout(() => {
+                console.log('Inicializando comboboxes após load...');
+                checkElementsWithRetry();
+            }, 500);
+        });
+
+        // Inicializar comboboxes (tentativa inicial)
+        checkElementsWithRetry();
+
+        // Teste de funcionamento das funções
+        console.log('Funções carregadas:', {
+            showDepartment: typeof showDepartment,
+            showIndicator: typeof showIndicator,
+            viewRecord: typeof viewRecord
+        });
+
+        // Exportar funções para o escopo global
+        window.showDepartment = showDepartment;
+        window.showIndicator = showIndicator;
+        window.viewRecord = viewRecord;
+        window.closeModal = closeModal;
+        window.searchBySchool = searchBySchool;
+        window.clearSearch = clearSearch;
+        window.logout = logout;
+        window.filterSchools = filterSchools;
+        window.selectSchool = selectSchool;
+        window.toggleSchoolDropdown = toggleSchoolDropdown;
+        window.initializeComboboxes = initializeComboboxes;
+        window.testComboboxes = testComboboxes;
+        window.forceReinitializeComboboxes = forceReinitializeComboboxes;
+        window.debugComboboxes = debugComboboxes;
+        window.checkElementsWithRetry = checkElementsWithRetry;
+    </script>
+</body>
+</html>

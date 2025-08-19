@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar Usuários - SRE GURUPI</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .search-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+        }
+        
+        .users-table {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .table-header {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+        }
+        
+        .table-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 2fr 1fr 1fr 1fr 2fr;
+            gap: 10px;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+        }
+        
+        .table-row:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .table-row:hover {
+            background-color: #e9ecef;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-action {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-view {
+            background: #007bff;
+            color: white;
+        }
+        
+        .btn-change {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-reset {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .btn-edit {
+            background: #17a2b8;
+            color: white;
+        }
+        
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-action:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            min-width: 400px;
+            max-width: 90%;
+        }
+        
+        .password-display {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 16px;
+            margin: 15px 0;
+            border: 1px solid #dee2e6;
+            text-align: center;
+        }
+        
+        .btn-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #545b62 0%, #4e555b 100%);
+            transform: translateY(-1px);
+        }
+        
+        @media (max-width: 768px) {
+            .table-row {
+                grid-template-columns: 1fr;
+                gap: 5px;
+            }
+            
+            .action-buttons {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Listar Usuários</h1>
+        <button class="logout-btn" onclick="logout()">Sair</button>
+    </div>
+
+    <div class="main-container">
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Buscar por nome, CPF ou escola...">
+        </div>
+        
+        <div id="usersList">
+            <p>Carregando usuários...</p>
+        </div>
+        
+        <div class="btn-actions">
+            <a href="user-management-new.html" class="btn-primary">👥 Cadastrar Novo Usuário</a>
+            <a href="user-dashboard.html" class="btn-secondary">🔙 Voltar ao Menu</a>
+        </div>
+    </div>
+
+    <!-- Modal para mostrar senha -->
+    <div id="passwordModal" class="modal">
+        <div class="modal-content">
+            <h3>🔍 Senha do Usuário</h3>
+            <p><strong>Usuário:</strong> <span id="passwordUserName"></span></p>
+            <p><strong>CPF:</strong> <span id="passwordUserCPF"></span></p>
+            <div class="password-display" id="passwordDisplay"></div>
+            <div class="btn-actions">
+                <button type="button" class="btn-secondary" onclick="closePasswordModal()">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para resetar senha -->
+    <div id="resetPasswordModal" class="modal">
+        <div class="modal-content">
+            <h3>🔄 Resetar Senha</h3>
+            <p><strong>Usuário:</strong> <span id="resetUserName"></span></p>
+            <p><strong>CPF:</strong> <span id="resetUserCPF"></span></p>
+            <p>A nova senha será: <strong>123456</strong></p>
+            <p style="color: #dc3545; font-size: 14px;">⚠️ O usuário deverá alterar esta senha no primeiro acesso.</p>
+            <div class="btn-actions">
+                <button type="button" class="btn-primary" onclick="confirmResetPassword()">Confirmar Reset</button>
+                <button type="button" class="btn-secondary" onclick="closeResetPasswordModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, getDocs, deleteDoc, doc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyABEloTfC_nT5vfDHpeqYdDjNoPCKwE-Eo",
+            authDomain: "projeto-alex-aaadf.firebaseapp.com",
+            projectId: "projeto-alex-aaadf",
+            storageBucket: "projeto-alex-aaadf.firebasestorage.app",
+            messagingSenderId: "720032595137",
+            appId: "1:720032595137:web:85834232e770a942216840"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Verificar se é super admin
+        if (localStorage.getItem('userRole') !== 'super_admin') {
+            window.location.href = 'index.html';
+        }
+
+        // Função de logout
+        window.logout = async function() {
+            try {
+                await signOut(auth);
+                localStorage.clear();
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Erro no logout:', error);
+                localStorage.clear();
+                window.location.href = 'index.html';
+            }
+        };
+
+        // Função para carregar usuários
+        async function loadUsers() {
+            try {
+                const usersSnapshot = await getDocs(collection(db, 'users'));
+                const users = [];
+                
+                usersSnapshot.forEach((doc) => {
+                    users.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+                
+                displayUsers(users);
+            } catch (error) {
+                console.error('Erro ao carregar usuários:', error);
+                document.getElementById('usersList').innerHTML = '<p>Erro ao carregar usuários.</p>';
+            }
+        }
+
+        // Função para exibir usuários
+        function displayUsers(users) {
+            const usersList = document.getElementById('usersList');
+            
+            if (users.length === 0) {
+                usersList.innerHTML = '<p>Nenhum usuário cadastrado.</p>';
+                return;
+            }
+            
+            let html = '<div class="users-table">';
+            html += '<div class="table-header">';
+            html += '<div class="table-row">';
+            html += '<div>Nome</div>';
+            html += '<div>CPF</div>';
+            html += '<div>E-mail</div>';
+            html += '<div>Função</div>';
+            html += '<div>Escola</div>';
+            html += '<div>Departamento</div>';
+            html += '<div>Ações</div>';
+            html += '</div>';
+            html += '</div>';
+            
+            users.forEach(user => {
+                html += '<div class="table-row">';
+                html += `<div>${user.name}</div>`;
+                html += `<div>${user.cpf}</div>`;
+                html += `<div>${user.email}</div>`;
+                html += `<div>${getRoleLabel(user.role)}</div>`;
+                html += `<div>${user.school}</div>`;
+                html += `<div>${getDepartmentLabel(user.department)}</div>`;
+                html += `<div class="action-buttons">`;
+                html += `<button onclick="showPassword('${user.id}', '${user.name}', '${user.cpf}')" class="btn-action btn-view" title="Ver Senha">🔍</button>`;
+                html += `<button onclick="resetPassword('${user.id}', '${user.name}', '${user.cpf}')" class="btn-action btn-reset" title="Resetar Senha">🔄</button>`;
+                html += `<button onclick="deleteUser('${user.id}')" class="btn-action btn-delete" title="Excluir">🗑️</button>`;
+                html += '</div>';
+                html += '</div>';
+            });
+            
+            html += '</div>';
+            usersList.innerHTML = html;
+        }
+
+        // Função para obter label da função
+        function getRoleLabel(role) {
+            const roles = {
+                'admin': 'Administrador',
+                'coordinator': 'Coordenador',
+                'teacher': 'Professor',
+                'supervisor': 'Supervisor'
+            };
+            return roles[role] || role;
+        }
+
+        // Função para obter label do departamento
+        function getDepartmentLabel(department) {
+            const departments = {
+                'curriculum': 'Currículo',
+                'supervision': 'Supervisão',
+                'multiprofessional': 'Equipe Multiprofissional'
+            };
+            return departments[department] || department;
+        }
+
+        // Função para mostrar senha
+        window.showPassword = async function(userId, userName, userCPF) {
+            try {
+                const userDoc = await getDocs(query(collection(db, 'users'), where('id', '==', userId)));
+                if (!userDoc.empty) {
+                    const userData = userDoc.docs[0].data();
+                    
+                    document.getElementById('passwordUserName').textContent = userName;
+                    document.getElementById('passwordUserCPF').textContent = userCPF;
+                    document.getElementById('passwordDisplay').textContent = userData.password;
+                    
+                    document.getElementById('passwordModal').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Erro ao carregar senha do usuário:', error);
+                alert('Erro ao carregar senha do usuário.');
+            }
+        };
+
+        // Função para fechar modal de senha
+        window.closePasswordModal = function() {
+            document.getElementById('passwordModal').style.display = 'none';
+        };
+
+        // Função para resetar senha
+        window.resetPassword = function(userId, userName, userCPF) {
+            document.getElementById('resetUserName').textContent = userName;
+            document.getElementById('resetUserCPF').textContent = userCPF;
+            document.getElementById('resetPasswordModal').setAttribute('data-user-id', userId);
+            document.getElementById('resetPasswordModal').style.display = 'block';
+        };
+
+        // Função para fechar modal de reset
+        window.closeResetPasswordModal = function() {
+            document.getElementById('resetPasswordModal').style.display = 'none';
+        };
+
+        // Função para confirmar reset de senha
+        window.confirmResetPassword = async function() {
+            const userId = document.getElementById('resetPasswordModal').getAttribute('data-user-id');
+            
+            try {
+                await updateDoc(doc(db, 'users', userId), {
+                    password: '123456'
+                });
+                
+                alert('✅ Senha resetada com sucesso! Nova senha: 123456');
+                closeResetPasswordModal();
+                loadUsers();
+            } catch (error) {
+                console.error('Erro ao resetar senha:', error);
+                alert('❌ Erro ao resetar senha: ' + error.message);
+            }
+        };
+
+        // Função para excluir usuário
+        window.deleteUser = async function(userId) {
+            if (confirm('⚠️ Tem certeza que deseja excluir este usuário?')) {
+                try {
+                    await deleteDoc(doc(db, 'users', userId));
+                    alert('✅ Usuário excluído com sucesso!');
+                    loadUsers();
+                } catch (error) {
+                    console.error('Erro ao excluir usuário:', error);
+                    alert('❌ Erro ao excluir usuário.');
+                }
+            }
+        };
+
+        // Função de busca
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            // Implementar busca em tempo real aqui
+        });
+
+        // Carregar usuários ao carregar a página
+        loadUsers();
+    </script>
+</body>
+</html>
+
