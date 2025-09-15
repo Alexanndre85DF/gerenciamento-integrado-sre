@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessoramentos Equipe Multiprofissional Realizados</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Assessoramentos Equipe Multiprofissional Realizados</h1>
+        <button class="logout-btn" onclick="logout()">Sair</button>
+    </div>
+
+    <div class="main-container">
+        <div class="card">
+            <div style="position: relative;">
+                <a href="assessoramento-multiprofissional.html" class="btn btn-secondary" style="position: absolute; top: 0; right: 0; font-size: 12px; padding: 6px 12px; margin: 0; background-color: #28a745; border-color: #28a745;">Voltar ao Menu</a>
+                <h2 style="margin-top: 60px;">Assessoramentos Realizados</h2>
+            </div>
+            <p>Visualize e gerencie os assessoramentos da equipe multiprofissional ja realizados</p>
+            
+            <div id="assessoramentosList">
+                <p style="text-align: center; color: #666; font-style: italic;">Carregando assessoramentos...</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyABEloTfC_nT5vfDHpeqYdDjNoPCKwE-Eo",
+            authDomain: "projeto-alex-aaadf.firebaseapp.com",
+            projectId: "projeto-alex-aaadf",
+            storageBucket: "projeto-alex-aaadf.firebasestorage.app",
+            messagingSenderId: "720032595137",
+            appId: "1:720032595137:web:85834232e770a942216840"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        function checkAuth() {
+            const userRole = localStorage.getItem('userRole');
+            const userCPF = localStorage.getItem('userCPF');
+            const userName = localStorage.getItem('userName');
+            
+            if (!userRole || !userCPF || !userName) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('userCPF');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userId');
+            window.location.href = 'index.html';
+        }
+
+        // CONSULTA SUPER SIMPLES - sem filtros, sem ordenacao
+        async function loadAssessoramentos() {
+            try {
+                console.log('Iniciando carregamento...');
+                
+                const assessoramentosList = document.getElementById('assessoramentosList');
+                assessoramentosList.innerHTML = '<p style="text-align: center; color: #666; font-style: italic;">Carregando assessoramentos...</p>';
+
+                // CONSULTA MAIS SIMPLES POSSIVEL - sem where, sem orderBy
+                const assessoramentosRef = collection(db, 'assessoramentos');
+                console.log('Referencia da colecao criada');
+                
+                const querySnapshot = await getDocs(assessoramentosRef);
+                console.log('Documentos obtidos:', querySnapshot.size);
+                
+                if (querySnapshot.empty) {
+                    assessoramentosList.innerHTML = '<p style="text-align: center; color: #666; font-style: italic;">Nenhum assessoramento encontrado.</p>';
+                    return;
+                }
+
+                // Filtrar no JavaScript
+                const assessoramentos = [];
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    console.log('Documento:', doc.id, data);
+                    
+                    if (data.department === 'Equipe Multiprofissional') {
+                        assessoramentos.push({
+                            id: doc.id,
+                            ...data
+                        });
+                    }
+                });
+
+                console.log('Assessoramentos filtrados:', assessoramentos.length);
+
+                if (assessoramentos.length === 0) {
+                    assessoramentosList.innerHTML = '<p style="text-align: center; color: #666; font-style: italic;">Nenhum assessoramento da Equipe Multiprofissional encontrado.</p>';
+                    return;
+                }
+
+                // Ordenar no JavaScript
+                assessoramentos.sort((a, b) => {
+                    const dateA = a.createdAt ? a.createdAt.toDate() : new Date(a.date || 0);
+                    const dateB = b.createdAt ? b.createdAt.toDate() : new Date(b.date || 0);
+                    return dateB - dateA;
+                });
+
+                let html = '';
+                assessoramentos.forEach((assessoramento) => {
+                    const date = assessoramento.createdAt ? 
+                        assessoramento.createdAt.toDate().toLocaleDateString('pt-BR') : 
+                        (assessoramento.date || 'Data nao disponivel');
+                    
+                    html += `
+                        <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin-bottom: 20px; background-color: #fafafa;">
+                            <h4 style="margin: 0 0 10px 0; color: #333;">${assessoramento.school || 'N/A'}</h4>
+                            <p style="margin: 5px 0; color: #666;"><strong>Municipio:</strong> ${assessoramento.municipality || 'N/A'}</p>
+                            <p style="margin: 5px 0; color: #666;"><strong>Tecnico:</strong> ${assessoramento.technician || 'N/A'}</p>
+                            <p style="margin: 5px 0; color: #666;"><strong>Data:</strong> ${date}</p>
+                            <p style="margin: 5px 0; color: #666;"><strong>Tipo:</strong> ${assessoramento.type || 'N/A'}</p>
+                            <small style="color: #999; font-size: 12px;">ID: ${assessoramento.id}</small>
+                        </div>
+                    `;
+                });
+
+                assessoramentosList.innerHTML = html;
+                console.log('SUCESSO! Assessoramentos carregados');
+
+            } catch (error) {
+                console.error('ERRO:', error);
+                document.getElementById('assessoramentosList').innerHTML = `
+                    <div style="text-align: center; color: #dc3545; padding: 20px;">
+                        <p><strong>Erro ao carregar assessoramentos</strong></p>
+                        <p>Erro: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        checkAuth();
+        loadAssessoramentos();
+        
+        window.logout = logout;
+    </script>
+</body>
+</html>

@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Frequência dos Estudantes - Supervisão - SRE GURUPI</title>
     <link rel="stylesheet" href="../styles.css">
+    <script src="../js/schools.js"></script>
+    <script src="../js/municipalities.js"></script>
 </head>
 <body>
     <div class="header">
@@ -13,9 +17,6 @@
     <div class="main-container">
         <div class="card">
             <h2>Formulário de Frequência dos Estudantes</h2>
-            
-            <!-- Mensagem de Status -->
-            <div id="statusMessage" class="status-message" style="display: none;"></div>
             
             <form id="frequencyForm" class="form-container">
                 <!-- Cabeçalho Padrão -->
@@ -28,7 +29,7 @@
                                 <option value="">Selecione a escola</option>
                                 <option value="CENTRO DE ENSINO MEDIO ARY RIBEIRO VALADAO FILHO">CENTRO DE ENSINO MEDIO ARY RIBEIRO VALADAO FILHO</option>
                                 <option value="CENTRO DE ENSINO MEDIO BOM JESUS">CENTRO DE ENSINO MEDIO BOM JESUS</option>
-                                <option value="CENTRO DE ENSINO MEDIO DE GURUPI">CENTRO DE ENSINO MEDIO DE GURUPI</option>                                
+                                <option value="CENTRO DE ENSINO MEDIO DE GURUPI">CENTRO DE ENSINO MEDIO DE GURUPI</option>
                                 <option value="COL DE TECELAGEM ART NSA SENHORA AUXILIADORA">COL DE TECELAGEM ART NSA SENHORA AUXILIADORA</option>
                                 <option value="COL EST ALAIR SENA CONCEICAO">COL EST ALAIR SENA CONCEICAO</option>
                                 <option value="COLÉGIO AGRICOLA DOM BOSCO">COLÉGIO AGRICOLA DOM BOSCO</option>
@@ -112,7 +113,7 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="technician">Técnico(a):</label>
-                            <input type="text" id="technician" name="technician" required>
+                            <input type="text" id="technician" name="technician" placeholder="Digite o nome do técnico" required>
                         </div>
                         <div class="form-group">
                             <label for="date">Data do Registro:</label>
@@ -121,42 +122,25 @@
                     </div>
                 </div>
 
-                <!-- Informações do Estudante -->
+                <!-- Sistema de Turmas Dinâmicas -->
                 <div class="form-section">
-                    <h3>Informações do Estudante</h3>
+                    <h3>Turmas da Escola</h3>
+                    
                     <div class="form-row">
-                        <div class="form-group">
-                            <label for="studentName">Nome do(a) estudante:</label>
-                            <input type="text" id="studentName" name="studentName" placeholder="Nome completo" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="consecutiveAbsences">Nº de faltas consecutivas:</label>
-                            <input type="number" id="consecutiveAbsences" name="consecutiveAbsences" value="0" min="0" required>
+                        <div class="form-group" style="width: 100%;">
+                            <label for="newTurma">Adicionar Nova Turma:</label>
+                            <div style="display: flex; gap: 10px; align-items: flex-end;">
+                                <input type="text" id="newTurma" placeholder="Ex: 1º ano A, 2º ano B" style="flex: 1;">
+                                <button type="button" id="addTurmaBtn" class="btn btn-secondary" style="white-space: nowrap;">+ Adicionar Turma</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="etapa">Etapa:</label>
-                            <select id="etapa" name="etapa" required>
-                                <option value="">Selecione</option>
-                                <option value="Ensino Fundamental">Ensino Fundamental</option>
-                                <option value="Ensino Médio">Ensino Médio</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="turmaId">ID da Turma:</label>
-                            <input type="text" id="turmaId" name="turmaId" placeholder="Digite o ID da turma" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="status">Status:</label>
-                            <select id="status" name="status" required>
-                                <option value="">Selecione</option>
-                                <option value="Pendente">Pendente</option>
-                                <option value="Resolvido">Resolvido</option>
-                            </select>
-                        </div>
+
+                    <!-- Lista de Turmas Adicionadas -->
+                    <div id="turmasContainer" class="form-section">
+                        <p style="color: #666; font-style: italic; text-align: center; padding: 20px;">
+                            Nenhuma turma adicionada. Clique em "Adicionar Turma" para começar.
+                        </p>
                     </div>
                 </div>
 
@@ -164,18 +148,23 @@
                 <div class="form-section">
                     <h3>Observações:</h3>
                     <div class="form-group">
-                        <textarea id="observations" name="observations" rows="4" placeholder="Digite suas observações sobre o estudante..."></textarea>
+                        <textarea id="observations" name="observations" rows="4" placeholder="Digite suas observações sobre a turma..."></textarea>
                     </div>
                 </div>
 
-                <!-- Links de Documentos -->
+                <!-- Anexos -->
                 <div class="form-section">
-                    <h3>Links de Documentos:</h3>
-                    <p class="form-description">Insira links para Google Drive, Google Docs, Planilhas ou outros documentos online</p>
+                    <h3>Anexos:</h3>
+                    <p class="form-description">Faça upload de documentos relacionados (PDF, Word, Excel, imagens, etc.)</p>
                     <div class="form-group">
-                        <textarea id="documentLinks" name="documentLinks" rows="4" placeholder="Ex: https://drive.google.com/...&#10;https://docs.google.com/..."></textarea>
+                        <input type="file" id="attachments" name="attachments" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.txt" style="margin-bottom: 10px;">
+                        <div id="attachmentsList" class="attachments-list"></div>
+                        <small style="color: #666; font-size: 12px;">Formatos aceitos: PDF, Word, Excel, imagens, texto. Máximo 5 arquivos.</small>
                     </div>
                 </div>
+
+                <!-- Mensagem de status -->
+                <div id="statusMessage" class="status-message" style="display: none;"></div>
 
                 <!-- Botões -->
                 <div class="form-actions">
@@ -189,6 +178,7 @@
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
 
         // Configuração do Firebase
         const firebaseConfig = {
@@ -202,6 +192,7 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const storage = getStorage(app);
 
         // Verificar autenticação
         function checkAuth() {
@@ -233,10 +224,10 @@
         }
 
         // Mostrar mensagem de status
-        function showStatus(message, type = 'info') {
+        function showStatus(message, isSuccess = true) {
             const statusDiv = document.getElementById('statusMessage');
             statusDiv.textContent = message;
-            statusDiv.className = `status-message ${type}`;
+            statusDiv.className = `status-message ${isSuccess ? 'success' : 'error'}`;
             statusDiv.style.display = 'block';
             
             setTimeout(() => {
@@ -244,45 +235,169 @@
             }, 5000);
         }
 
+        // ===== SISTEMA DE ANEXOS MÚLTIPLOS =====
+        let selectedFiles = [];
+
+        // Event listener para seleção de arquivos
+        document.getElementById('attachments').addEventListener('change', function(e) {
+            const newFiles = Array.from(e.target.files);
+            
+            // Adicionar novos arquivos aos existentes (evitando duplicatas)
+            newFiles.forEach(newFile => {
+                // Verificar se o arquivo já existe (por nome e tamanho)
+                const isDuplicate = selectedFiles.some(existingFile => 
+                    existingFile.name === newFile.name && existingFile.size === newFile.size
+                );
+                
+                if (!isDuplicate) {
+                    selectedFiles.push(newFile);
+                }
+            });
+            
+            // Verificar limite máximo
+            if (selectedFiles.length > 5) {
+                alert('Máximo de 5 arquivos permitido! Removendo arquivos excedentes.');
+                selectedFiles = selectedFiles.slice(0, 5);
+            }
+            
+            displayAttachments();
+            console.log(`📁 Total de anexos selecionados: ${selectedFiles.length}`);
+        });
+
+        function displayAttachments() {
+            const attachmentsList = document.getElementById('attachmentsList');
+            attachmentsList.innerHTML = '';
+            
+            if (selectedFiles.length === 0) {
+                attachmentsList.innerHTML = '<p style="color: #666; font-style: italic;">Nenhum arquivo selecionado</p>';
+                return;
+            }
+            
+            // Cabeçalho com contador e botão limpar tudo
+            const headerDiv = document.createElement('div');
+            headerDiv.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 8px; background: #f8f9fa; border-radius: 5px;';
+            headerDiv.innerHTML = `
+                <span style="font-weight: bold; color: #495057;">📎 Anexos selecionados (${selectedFiles.length}/5)</span>
+                <button type="button" onclick="clearAllAttachments()" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 3px; font-size: 11px; cursor: pointer;">🗑️ Limpar Todos</button>
+            `;
+            attachmentsList.appendChild(headerDiv);
+            
+            selectedFiles.forEach((file, index) => {
+                const fileDiv = document.createElement('div');
+                fileDiv.className = 'attachment-item';
+                const fileSizeKB = (file.size / 1024).toFixed(1);
+                fileDiv.innerHTML = `
+                    <span>📎 ${file.name} <small style="color: #666;">(${fileSizeKB} KB)</small></span>
+                    <button type="button" onclick="removeFile(${index})" class="btn-remove">❌</button>
+                `;
+                attachmentsList.appendChild(fileDiv);
+            });
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            displayAttachments();
+            console.log(`Arquivo removido. Total de anexos: ${selectedFiles.length}`);
+        }
+
+        function clearAllAttachments() {
+            selectedFiles = [];
+            displayAttachments();
+            console.log('Todos os anexos foram removidos');
+        }
+
+        // Função para fazer upload dos anexos
+        async function uploadAttachments() {
+            if (selectedFiles.length === 0) return [];
+            
+            console.log(`🚀 Iniciando upload de ${selectedFiles.length} arquivo(s)...`);
+            
+            const uploadPromises = selectedFiles.map(async (file, index) => {
+                try {
+                    console.log(`📤 Fazendo upload do arquivo ${index + 1}/${selectedFiles.length}: ${file.name}`);
+                    
+                    const timestamp = Date.now();
+                    const fileName = `${timestamp}_${file.name}`;
+                    const storageRef = ref(storage, `attachments/${fileName}`);
+                    
+                    const snapshot = await uploadBytes(storageRef, file);
+                    const downloadURL = await getDownloadURL(snapshot.ref);
+                    
+                    console.log(`✅ Upload concluído: ${file.name}`);
+                    
+                    return {
+                        name: file.name,
+                        type: file.type,
+                        size: file.size,
+                        downloadURL: downloadURL,
+                        uploadedAt: new Date().toISOString()
+                    };
+                } catch (error) {
+                    console.error(`❌ Erro no upload de ${file.name}:`, error);
+                    throw error;
+                }
+            });
+            
+            const uploadedAttachments = await Promise.all(uploadPromises);
+            console.log(`🎉 Todos os ${uploadedAttachments.length} anexos foram enviados com sucesso!`);
+            console.log('📋 Resumo dos anexos:', uploadedAttachments.map(att => `${att.name} (${(att.size/1024).toFixed(1)} KB)`));
+            
+            return uploadedAttachments;
+        }
+
         // Validar formulário
         function validateForm() {
-            const requiredFields = [
-                { id: 'school', name: 'Nome da Escola' },
-                { id: 'municipality', name: 'Município' },
-                { id: 'technician', name: 'Técnico(a)' },
-                { id: 'date', name: 'Data do Registro' },
-                { id: 'studentName', name: 'Nome do Estudante' },
-                { id: 'etapa', name: 'Etapa' },
-                { id: 'turmaId', name: 'ID da Turma' },
-                { id: 'consecutiveAbsences', name: 'Número de Faltas' },
-                { id: 'status', name: 'Status' }
-            ];
-
-            for (const field of requiredFields) {
-                const element = document.getElementById(field.id);
-                if (!element) continue;
-
-                if (element.tagName === 'SELECT') {
-                    if (!element.value || element.value === '') {
-                        showStatus(`Por favor, preencha o campo: ${field.name}`, 'error');
-                        element.focus();
-                        return false;
-                    }
-                } else {
-                    if (!element.value.trim()) {
-                        showStatus(`Por favor, preencha o campo: ${field.name}`, 'error');
-                        element.focus();
-                        return false;
-                    }
+            const requiredFields = ['school', 'municipality', 'technician', 'date'];
+            
+            for (const fieldId of requiredFields) {
+                const field = document.getElementById(fieldId);
+                if (!field.value.trim()) {
+                    showStatus(`Por favor, preencha o campo: ${field.previousElementSibling.textContent.replace(':', '')}`, false);
+                    field.focus();
+                    return false;
                 }
             }
-
+            
+            // Verificar se pelo menos uma turma foi adicionada
+            if (turmas.length === 0) {
+                showStatus('Por favor, adicione pelo menos uma turma', false);
+                return false;
+            }
+            
+            // Validar cada turma
+            for (const turma of turmas) {
+                if (turma.totalEstudantes <= 0) {
+                    showStatus(`Por favor, informe o total de estudantes da turma "${turma.nome}"`, false);
+                    return false;
+                }
+                if (!turma.etapa) {
+                    showStatus(`Por favor, selecione a etapa da turma "${turma.nome}"`, false);
+                    return false;
+                }
+                if (turma.bimestres.length === 0) {
+                    showStatus(`Por favor, selecione pelo menos um bimestre para a turma "${turma.nome}"`, false);
+                    return false;
+                }
+            }
+            
             return true;
+        }
+
+        // Obter bimestres selecionados
+        function getSelectedBimesters() {
+            const bimesters = [];
+            if (document.getElementById('bimester1').checked) bimesters.push('1º Bimestre');
+            if (document.getElementById('bimester2').checked) bimesters.push('2º Bimestre');
+            if (document.getElementById('bimester3').checked) bimesters.push('3º Bimestre');
+            if (document.getElementById('bimester4').checked) bimesters.push('4º Bimestre');
+            return bimesters;
         }
 
         // Inicializar
         checkAuth();
         setCurrentDate();
+        
+
         
         // Form handler
         document.getElementById('frequencyForm').addEventListener('submit', async (e) => {
@@ -298,9 +413,7 @@
             try {
                 submitBtn.disabled = true;
                 submitBtn.textContent = 'Salvando...';
-                showStatus('Salvando registro...', 'info');
-                
-                console.log('Iniciando salvamento...');
+                showStatus('Salvando registro...', true);
                 
                 const formData = {
                     department: 'Supervisão',
@@ -309,16 +422,12 @@
                     municipality: document.getElementById('municipality').value,
                     technician: document.getElementById('technician').value,
                     date: document.getElementById('date').value,
-                    studentName: document.getElementById('studentName').value,
-                    etapa: document.getElementById('etapa').value,
-                    turmaId: document.getElementById('turmaId').value,
-                    consecutiveAbsences: parseInt(document.getElementById('consecutiveAbsences').value),
-                    status: document.getElementById('status').value,
+                    turmas: turmas, // ✅ NOVO: Array com todas as turmas e seus dados
                     observations: document.getElementById('observations').value,
-                    documentLinks: document.getElementById('documentLinks').value,
-                    createdBy: localStorage.getItem('userCPF'),
-                    createdByRole: localStorage.getItem('userRole'),
-                    createdByName: localStorage.getItem('userName'),
+                    attachments: await uploadAttachments(), // Anexos do Firebase Storage
+                    createdBy: localStorage.getItem('userCPF') || 'Usuário não identificado',
+                    createdByRole: localStorage.getItem('userRole') || 'N/A',
+                    createdByName: localStorage.getItem('userName') || 'N/A',
                     createdAt: serverTimestamp(),
                     recordStatus: 'active'
                 };
@@ -329,78 +438,259 @@
                 try {
                     const docRef = await addDoc(collection(db, 'records'), formData);
                     console.log('Documento salvo com ID:', docRef.id);
+                    showStatus('Registro salvo com sucesso no Firebase!', true);
                     
-                    // Salvar também no localStorage como backup
-                    const localRecords = JSON.parse(localStorage.getItem('localRecords') || '[]');
-                    localRecords.push({
-                        ...formData,
-                        id: docRef.id,
-                        createdAt: new Date().toISOString()
-                    });
-                    localStorage.setItem('localRecords', JSON.stringify(localRecords));
-                    
-                    showStatus('Registro salvo com sucesso! Redirecionando...', 'success');
-                    
-                    // Redirecionar para registros unificados
-                    setTimeout(() => {
-                        window.location.href = '../monitoring-records-unified.html';
-                    }, 2000);
+                    // Limpar formulário
+                    document.getElementById('frequencyForm').reset();
+                    turmas = []; // Limpar array de turmas
+                    displayTurmas(); // Atualizar display
+                    updateTurmaCounter(); // Atualizar contador
+                    setCurrentDate();
                     
                 } catch (firebaseError) {
                     console.error('Erro no Firebase:', firebaseError);
                     
-                    // Fallback para localStorage
-                    const localRecords = JSON.parse(localStorage.getItem('localRecords') || '[]');
-                    const localId = 'local_' + Date.now();
-                    localRecords.push({
+                    // Fallback: salvar no localStorage
+                    const records = JSON.parse(localStorage.getItem('frequencyRecords') || '[]');
+                    const recordWithId = {
                         ...formData,
-                        id: localId,
-                        createdAt: new Date().toISOString()
-                    });
-                    localStorage.setItem('localRecords', JSON.stringify(localRecords));
+                        id: Date.now().toString(),
+                        createdAt: new Date().toISOString(),
+                        savedLocally: true
+                    };
+                    records.push(recordWithId);
+                    localStorage.setItem('frequencyRecords', JSON.stringify(records));
                     
-                    showStatus('Registro salvo localmente. Redirecionando...', 'success');
+                    showStatus('Registro salvo localmente (Firebase indisponível). ID: ' + recordWithId.id, true);
                     
-                    // Redirecionar para registros unificados
-                    setTimeout(() => {
-                        window.location.href = '../monitoring-records-unified.html';
-                    }, 2000);
+                    // Limpar formulário
+                    document.getElementById('frequencyForm').reset();
+                    turmas = []; // Limpar array de turmas
+                    displayTurmas(); // Atualizar display
+                    updateTurmaCounter(); // Atualizar contador
+                    setCurrentDate();
                 }
                 
             } catch (error) {
-                console.error('Erro ao salvar:', error);
-                showStatus('Erro ao salvar o registro: ' + error.message, 'error');
-                
-                // Fallback para localStorage em caso de erro geral
-                try {
-                    const localRecords = JSON.parse(localStorage.getItem('localRecords') || '[]');
-                    const localId = 'local_' + Date.now();
-                    localRecords.push({
-                        ...formData,
-                        id: localId,
-                        createdAt: new Date().toISOString()
-                    });
-                    localStorage.setItem('localRecords', JSON.stringify(localRecords));
-                    
-                    showStatus('Registro salvo localmente. Redirecionando...', 'success');
-                    
-                    setTimeout(() => {
-                        window.location.href = '../monitoring-records-unified.html';
-                    }, 2000);
-                } catch (localError) {
-                    showStatus('Erro crítico ao salvar. Tente novamente.', 'error');
-                }
+                console.error('Erro geral ao salvar:', error);
+                showStatus('Erro ao salvar o registro: ' + error.message, false);
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = originalText;
             }
         });
 
-        // Exportar função de logout
+        // ===== SISTEMA DE TURMAS DINÂMICAS =====
+        let turmas = [];
+        let turmaCounter = 0;
+
+        // Função para adicionar nova turma
+        function addTurma() {
+            const turmaInput = document.getElementById('newTurma');
+            const turmaNome = turmaInput.value.trim();
+            
+            if (!turmaNome) {
+                alert('Por favor, digite o nome da turma');
+                turmaInput.focus();
+                return;
+            }
+            
+            // Verificar se a turma já existe
+            if (turmas.some(t => t.nome === turmaNome)) {
+                alert('Esta turma já foi adicionada');
+                turmaInput.focus();
+                return;
+            }
+            
+            turmaCounter++;
+            const turmaId = `turma_${turmaCounter}`;
+            
+            const novaTurma = {
+                id: turmaId,
+                nome: turmaNome,
+                totalEstudantes: 0,
+                etapa: '',
+                bimestres: [],
+                status: 'Pendente'
+            };
+            
+            turmas.push(novaTurma);
+            turmaInput.value = '';
+            displayTurmas();
+            updateTurmaCounter();
+            
+            alert(`Turma "${turmaNome}" adicionada com sucesso!`);
+        }
+
+        // Função para remover turma
+        function removeTurma(turmaId) {
+            const turmaIndex = turmas.findIndex(t => t.id === turmaId);
+            if (turmaIndex !== -1) {
+                const turmaNome = turmas[turmaIndex].nome;
+                turmas.splice(turmaIndex, 1);
+                displayTurmas();
+                updateTurmaCounter();
+                alert(`Turma "${turmaNome}" removida`);
+            }
+        }
+
+        // Função para atualizar dados da turma
+        function updateTurmaData(turmaId, field, value) {
+            const turma = turmas.find(t => t.id === turmaId);
+            if (turma) {
+                turma[field] = value;
+            }
+        }
+
+        // Função para atualizar bimestres da turma
+        function updateTurmaBimestres(turmaId, bimestre, isChecked) {
+            const turma = turmas.find(t => t.id === turmaId);
+            if (turma) {
+                if (isChecked) {
+                    if (!turma.bimestres.includes(bimestre)) {
+                        turma.bimestres.push(bimestre);
+                    }
+                } else {
+                    turma.bimestres = turma.bimestres.filter(b => b !== bimestre);
+                }
+            }
+        }
+
+        // Função para exibir turmas
+        function displayTurmas() {
+            const container = document.getElementById('turmasContainer');
+            
+            if (turmas.length === 0) {
+                container.innerHTML = `
+                    <p style="color: #666; font-style: italic; text-align: center; padding: 20px;">
+                        Nenhuma turma adicionada. Clique em "Adicionar Turma" para começar.
+                    </p>
+                `;
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            turmas.forEach(turma => {
+                const turmaDiv = document.createElement('div');
+                turmaDiv.className = 'form-section';
+                turmaDiv.style.cssText = 'background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 15px;';
+                turmaDiv.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #dee2e6;">
+                        <span style="font-weight: bold; color: #495057; font-size: 16px;">${turma.nome}</span>
+                        <button type="button" onclick="removeTurma('${turma.id}')" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                            ❌ Remover
+                        </button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                                 <div>
+                             <label>Total de Estudantes Infrequentes:</label>
+                             <input 
+                                 type="number" 
+                                 min="0" 
+                                 placeholder="Digite o número" 
+                                 value="${turma.totalEstudantes || 0}"
+                                 onchange="updateTurmaData('${turma.id}', 'totalEstudantes', parseInt(this.value) || 0)"
+                                 required
+                                 style="width: 100%;"
+                             >
+                         </div>
+                        <div>
+                            <label>Etapa:</label>
+                            <select 
+                                onchange="updateTurmaData('${turma.id}', 'etapa', this.value)"
+                                required
+                                style="width: 100%;"
+                            >
+                                <option value="">Selecione</option>
+                                <option value="Ensino Fundamental" ${turma.etapa === 'Ensino Fundamental' ? 'selected' : ''}>Ensino Fundamental</option>
+                                <option value="Ensino Médio" ${turma.etapa === 'Ensino Médio' ? 'selected' : ''}>Ensino Médio</option>
+                                <option value="Ensino Fundamental e Ensino Médio" ${turma.etapa === 'Ensino Fundamental e Ensino Médio' ? 'selected' : ''}>Ensino Fundamental e Ensino Médio</option>
+                                <option value="EJA" ${turma.etapa === 'EJA' ? 'selected' : ''}>EJA</option>
+                                <option value="Ensino Fundamental e EJA" ${turma.etapa === 'Ensino Fundamental e EJA' ? 'selected' : ''}>Ensino Fundamental e EJA</option>
+                                <option value="Ensino Médio e EJA" ${turma.etapa === 'Ensino Médio e EJA' ? 'selected' : ''}>Ensino Médio e EJA</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Status:</label>
+                            <select 
+                                onchange="updateTurmaData('${turma.id}', 'status', this.value)"
+                                required
+                                style="width: 100%;"
+                            >
+                                <option value="Pendente" ${turma.status === 'Pendente' ? 'selected' : ''}>Pendente</option>
+                                <option value="Resolvido" ${turma.status === 'Resolvido' ? 'selected' : ''}>Resolvido</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Bimestres:</label>
+                            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 5px;">
+                                <label style="display: flex; align-items: center; gap: 5px;">
+                                    <input 
+                                        type="checkbox" 
+                                        value="1º Bimestre"
+                                        ${turma.bimestres.includes('1º Bimestre') ? 'checked' : ''}
+                                        onchange="updateTurmaBimestres('${turma.id}', '1º Bimestre', this.checked)"
+                                    > 1º Bimestre
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 5px;">
+                                    <input 
+                                        type="checkbox" 
+                                        value="2º Bimestre"
+                                        ${turma.bimestres.includes('2º Bimestre') ? 'checked' : ''}
+                                        onchange="updateTurmaBimestres('${turma.id}', '2º Bimestre', this.checked)"
+                                    > 2º Bimestre
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 5px;">
+                                    <input 
+                                        type="checkbox" 
+                                        value="3º Bimestre"
+                                        ${turma.bimestres.includes('3º Bimestre') ? 'checked' : ''}
+                                        onchange="updateTurmaBimestres('${turma.id}', '3º Bimestre', this.checked)"
+                                    > 3º Bimestre
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 5px;">
+                                    <input 
+                                        type="checkbox" 
+                                        value="4º Bimestre"
+                                        ${turma.bimestres.includes('4º Bimestre') ? 'checked' : ''}
+                                        onchange="updateTurmaBimestres('${turma.id}', '4º Bimestre', this.checked)"
+                                    > 4º Bimestre
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(turmaDiv);
+            });
+        }
+
+        // Função para atualizar contador de turmas
+        function updateTurmaCounter() {
+            const addBtn = document.getElementById('addTurmaBtn');
+            if (turmas.length > 0) {
+                addBtn.innerHTML = `+ Adicionar Turma <span style="background: #007bff; color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; margin-left: 10px;">${turmas.length}</span>`;
+            } else {
+                addBtn.innerHTML = '+ Adicionar Turma';
+            }
+        }
+
+        // Event listener para o botão de adicionar turma
+        document.addEventListener('DOMContentLoaded', function() {
+            const addTurmaBtn = document.getElementById('addTurmaBtn');
+            if (addTurmaBtn) {
+                addTurmaBtn.addEventListener('click', addTurma);
+            }
+        });
+
+        // Exportar funções para uso global
         window.logout = logout;
+        window.removeFile = removeFile;
+        window.clearAllAttachments = clearAllAttachments;
+        window.addTurma = addTurma;
+        window.removeTurma = removeTurma;
+        window.updateTurmaData = updateTurmaData;
+        window.updateTurmaBimestres = updateTurmaBimestres;
     </script>
-    
-    <!-- Script para pesquisa de escola - COMENTADO PARA EVITAR CONFLITOS -->
-    <!-- <script src="../js/school-search.js"></script> -->
 </body>
 </html>

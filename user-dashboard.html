@@ -52,38 +52,137 @@
                 max-width: 300px;
             }
         }
+        
+        /* Estilos para o dropdown de Relatório */
+        .report-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .report-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+        }
+        
+        .dropdown-arrow {
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+        
+        .report-dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-radius: 8px;
+            z-index: 1000;
+            margin-top: 5px;
+            border: 1px solid #e9ecef;
+            overflow: hidden;
+        }
+        
+        .report-dropdown-content.show {
+            display: block;
+            animation: fadeInDown 0.3s ease;
+        }
+        
+        .dropdown-item {
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.2s ease;
+            border-bottom: 1px solid #f8f9fa;
+        }
+        
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: #007bff;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsividade para o dropdown */
+        @media (max-width: 768px) {
+            .report-dropdown {
+                width: 100%;
+            }
+            
+            .report-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .report-dropdown-content {
+                position: static;
+                box-shadow: none;
+                border: 1px solid #dee2e6;
+                margin-top: 10px;
+                border-radius: 5px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Sistema de Monitoramento Integrado</h1>
-        <button class="logout-btn" onclick="logout()">Sair</button>
-    </div>
-
-    <div class="main-container">
-        <div class="notification-area">
-            <div class="notification-icon">🔔</div>
-            <span>Notificações do Sistema</span>
-            <div class="notification-badge">0</div>
+    <div class="main-content">
+        <div class="header">
+            <h1>Sistema de Monitoramento Integrado</h1>
+            <button class="logout-btn" onclick="logout()">Sair</button>
         </div>
 
-        <!-- Menu Principal -->
-        <div class="main-menu">
-            <a href="monitoring-generate.html" class="btn btn-primary">Gerar Monitoramento</a>
-            <a href="monitoring-records-unified.html" class="btn btn-primary">Registros Unificados</a>
-            <a href="monitoring-resolved.html" class="btn btn-primary">Resolvidos</a>
-        </div>
+        <div class="main-container">
+            <div class="notification-area">
+                <div class="notification-icon">🔔</div>
+                <span>Notificações do Sistema</span>
+                <div class="notification-badge">0</div>
+            </div>
 
-        <!-- Menu de Administração (apenas para super admins) -->
-        <div id="adminMenu" class="admin-menu" style="display: none;">
-            <h3 style="text-align: center; margin: 30px 0 20px 0; color: #333; border-top: 2px solid #007bff; padding-top: 20px;">Administração do Sistema</h3>
-            <div class="admin-buttons">
-                <a href="user-management-new.html" class="btn btn-admin">👥 Gerenciar Usuários</a>
-                <a href="user-list-new.html" class="btn btn-admin">📋 Listar Usuários</a>
-                <a href="notice-management-new.html" class="btn btn-admin">📢 Gerenciar Avisos</a>
+            <!-- Menu Principal -->
+            <div class="main-menu">
+                <a href="monitoring-generate.html" class="btn btn-primary">Gerar Monitoramento</a>
+                <a href="monitoring-records-unified.html" class="btn btn-primary">Registros Unificados</a>
+                <a href="monitoring-resolved.html" class="btn btn-primary">Resolvidos</a>
+                <a href="reports-main.html" class="btn btn-primary">Relatório</a>
+                <a href="https://painel-sge-b4jkmpsq9fzxdogtb5aqmi.streamlit.app" target="_blank" class="btn btn-success">Análise de Dados</a>
+            </div>
+
+            <!-- Menu de Administração (apenas para super admins) -->
+            <div id="adminMenu" class="admin-menu" style="display: none;">
+                <h3 style="text-align: center; margin: 30px 0 20px 0; color: #333; border-top: 2px solid #007bff; padding-top: 20px;">Administração do Sistema</h3>
+                <div class="admin-buttons">
+                    <a href="user-management-new.html" class="btn btn-admin">👥 Gerenciar Usuários</a>
+                    <a href="user-list-new.html" class="btn btn-admin">Listar Usuários</a>
+                    <a href="notice-management-new.html" class="btn btn-admin">📢 Gerenciar Avisos</a>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Rodapé Profissional -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 - Superintendência Regional de Educação de Gurupi</p>
+            <p>Sistema de Monitoramento Integrado - SRE Gurupi</p>
+        </div>
+    </footer>
 
     <!-- Firebase SDK -->
     <script type="module">
@@ -115,6 +214,9 @@
             localStorage.removeItem('userId');
             window.location.href = 'index.html';
         }
+
+        // Função para controlar o dropdown de relatório
+
 
         // Função para carregar avisos ativos
         async function loadActiveNotices() {

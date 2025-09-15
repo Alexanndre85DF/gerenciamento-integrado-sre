@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Relatórios - SRE GURUPI</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        .button-group .btn {
+            width: 100%;
+            text-align: center;
+            padding: 15px 20px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .back-navigation {
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+        .menu-card p {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .button-group {
+                grid-template-columns: 1fr;
+                max-width: 300px;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <div class="header">
+            <h1>Sistema de Relatórios</h1>
+            <button class="logout-btn" onclick="logout()">Sair</button>
+        </div>
+
+        <div class="main-container">
+            <div class="menu-card">
+                <div style="position: relative;">
+                    <a href="user-dashboard.html" class="btn btn-secondary" style="position: absolute; top: 0; right: 0; font-size: 12px; padding: 6px 12px; margin: 0;">Voltar ao Menu</a>
+                    <p style="margin-top: 60px;">Selecione a opção para acessar as funcionalidades específicas:</p>
+                </div>
+                
+                <div class="button-group">
+                    <a href="report-create.html" class="btn btn-primary">
+                        Criar Relatório
+                    </a>
+                    
+                    <a href="report-view.html" class="btn btn-primary">
+                        Visualizar Relatórios
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rodapé Profissional -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 - Superintendência Regional de Educação de Gurupi</p>
+            <p>Sistema de Monitoramento Integrado - SRE Gurupi</p>
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script>
+        // Função de logout
+        window.logout = function() {
+            firebase.auth().signOut().then(() => {
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userRole');
+                localStorage.removeItem('userId');
+                window.location.href = 'index.html';
+            }).catch((error) => {
+                console.error("Erro ao fazer logout:", error);
+                alert("Erro ao fazer logout. Tente novamente.");
+            });
+        }
+    </script>
+</body>
+</html>

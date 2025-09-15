@@ -120,108 +120,34 @@
                     </div>
                 </div>
 
-                <!-- Informações do Registro -->
+                <!-- Sistema de Turmas Dinâmicas -->
                 <div class="form-section">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="referenceDate">Data de Referência:</label>
-                            <input type="date" id="referenceDate" name="referenceDate" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="classId">ID da Turma:</label>
-                            <input type="text" id="classId" name="classId" placeholder="ID da turma" required>
-                        </div>
+                    <div class="section-header">
+                        <h3>Turmas e Componentes Curriculares</h3>
+                        <button type="button" class="btn-secondary" onclick="addTurma()">➕ Adicionar Turma</button>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="className">Nome da Turma:</label>
-                            <input type="text" id="className" name="className" placeholder="Nome da turma" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="discipline">Disciplina:</label>
-                            <input type="text" id="discipline" name="discipline" placeholder="Nome da disciplina" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="periodStart">Período Inicial:</label>
-                            <input type="date" id="periodStart" name="periodStart" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="periodEnd">Período Final:</label>
-                            <input type="date" id="periodEnd" name="periodEnd" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="plannedClasses">Aulas Previstas no Período:</label>
-                            <input type="number" id="plannedClasses" name="plannedClasses" min="0" placeholder="Digite o número de aulas previstas" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="givenClasses">Aulas Dadas no Período:</label>
-                            <input type="number" id="givenClasses" name="givenClasses" min="0" placeholder="Digite o número de aulas realizadas" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="professorName">Nome do(a) Professor(a):</label>
-                            <input type="text" id="professorName" name="professorName" placeholder="Nome completo" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="bimester">Bimestre:</label>
-                            <select id="bimester" name="bimester" required>
-                                <option value="">Selecione</option>
-                                <option value="1º Bimestre">1º Bimestre</option>
-                                <option value="2º Bimestre">2º Bimestre</option>
-                                <option value="3º Bimestre">3º Bimestre</option>
-                                <option value="4º Bimestre">4º Bimestre</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="situation">Situação:</label>
-                            <select id="situation" name="situation" required>
-                                <option value="">Selecione</option>
-                                <option value="Em andamento">Em andamento</option>
-                                <option value="Concluído">Concluído</option>
-                                <option value="Pendente">Pendente</option>
-                                <option value="Suspenso">Suspenso</option>
-                            </select>
-                        </div>
+                    <div id="turmasContainer">
+                        <!-- As turmas serão adicionadas aqui dinamicamente -->
                     </div>
                 </div>
 
-                <!-- Totais e Taxa de Cumprimento -->
+                <!-- Resumo Consolidado -->
                 <div class="form-section">
-                    <h3>Resumo do Período</h3>
+                    <h3>Resumo Consolidado da Escola</h3>
                     <div class="form-row">
+                        <div class="form-group">
+                            <label>Total de Turmas: <span id="totalTurmas">0</span></label>
+                        </div>
                         <div class="form-group">
                             <label>Total de Aulas Previstas: <span id="totalPlanned">0</span></label>
                         </div>
-                        <div class="form-group">
-                            <label>Total de Aulas Realizadas: <span id="totalGiven">0</span></label>
-                        </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Taxa de Cumprimento: <span id="completionRate">0%</span></label>
+                            <label>Total de Aulas Realizadas: <span id="totalGiven">0</span></label>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Motivos de não realização -->
-                <div class="form-section">
-                    <h3>Motivos de não realização/registro:</h3>
-                    <div class="form-group">
-                        <div class="checkbox-group">
-                            <label><input type="checkbox" name="teacherAbsence" value="true"> Falta do Docente</label>
-                            <label><input type="checkbox" name="schoolEvent" value="true"> Evento Escolar</label>
-                            <label><input type="checkbox" name="holiday" value="true"> Feriado</label>
-                            <label><input type="checkbox" name="strike" value="true"> Greve/Suspensão</label>
-                            <label><input type="checkbox" name="sgeUnavailable" value="true"> Indisponibilidade SGE</label>
-                            <label><input type="checkbox" name="professorNotLaunched" value="true"> Não Lançamento SGE Professor</label>
-                            <label><input type="checkbox" name="others" value="true"> Outros</label>
+                        <div class="form-group">
+                            <label>Taxa de Cumprimento Geral: <span id="completionRate">0%</span></label>
                         </div>
                     </div>
                 </div>
@@ -230,23 +156,28 @@
                 <div class="form-section">
                     <h3>Observações:</h3>
                     <div class="form-group">
-                        <textarea id="observations" name="observations" rows="4" placeholder="Digite suas observações..."></textarea>
+                        <textarea id="observations" name="observations" rows="4" placeholder="Digite suas observações gerais sobre as aulas previstas e dadas..."></textarea>
                     </div>
                 </div>
 
-                <!-- Links de Documentos -->
+                <!-- Anexos -->
                 <div class="form-section">
-                    <h3>Links de Documentos:</h3>
-                    <p class="form-description">Insira links para Google Drive, Google Docs, Planilhas ou outros documentos online</p>
+                    <h3>Anexos:</h3>
+                    <p class="form-description">Faça upload de documentos relacionados (PDF, Word, Excel, imagens, etc.)</p>
                     <div class="form-group">
-                        <textarea id="documentLinks" name="documentLinks" rows="4" placeholder="Ex: https://drive.google.com/...&#10;https://docs.google.com/..."></textarea>
+                        <input type="file" id="attachments" name="attachments" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.txt" style="margin-bottom: 10px;">
+                        <div id="attachmentsList" class="attachments-list"></div>
+                        <small style="color: #666; font-size: 12px;">Formatos aceitos: PDF, Word, Excel, imagens, texto. Máximo 5 arquivos.</small>
                     </div>
                 </div>
+
+                <!-- Mensagem de status -->
+                <div id="statusMessage" class="status-message" style="display: none;"></div>
 
                 <!-- Botões -->
                 <div class="form-actions">
-                    <button type="submit" class="btn-primary">Salvar Registro</button>
-                    <button type="button" class="btn-secondary" onclick="window.history.back()">Voltar</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Salvar Registro</button>
+                    <button type="button" class="btn btn-secondary" onclick="window.history.back()">Voltar</button>
                 </div>
             </form>
         </div>
@@ -255,10 +186,11 @@
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
 
         // Configuração do Firebase
         const firebaseConfig = {
-            apiKey: "AIzaSyABE1oTfC_nT5vfDHpeqYdDjNoPCKwE-Eo",
+            apiKey: "AIzaSyABEloTfC_nT5vfDHpeqYdDjNoPCKwE-Eo",
             authDomain: "projeto-alex-aaadf.firebaseapp.com",
             projectId: "projeto-alex-aaadf",
             storageBucket: "projeto-alex-aaadf.firebasestorage.app",
@@ -268,6 +200,249 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // ===== SISTEMA DE TURMAS DINÂMICAS =====
+        let turmas = [];
+        let turmaCounter = 0;
+        let componenteCounter = 0;
+
+        // Função para adicionar uma nova turma
+        function addTurma() {
+            turmaCounter++;
+            const turmaId = `turma_${turmaCounter}`;
+            
+                         const turma = {
+                 id: turmaId,
+                 idTurma: '',
+                 bimester: '',
+                 situation: '',
+                 componentes: []
+             };
+            
+            turmas.push(turma);
+            displayTurmas();
+        }
+
+        // Função para remover uma turma
+        function removeTurma(turmaId) {
+            turmas = turmas.filter(t => t.id !== turmaId);
+            displayTurmas();
+            updateResumo();
+        }
+
+        // Função para adicionar componente curricular a uma turma
+        function addComponente(turmaId) {
+            componenteCounter++;
+            const componenteId = `comp_${componenteCounter}`;
+            
+            const componente = {
+                id: componenteId,
+                nome: '',
+                aulasPrevistas: 0,
+                aulasDadas: 0,
+                porcentagem: 0
+            };
+            
+            const turma = turmas.find(t => t.id === turmaId);
+            if (turma) {
+                turma.componentes.push(componente);
+                displayTurmas();
+                updateResumo();
+            }
+        }
+
+        // Função para remover componente curricular
+        function removeComponente(turmaId, componenteId) {
+            const turma = turmas.find(t => t.id === turmaId);
+            if (turma) {
+                turma.componentes = turma.componentes.filter(c => c.id !== componenteId);
+                displayTurmas();
+                updateResumo();
+            }
+        }
+
+        // Função para atualizar dados da turma
+        function updateTurmaData(turmaId, field, value) {
+            const turma = turmas.find(t => t.id === turmaId);
+            if (turma) {
+                turma[field] = value;
+                updateResumo();
+            }
+        }
+
+        // Função para atualizar dados do componente
+        function updateComponenteData(turmaId, componenteId, field, value) {
+            const turma = turmas.find(t => t.id === turmaId);
+            if (turma) {
+                const componente = turma.componentes.find(c => c.id === componenteId);
+                if (componente) {
+                    if (field === 'aulasPrevistas' || field === 'aulasDadas') {
+                        componente[field] = parseInt(value) || 0;
+                        // Calcular porcentagem automaticamente
+                        if (componente.aulasPrevistas > 0) {
+                            componente.porcentagem = Math.round((componente.aulasDadas / componente.aulasPrevistas) * 100);
+                        } else {
+                            componente.porcentagem = 0;
+                        }
+                    } else {
+                        componente[field] = value;
+                    }
+                    updateResumo();
+                }
+            }
+        }
+
+        // Função para exibir todas as turmas
+        function displayTurmas() {
+            const container = document.getElementById('turmasContainer');
+            
+            if (turmas.length === 0) {
+                container.innerHTML = '<p style="color: #666; font-style: italic; text-align: center; padding: 20px;">Nenhuma turma adicionada. Clique em "Adicionar Turma" para começar.</p>';
+                return;
+            }
+            
+            let html = '';
+            
+            turmas.forEach((turma, turmaIndex) => {
+                html += `
+                    <div class="turma-card" style="border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-bottom: 20px; background: #f9f9f9;">
+                        <div class="turma-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h4 style="margin: 0; color: #2c3e50;">🏫 Turma ${turmaIndex + 1}</h4>
+                            <button type="button" class="btn-danger" onclick="removeTurma('${turma.id}')" style="background: #dc3545; color: white; border: none; padding: 8px 12px; border-radius: 4px; font-size: 12px;">🗑️ Remover Turma</button>
+                        </div>
+                        
+                                                 <div class="form-row">
+                             <div class="form-group">
+                                 <label>ID da Turma:</label>
+                                 <input 
+                                     type="text" 
+                                     placeholder="ID da turma" 
+                                     value="${turma.idTurma}"
+                                     onchange="updateTurmaData('${turma.id}', 'idTurma', this.value)"
+                                     required
+                                     style="width: 100%;"
+                                 >
+                             </div>
+                         </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Bimestre:</label>
+                                <select 
+                                    onchange="updateTurmaData('${turma.id}', 'bimester', this.value)"
+                                    required
+                                    style="width: 100%;"
+                                >
+                                    <option value="">Selecione</option>
+                                    <option value="1º Bimestre" ${turma.bimester === '1º Bimestre' ? 'selected' : ''}>1º Bimestre</option>
+                                    <option value="2º Bimestre" ${turma.bimester === '2º Bimestre' ? 'selected' : ''}>2º Bimestre</option>
+                                    <option value="3º Bimestre" ${turma.bimester === '3º Bimestre' ? 'selected' : ''}>3º Bimestre</option>
+                                    <option value="4º Bimestre" ${turma.bimester === '4º Bimestre' ? 'selected' : ''}>4º Bimestre</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Situação:</label>
+                                <select 
+                                    onchange="updateTurmaData('${turma.id}', 'situation', this.value)"
+                                    required
+                                    style="width: 100%;"
+                                >
+                                    <option value="">Selecione</option>
+                                    <option value="Em andamento" ${turma.situation === 'Em andamento' ? 'selected' : ''}>Em andamento</option>
+                                    <option value="Concluído" ${turma.situation === 'Concluído' ? 'selected' : ''}>Concluído</option>
+                                    <option value="Pendente" ${turma.situation === 'Pendente' ? 'selected' : ''}>Pendente</option>
+                                    <option value="Suspenso" ${turma.situation === 'Suspenso' ? 'selected' : ''}>Suspenso</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="componentes-section" style="margin-top: 20px;">
+                            <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <h5 style="margin: 0; color: #495057;">📚 Componentes Curriculares</h5>
+                                <button type="button" class="btn-secondary" onclick="addComponente('${turma.id}')" style="background: #6c757d; color: white; border: none; padding: 6px 10px; border-radius: 4px; font-size: 11px;">➕ Adicionar Componente</button>
+                            </div>
+                            
+                            ${turma.componentes.length === 0 ? '<p style="color: #666; font-style: italic; text-align: center; padding: 10px;">Nenhum componente adicionado. Clique em "Adicionar Componente" para começar.</p>' : ''}
+                            
+                            ${turma.componentes.map((componente, compIndex) => `
+                                <div class="componente-card" style="border: 1px solid #e9ecef; border-radius: 6px; padding: 15px; margin-bottom: 15px; background: white;">
+                                    <div class="componente-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                        <h6 style="margin: 0; color: #6c757d;">📚 Componente ${compIndex + 1}</h6>
+                                        <button type="button" onclick="removeComponente('${turma.id}', '${componente.id}')" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 3px; font-size: 10px;">❌</button>
+                                    </div>
+                                    
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Nome do Componente:</label>
+                                            <input 
+                                                type="text" 
+                                                placeholder="Ex: Matemática, Português, História..." 
+                                                value="${componente.nome}"
+                                                onchange="updateComponenteData('${turma.id}', '${componente.id}', 'nome', this.value)"
+                                                required
+                                                style="width: 100%;"
+                                            >
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Aulas Previstas:</label>
+                                            <input 
+                                                type="number" 
+                                                min="0" 
+                                                placeholder="Número de aulas previstas" 
+                                                value="${componente.aulasPrevistas}"
+                                                onchange="updateComponenteData('${turma.id}', '${componente.id}', 'aulasPrevistas', this.value)"
+                                                required
+                                                style="width: 100%;"
+                                            >
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Aulas Dadas:</label>
+                                            <input 
+                                                type="number" 
+                                                min="0" 
+                                                placeholder="Número de aulas realizadas" 
+                                                value="${componente.aulasDadas}"
+                                                onchange="updateComponenteData('${turma.id}', '${componente.id}', 'aulasDadas', this.value)"
+                                                required
+                                                style="width: 100%;"
+                                            >
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Taxa de Cumprimento:</label>
+                                            <input 
+                                                type="text" 
+                                                value="${componente.porcentagem}%" 
+                                                readonly
+                                                style="width: 100%; background: #e9ecef; color: #495057; font-weight: bold; text-align: center;"
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // Função para atualizar resumo consolidado
+        function updateResumo() {
+            const totalTurmas = turmas.length;
+            const totalPrevistas = turmas.reduce((total, t) => total + t.componentes.reduce((sum, c) => sum + (parseInt(c.aulasPrevistas) || 0), 0), 0);
+            const totalDadas = turmas.reduce((total, t) => total + t.componentes.reduce((sum, c) => sum + (parseInt(c.aulasDadas) || 0), 0), 0);
+            const taxaGeral = totalPrevistas > 0 ? Math.round((totalDadas / totalPrevistas) * 100) : 0;
+            
+            document.getElementById('totalTurmas').textContent = totalTurmas;
+            document.getElementById('totalPlanned').textContent = totalPrevistas;
+            document.getElementById('totalGiven').textContent = totalDadas;
+            document.getElementById('completionRate').textContent = taxaGeral + '%';
+        }
 
         // Verificar autenticação
         function checkAuth() {
@@ -289,20 +464,200 @@
             window.location.href = '../index.html';
         }
 
-        // Calcular totais e taxa de cumprimento
-        function calculateTotals() {
-            const planned = parseInt(document.getElementById('plannedClasses').value) || 0;
-            const given = parseInt(document.getElementById('givenClasses').value) || 0;
+        // Mostrar mensagem de status
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.textContent = message;
+            statusDiv.className = `status-message ${type}`;
+            statusDiv.style.display = 'block';
             
-            document.getElementById('totalPlanned').textContent = planned;
-            document.getElementById('totalGiven').textContent = given;
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Gerenciar anexos múltiplos
+        let selectedFiles = [];
+
+        document.getElementById('attachments').addEventListener('change', function(e) {
+            const newFiles = Array.from(e.target.files);
             
-            if (planned > 0) {
-                const rate = ((given / planned) * 100).toFixed(1);
-                document.getElementById('completionRate').textContent = rate + '%';
-            } else {
-                document.getElementById('completionRate').textContent = '0%';
+            // Adicionar novos arquivos aos existentes (evitando duplicatas)
+            newFiles.forEach(newFile => {
+                // Verificar se o arquivo já existe (por nome e tamanho)
+                const isDuplicate = selectedFiles.some(existingFile => 
+                    existingFile.name === newFile.name && existingFile.size === newFile.size
+                );
+                
+                if (!isDuplicate && selectedFiles.length < 5) {
+                    selectedFiles.push(newFile);
+                }
+            });
+            
+            // Verificar limite máximo
+            if (selectedFiles.length > 5) {
+                alert('Máximo de 5 arquivos permitido!');
+                // Manter apenas os primeiros 5
+                selectedFiles = selectedFiles.slice(0, 5);
             }
+            
+            displayAttachments();
+            
+            // Limpar o input para permitir seleção do mesmo arquivo novamente
+            e.target.value = '';
+        });
+
+        function displayAttachments() {
+            const attachmentsList = document.getElementById('attachmentsList');
+            attachmentsList.innerHTML = '';
+            
+            if (selectedFiles.length === 0) {
+                attachmentsList.innerHTML = '<p style="color: #666; font-style: italic; text-align: center; padding: 10px;">Nenhum arquivo selecionado</p>';
+                return;
+            }
+            
+            // Adicionar cabeçalho com contador e botão limpar tudo
+            const headerDiv = document.createElement('div');
+            headerDiv.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 5px 0; border-bottom: 1px solid #dee2e6;';
+            headerDiv.innerHTML = `
+                <span style="font-weight: 600; color: #333;">📎 Anexos (${selectedFiles.length}/5)</span>
+                ${selectedFiles.length > 0 ? '<button type="button" onclick="clearAllAttachments()" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 3px; font-size: 12px; cursor: pointer;">Limpar Todos</button>' : ''}
+            `;
+            attachmentsList.appendChild(headerDiv);
+            
+            selectedFiles.forEach((file, index) => {
+                const fileDiv = document.createElement('div');
+                fileDiv.className = 'attachment-item';
+                fileDiv.innerHTML = `
+                    <span>📎 ${file.name} <small style="color: #666;">(${(file.size / 1024).toFixed(1)} KB)</small></span>
+                    <button type="button" onclick="removeFile(${index})" class="btn-remove">❌</button>
+                `;
+                attachmentsList.appendChild(fileDiv);
+            });
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            displayAttachments();
+            console.log(`Arquivo removido. Total de anexos: ${selectedFiles.length}`);
+        }
+
+        function clearAllAttachments() {
+            selectedFiles = [];
+            displayAttachments();
+            console.log('Todos os anexos foram removidos');
+        }
+
+        // Função para fazer upload dos anexos
+        async function uploadAttachments() {
+            console.log('🔄 Iniciando upload de anexos...');
+            console.log('📁 Arquivos selecionados:', selectedFiles.length);
+            
+            if (selectedFiles.length === 0) {
+                console.log('❌ Nenhum arquivo para fazer upload');
+                return [];
+            }
+            
+            const uploadPromises = selectedFiles.map(async (file, index) => {
+                try {
+                    console.log(`📤 Fazendo upload do arquivo ${index + 1}/${selectedFiles.length}: ${file.name}`);
+                    
+                    const timestamp = Date.now();
+                    const fileName = `${timestamp}_${file.name}`;
+                    const storageRef = ref(storage, `attachments/${fileName}`);
+                    
+                    console.log(`📁 Referência do storage criada: ${fileName}`);
+                    
+                    const snapshot = await uploadBytes(storageRef, file);
+                    console.log(`✅ Upload concluído para: ${file.name}`);
+                    
+                    const downloadURL = await getDownloadURL(snapshot.ref);
+                    console.log(`🔗 Download URL obtida para: ${file.name}`);
+                    
+                    const attachmentData = {
+                        name: file.name,
+                        type: file.type,
+                        size: file.size,
+                        downloadURL: downloadURL,
+                        uploadedAt: new Date().toISOString()
+                    };
+                    
+                    console.log(`📋 Dados do anexo preparados:`, attachmentData);
+                    return attachmentData;
+                    
+                } catch (error) {
+                    console.error(`❌ Erro ao fazer upload de ${file.name}:`, error);
+                    throw new Error(`Falha no upload de ${file.name}: ${error.message}`);
+                }
+            });
+            
+            try {
+                const results = await Promise.all(uploadPromises);
+                console.log(`🎉 Upload de todos os anexos concluído! Total: ${results.length}`);
+                console.log('📋 Resultados finais:', results);
+                return results;
+            } catch (error) {
+                console.error('❌ Erro geral no upload dos anexos:', error);
+                throw error;
+            }
+        }
+
+        // Validar formulário
+        function validateForm() {
+            const requiredFields = ['school', 'municipality', 'technician', 'date'];
+            
+            for (const fieldId of requiredFields) {
+                const field = document.getElementById(fieldId);
+                if (!field.value.trim()) {
+                    showStatus(`Por favor, preencha o campo: ${field.previousElementSibling.textContent.replace(':', '')}`, 'error');
+                    field.focus();
+                    return false;
+                }
+            }
+            
+            // Validar se há pelo menos uma turma
+            if (turmas.length === 0) {
+                showStatus('Adicione pelo menos uma turma antes de salvar!', 'error');
+                return false;
+            }
+            
+                         // Validar se cada turma tem todos os campos obrigatórios
+             for (let turma of turmas) {
+                 if (!turma.idTurma.trim()) {
+                     showStatus(`A turma ${turmas.indexOf(turma) + 1} deve ter um ID!`, 'error');
+                     return false;
+                 }
+                                 if (!turma.bimester) {
+                     showStatus(`A turma ${turmas.indexOf(turma) + 1} deve ter um bimestre selecionado!`, 'error');
+                     return false;
+                 }
+                 if (!turma.situation) {
+                     showStatus(`A turma ${turmas.indexOf(turma) + 1} deve ter uma situação selecionada!`, 'error');
+                     return false;
+                 }
+                 if (turma.componentes.length === 0) {
+                     showStatus(`A turma ${turmas.indexOf(turma) + 1} deve ter pelo menos um componente curricular!`, 'error');
+                     return false;
+                 }
+                 
+                 // Validar se cada componente tem todos os campos obrigatórios
+                 for (let componente of turma.componentes) {
+                     if (!componente.nome.trim()) {
+                         showStatus(`O componente da turma ${turmas.indexOf(turma) + 1} deve ter um nome!`, 'error');
+                         return false;
+                     }
+                                         if (componente.aulasPrevistas <= 0) {
+                         showStatus(`O componente "${componente.nome}" da turma ${turmas.indexOf(turma) + 1} deve ter um número válido de aulas previstas!`, 'error');
+                         return false;
+                     }
+                     if (componente.aulasDadas < 0) {
+                         showStatus(`O componente "${componente.nome}" da turma ${turmas.indexOf(turma) + 1} deve ter um número válido de aulas dadas!`, 'error');
+                         return false;
+                     }
+                }
+            }
+            
+            return true;
         }
 
         // Inicializar
@@ -311,23 +666,37 @@
         // Definir data atual como padrão
         document.getElementById('date').value = new Date().toISOString().split('T')[0];
         
-        // Event listeners para cálculo automático
-        const plannedInput = document.getElementById('plannedClasses');
-        const givenInput = document.getElementById('givenClasses');
-        
-        if (plannedInput) {
-            plannedInput.addEventListener('input', calculateTotals);
-        }
-        
-        if (givenInput) {
-            givenInput.addEventListener('input', calculateTotals);
-        }
-        
         // Form handler
         document.getElementById('plannedClassesForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            if (!validateForm()) {
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.textContent;
+            
             try {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Salvando...';
+                showStatus('Salvando registro...', 'info');
+                
+                console.log('Iniciando salvamento...');
+                
+                // Fazer upload dos anexos primeiro
+                let attachments = [];
+                try {
+                    attachments = await uploadAttachments();
+                    console.log('Anexos enviados:', attachments);
+                } catch (uploadError) {
+                    console.error('Erro no upload dos anexos:', uploadError);
+                    showStatus('Erro no upload dos anexos: ' + uploadError.message, 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                    return;
+                }
+                
                 const formData = {
                     department: 'Supervisão',
                     indicator: 'Aulas Previstas e Aulas Dadas',
@@ -335,53 +704,54 @@
                     municipality: document.getElementById('municipality').value,
                     technician: document.getElementById('technician').value,
                     date: document.getElementById('date').value,
-                    referenceDate: document.getElementById('referenceDate').value,
-                    classId: document.getElementById('classId').value,
-                    className: document.getElementById('className').value,
-                    discipline: document.getElementById('discipline').value,
-                    periodStart: document.getElementById('periodStart').value,
-                    periodEnd: document.getElementById('periodEnd').value,
-                    plannedClasses: parseInt(document.getElementById('plannedClasses').value),
-                    givenClasses: parseInt(document.getElementById('givenClasses').value),
-                    totalPlanned: parseInt(document.getElementById('totalPlanned').textContent),
-                    totalGiven: parseInt(document.getElementById('totalGiven').textContent),
-                    completionRate: document.getElementById('completionRate').textContent,
-                    professorName: document.getElementById('professorName').value,
-                    bimester: document.getElementById('bimester').value,
-                    situation: document.getElementById('situation').value,
-                    teacherAbsence: document.querySelector('input[name="teacherAbsence"]').checked,
-                    schoolEvent: document.querySelector('input[name="schoolEvent"]').checked,
-                    holiday: document.querySelector('input[name="holiday"]').checked,
-                    strike: document.querySelector('input[name="strike"]').checked,
-                    sgeUnavailable: document.querySelector('input[name="sgeUnavailable"]').checked,
-                    professorNotLaunched: document.querySelector('input[name="professorNotLaunched"]').checked,
-                    others: document.querySelector('input[name="others"]').checked,
+                    turmas: turmas, // Nova estrutura com turmas dinâmicas
                     observations: document.getElementById('observations').value,
-                    documentLinks: document.getElementById('documentLinks').value,
-                    createdBy: localStorage.getItem('userCPF'),
-                    createdByRole: localStorage.getItem('userRole'),
-                    createdByName: localStorage.getItem('userName'),
+                    attachments: attachments,
+                    createdBy: localStorage.getItem('userCPF') || 'Usuário não identificado',
+                    createdByRole: localStorage.getItem('userRole') || 'N/A',
+                    createdByName: localStorage.getItem('userName') || 'N/A',
                     createdAt: serverTimestamp(),
                     status: 'active'
                 };
 
-                await addDoc(collection(db, 'records'), formData);
-                
-                alert('Registro salvo com sucesso! Redirecionando para a página de registros unificados...');
-                
-                // Redirecionar para a página de registros unificados após salvar
-                setTimeout(() => {
-                    window.location.href = '../monitoring-records-unified.html';
-                }, 1500);
+                console.log('Dados do formulário:', formData);
+
+                // Tentar salvar no Firebase
+                try {
+                    const docRef = await addDoc(collection(db, 'records'), formData);
+                    console.log('Documento salvo com ID:', docRef.id);
+                    
+                    showStatus('Registro salvo com sucesso! Redirecionando...', 'success');
+                    
+                    // Redirecionar para registros unificados
+                    setTimeout(() => {
+                        window.location.href = '../monitoring-records-unified.html';
+                    }, 2000);
+                    
+                } catch (firebaseError) {
+                    console.error('Erro no Firebase:', firebaseError);
+                    showStatus('Erro ao salvar no Firebase: ' + firebaseError.message, 'error');
+                }
                 
             } catch (error) {
                 console.error('Erro ao salvar:', error);
-                alert('Erro ao salvar o registro: ' + error.message);
+                showStatus('Erro ao salvar o registro: ' + error.message, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
             }
         });
+
+        // Exportar funções para uso global
+        window.logout = logout;
+        window.removeFile = removeFile;
+        window.clearAllAttachments = clearAllAttachments;
+        window.addTurma = addTurma;
+        window.removeTurma = removeTurma;
+        window.addComponente = addComponente;
+        window.removeComponente = removeComponente;
+        window.updateTurmaData = updateTurmaData;
+        window.updateComponenteData = updateComponenteData;
     </script>
-    
-    <!-- Script para pesquisa de escola -->
-    <script src="../js/school-search.js"></script>
 </body>
 </html>

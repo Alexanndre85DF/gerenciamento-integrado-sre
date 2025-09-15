@@ -120,93 +120,33 @@
                     </div>
                 </div>
 
-                <!-- Informações da Turma -->
+                <!-- Sistema de Turmas Dinâmicas -->
                 <div class="form-section">
-                    <h3>Informações da Turma</h3>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="className">Nome da Turma:</label>
-                            <input type="text" id="className" name="className" placeholder="Nome da turma" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="shift">Turno:</label>
-                            <select id="shift" name="shift" required>
-                                <option value="">Selecione o turno</option>
-                                <option value="Matutino">Matutino</option>
-                                <option value="Vespertino">Vespertino</option>
-                                <option value="Noturno">Noturno</option>
-                                <option value="Integral">Integral</option>
-                            </select>
-                        </div>
+                    <div class="section-header">
+                        <h3>Turmas e Estudantes</h3>
+                        <button type="button" class="btn-secondary" onclick="addTurma()">➕ Adicionar Turma</button>
+                    </div>
+                    <div id="turmasContainer">
+                        <!-- As turmas serão adicionadas aqui dinamicamente -->
                     </div>
                 </div>
 
-                <!-- Informações do Estudante -->
+                <!-- Observações Gerais -->
                 <div class="form-section">
-                    <h3>Estudantes da Turma</h3>
-                    <div class="form-subsection">
-                        <h4>Estudante 1</h4>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="studentName">Nome do(a) estudante:</label>
-                                <input type="text" id="studentName" name="studentName" placeholder="Nome completo" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="absences">Nº de faltas:</label>
-                                <input type="number" id="absences" name="absences" value="0" min="0" required>
-                            </div>
-                        </div>
-                        
-                        <!-- Checkboxes Esquerda -->
-                        <div class="form-row">
-                            <div class="form-group">
-                                <div class="checkbox-group">
-                                    <label><input type="checkbox" name="pcd" value="true"> PCD</label>
-                                    <label><input type="checkbox" name="ministerioPublico" value="true"> Ministério Público</label>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="checkbox-group">
-                                    <label><input type="checkbox" name="menorIdade" value="true"> Menor de Idade</label>
-                                    <label><input type="checkbox" name="atestadoMedico" value="true"> Atestado Médico</label>
-                                    <label><input type="checkbox" name="conselhoTutelar" value="true"> Conselho Tutelar</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Número de Visitas -->
-                        <div class="form-section">
-                            <h4>Número de Visitas:</h4>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <div class="checkbox-group">
-                                        <label><input type="checkbox" id="visit1" name="visit1" value="true"> 1ª visita</label>
-                                        <label><input type="checkbox" id="visit2" name="visit2" value="true"> 2ª visita</label>
-                                        <label><input type="checkbox" id="visit3" name="visit3" value="true"> 3ª visita</label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label>Total de visitas: <span id="totalVisits">0</span></label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Observações -->
-                <div class="form-section">
-                    <h3>Observações:</h3>
+                    <h3>Observações Gerais:</h3>
                     <div class="form-group">
-                        <textarea id="observations" name="observations" rows="4" placeholder="Digite suas observações sobre o estudante..."></textarea>
+                        <textarea id="observations" name="observations" rows="4" placeholder="Digite suas observações gerais sobre a busca ativa..."></textarea>
                     </div>
                 </div>
 
-                <!-- Links de Documentos -->
+                <!-- Anexos -->
                 <div class="form-section">
-                    <h3>Links de Documentos:</h3>
-                    <p class="form-description">Insira links para Google Drive, Google Docs, Planilhas ou outros documentos online</p>
+                    <h3>Anexos:</h3>
+                    <p class="form-description">Faça upload de documentos relacionados (PDF, Word, Excel, imagens, etc.)</p>
                     <div class="form-group">
-                        <textarea id="documentLinks" name="documentLinks" rows="4" placeholder="Ex: https://drive.google.com/...&#10;https://docs.google.com/..."></textarea>
+                        <input type="file" id="attachments" name="attachments" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.txt" style="margin-bottom: 10px;">
+                        <div id="attachmentsList" class="attachments-list"></div>
+                        <small style="color: #666; font-size: 12px;">Formatos aceitos: PDF, Word, Excel, imagens, texto. Máximo 5 arquivos.</small>
                     </div>
                 </div>
 
@@ -222,6 +162,7 @@
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
 
         // Configuração do Firebase
         const firebaseConfig = {
@@ -235,6 +176,355 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // ===== SISTEMA DE TURMAS DINÂMICAS =====
+        let turmas = [];
+        let turmaCounter = 0;
+
+        // Função para adicionar uma nova turma
+        function addTurma() {
+            turmaCounter++;
+            const turmaId = `turma_${turmaCounter}`;
+            
+            const turma = {
+                id: turmaId,
+                nome: '',
+                turno: '',
+                estudantes: []
+            };
+            
+            turmas.push(turma);
+            displayTurmas();
+        }
+
+        // Função para remover uma turma
+        function removeTurma(turmaId) {
+            turmas = turmas.filter(t => t.id !== turmaId);
+            displayTurmas();
+        }
+
+        // Função para adicionar estudante a uma turma
+        function addEstudante(turmaId) {
+            const turma = turmas.find(t => t.id === turmaId);
+            if (turma) {
+                const estudanteId = `estudante_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                const estudante = {
+                    id: estudanteId,
+                    nome: '',
+                    faltas: 0,
+                    pcd: false,
+                    ministerioPublico: false,
+                    menorIdade: false,
+                    atestadoMedico: false,
+                    conselhoTutelar: false,
+                    visit1: false,
+                    visit2: false,
+                    visit3: false,
+                    observacoes: ''
+                };
+                
+                turma.estudantes.push(estudante);
+                displayTurmas();
+            }
+        }
+
+        // Função para remover estudante de uma turma
+        function removeEstudante(turmaId, estudanteId) {
+            const turma = turmas.find(t => t.id === turmaId);
+            if (turma) {
+                turma.estudantes = turma.estudantes.filter(e => e.id !== estudanteId);
+                displayTurmas();
+            }
+        }
+
+        // Função para atualizar dados da turma
+        function updateTurmaData(turmaId, field, value) {
+            const turma = turmas.find(t => t.id === turmaId);
+            if (turma) {
+                turma[field] = value;
+            }
+        }
+
+        // Função para atualizar dados do estudante
+        function updateEstudanteData(turmaId, estudanteId, field, value) {
+            const turma = turmas.find(t => t.id === turmaId);
+            if (turma) {
+                const estudante = turma.estudantes.find(e => e.id === estudanteId);
+                if (estudante) {
+                    if (field === 'faltas') {
+                        estudante[field] = parseInt(value) || 0;
+                    } else if (field === 'visit1' || field === 'visit2' || field === 'visit3') {
+                        estudante[field] = value;
+                        updateTotalVisitas(turmaId, estudanteId);
+                    } else {
+                        estudante[field] = value;
+                    }
+                }
+            }
+        }
+
+        // Função para calcular total de visitas de um estudante
+        function updateTotalVisitas(turmaId, estudanteId) {
+            const turma = turmas.find(t => t.id === turmaId);
+            if (turma) {
+                const estudante = turma.estudantes.find(e => e.id === estudanteId);
+                if (estudante) {
+                    const total = (estudante.visit1 ? 1 : 0) + (estudante.visit2 ? 1 : 0) + (estudante.visit3 ? 1 : 0);
+                    document.getElementById(`totalVisitas_${estudanteId}`).textContent = total;
+                }
+            }
+        }
+
+        // Função para exibir todas as turmas
+        function displayTurmas() {
+            const container = document.getElementById('turmasContainer');
+            
+            if (turmas.length === 0) {
+                container.innerHTML = '<p style="color: #666; font-style: italic; text-align: center; padding: 20px;">Nenhuma turma adicionada. Clique em "Adicionar Turma" para começar.</p>';
+                return;
+            }
+            
+            let html = '';
+            
+            turmas.forEach((turma, turmaIndex) => {
+                html += `
+                    <div class="turma-card" style="border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 20px; background: #f9f9f9;">
+                        <div class="turma-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <h4 style="margin: 0; color: #2c3e50;">🏫 Turma ${turmaIndex + 1}</h4>
+                            <button type="button" class="btn-danger" onclick="removeTurma('${turma.id}')" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 12px;">🗑️ Remover Turma</button>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Nome da Turma:</label>
+                                <input 
+                                    type="text" 
+                                    placeholder="Nome da turma" 
+                                    value="${turma.nome}"
+                                    onchange="updateTurmaData('${turma.id}', 'nome', this.value)"
+                                    required
+                                    style="width: 100%;"
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label>Turno:</label>
+                                <select 
+                                    onchange="updateTurmaData('${turma.id}', 'turno', this.value)"
+                                    required
+                                    style="width: 100%;"
+                                >
+                                    <option value="">Selecione o turno</option>
+                                    <option value="Matutino" ${turma.turno === 'Matutino' ? 'selected' : ''}>Matutino</option>
+                                    <option value="Vespertino" ${turma.turno === 'Vespertino' ? 'selected' : ''}>Vespertino</option>
+                                    <option value="Noturno" ${turma.turno === 'Noturno' ? 'selected' : ''}>Noturno</option>
+                                    <option value="Integral" ${turma.turno === 'Integral' ? 'selected' : ''}>Integral</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="estudantes-section" style="margin-top: 15px;">
+                            <div class="estudantes-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <h5 style="margin: 0; color: #34495e;">👥 Estudantes da Turma</h5>
+                                <button type="button" class="btn-secondary" onclick="addEstudante('${turma.id}')" style="background: #6c757d; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px;">➕ Adicionar Estudante</button>
+                            </div>
+                            
+                            <div class="estudantes-list">
+                                ${turma.estudantes.length === 0 ? '<p style="color: #666; font-style: italic; text-align: center; padding: 10px;">Nenhum estudante adicionado. Clique em "Adicionar Estudante" para começar.</p>' : ''}
+                                
+                                ${turma.estudantes.map((estudante, estudanteIndex) => `
+                                    <div class="estudante-card" style="border: 1px solid #e0e0e0; border-radius: 6px; padding: 12px; margin-bottom: 10px; background: white;">
+                                        <div class="estudante-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                            <h6 style="margin: 0; color: #495057;">👤 Estudante ${estudanteIndex + 1}</h6>
+                                            <button type="button" class="btn-danger" onclick="removeEstudante('${turma.id}', '${estudante.id}')" style="background: #dc3545; color: white; border: none; padding: 3px 6px; border-radius: 3px; font-size: 10px;">❌</button>
+                                        </div>
+                                        
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label>Nome do(a) estudante:</label>
+                                                <input 
+                                                    type="text" 
+                                                    placeholder="Nome completo" 
+                                                    value="${estudante.nome}"
+                                                    onchange="updateEstudanteData('${turma.id}', '${estudante.id}', 'nome', this.value)"
+                                                    required
+                                                    style="width: 100%;"
+                                                >
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Nº de faltas:</label>
+                                                <input 
+                                                    type="number" 
+                                                    min="0" 
+                                                    value="${estudante.faltas}"
+                                                    onchange="updateEstudanteData('${turma.id}', '${estudante.id}', 'faltas', this.value)"
+                                                    required
+                                                    style="width: 100%;"
+                                                >
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <div class="checkbox-group">
+                                                    <label><input type="checkbox" ${estudante.pcd ? 'checked' : ''} onchange="updateEstudanteData('${turma.id}', '${estudante.id}', 'pcd', this.checked)"> PCD</label>
+                                                    <label><input type="checkbox" ${estudante.ministerioPublico ? 'checked' : ''} onchange="updateEstudanteData('${turma.id}', '${estudante.id}', 'ministerioPublico', this.checked)"> Ministério Público</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="checkbox-group">
+                                                    <label><input type="checkbox" ${estudante.menorIdade ? 'checked' : ''} onchange="updateEstudanteData('${turma.id}', '${estudante.id}', 'menorIdade', this.checked)"> Menor de Idade</label>
+                                                    <label><input type="checkbox" ${estudante.atestadoMedico ? 'checked' : ''} onchange="updateEstudanteData('${turma.id}', '${estudante.id}', 'atestadoMedico', this.checked)"> Atestado Médico</label>
+                                                    <label><input type="checkbox" ${estudante.conselhoTutelar ? 'checked' : ''} onchange="updateEstudanteData('${turma.id}', '${estudante.id}', 'conselhoTutelar', this.checked)"> Conselho Tutelar</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-section">
+                                            <h6>Número de Visitas:</h6>
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <div class="checkbox-group">
+                                                        <label><input type="checkbox" id="visit1_${estudante.id}" ${estudante.visit1 ? 'checked' : ''} onchange="updateEstudanteData('${turma.id}', '${estudante.id}', 'visit1', this.checked)"> 1ª visita</label>
+                                                        <label><input type="checkbox" id="visit2_${estudante.id}" ${estudante.visit2 ? 'checked' : ''} onchange="updateEstudanteData('${turma.id}', '${estudante.id}', 'visit2', this.checked)"> 2ª visita</label>
+                                                        <label><input type="checkbox" id="visit3_${estudante.id}" ${estudante.visit3 ? 'checked' : ''} onchange="updateEstudanteData('${turma.id}', '${estudante.id}', 'visit3', this.checked)"> 3ª visita</label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Total de visitas: <span id="totalVisitas_${estudante.id}">${(estudante.visit1 ? 1 : 0) + (estudante.visit2 ? 1 : 0) + (estudante.visit3 ? 1 : 0)}</span></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label>Observações do estudante:</label>
+                                            <textarea 
+                                                placeholder="Digite suas observações sobre o estudante..."
+                                                onchange="updateEstudanteData('${turma.id}', '${estudante.id}', 'observacoes', this.value)"
+                                                rows="3"
+                                                style="width: 100%;"
+                                            >${estudante.observacoes}</textarea>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // ===== SISTEMA DE ANEXOS MÚLTIPLOS =====
+        let selectedFiles = [];
+
+        // Event listener para seleção de arquivos
+        document.getElementById('attachments').addEventListener('change', function(e) {
+            const newFiles = Array.from(e.target.files);
+            
+            // Adicionar novos arquivos aos existentes (evitando duplicatas)
+            newFiles.forEach(newFile => {
+                // Verificar se o arquivo já existe (por nome e tamanho)
+                const isDuplicate = selectedFiles.some(existingFile => 
+                    existingFile.name === newFile.name && existingFile.size === newFile.size
+                );
+                
+                if (!isDuplicate) {
+                    selectedFiles.push(newFile);
+                }
+            });
+            
+            // Verificar limite máximo
+            if (selectedFiles.length > 5) {
+                alert('Máximo de 5 arquivos permitido! Removendo arquivos excedentes.');
+                selectedFiles = selectedFiles.slice(0, 5);
+            }
+            
+            displayAttachments();
+            console.log(`📁 Total de anexos selecionados: ${selectedFiles.length}`);
+        });
+
+        function displayAttachments() {
+            const attachmentsList = document.getElementById('attachmentsList');
+            attachmentsList.innerHTML = '';
+            
+            if (selectedFiles.length === 0) {
+                attachmentsList.innerHTML = '<p style="color: #666; font-style: italic;">Nenhum arquivo selecionado</p>';
+                return;
+            }
+            
+            // Cabeçalho com contador e botão limpar tudo
+            const headerDiv = document.createElement('div');
+            headerDiv.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 8px; background: #f8f9fa; border-radius: 5px;';
+            headerDiv.innerHTML = `
+                <span style="font-weight: bold; color: #495057;">📎 Anexos selecionados (${selectedFiles.length}/5)</span>
+                <button type="button" onclick="clearAllAttachments()" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 3px; font-size: 11px; cursor: pointer;">🗑️ Limpar Todos</button>
+            `;
+            attachmentsList.appendChild(headerDiv);
+            
+            selectedFiles.forEach((file, index) => {
+                const fileDiv = document.createElement('div');
+                fileDiv.className = 'attachment-item';
+                const fileSizeKB = (file.size / 1024).toFixed(1);
+                fileDiv.innerHTML = `
+                    <span>📎 ${file.name} <small style="color: #666;">(${fileSizeKB} KB)</small></span>
+                    <button type="button" onclick="removeFile(${index})" class="btn-remove">❌</button>
+                `;
+                attachmentsList.appendChild(fileDiv);
+            });
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            displayAttachments();
+            console.log(`Arquivo removido. Total de anexos: ${selectedFiles.length}`);
+        }
+
+        function clearAllAttachments() {
+            selectedFiles = [];
+            displayAttachments();
+            console.log('Todos os anexos foram removidos');
+        }
+
+        // Função para fazer upload dos anexos
+        async function uploadAttachments() {
+            if (selectedFiles.length === 0) return [];
+            
+            console.log(`🚀 Iniciando upload de ${selectedFiles.length} arquivo(s)...`);
+            
+            const uploadPromises = selectedFiles.map(async (file, index) => {
+                try {
+                    console.log(`📤 Fazendo upload do arquivo ${index + 1}/${selectedFiles.length}: ${file.name}`);
+                    
+                    const timestamp = Date.now();
+                    const fileName = `${timestamp}_${file.name}`;
+                    const storageRef = ref(storage, `attachments/${fileName}`);
+                    
+                    const snapshot = await uploadBytes(storageRef, file);
+                    const downloadURL = await getDownloadURL(snapshot.ref);
+                    
+                    console.log(`✅ Upload concluído: ${file.name}`);
+                    
+                    return {
+                        name: file.name,
+                        type: file.type,
+                        size: file.size,
+                        downloadURL: downloadURL,
+                        uploadedAt: new Date().toISOString()
+                    };
+                } catch (error) {
+                    console.error(`❌ Erro no upload de ${file.name}:`, error);
+                    throw error;
+                }
+            });
+            
+            const uploadedAttachments = await Promise.all(uploadPromises);
+            console.log(`🎉 Todos os ${uploadedAttachments.length} anexos foram enviados com sucesso!`);
+            console.log('📋 Resumo dos anexos:', uploadedAttachments.map(att => `${att.name} (${(att.size/1024).toFixed(1)} KB)`));
+            
+            return uploadedAttachments;
+        }
 
         // Verificar autenticação
         function checkAuth() {
@@ -256,29 +546,37 @@
             window.location.href = '../index.html';
         }
 
-        // Calcular total de visitas
-        function calculateTotalVisits() {
-            const visit1 = document.getElementById('visit1').checked ? 1 : 0;
-            const visit2 = document.getElementById('visit2').checked ? 1 : 0;
-            const visit3 = document.getElementById('visit3').checked ? 1 : 0;
-            const total = visit1 + visit2 + visit3;
-            document.getElementById('totalVisits').textContent = total;
-        }
-
         // Inicializar
         checkAuth();
         
         // Definir data atual como padrão
         document.getElementById('date').value = new Date().toISOString().split('T')[0];
         
-        // Event listeners para checkboxes de visita
-        document.getElementById('visit1').addEventListener('change', calculateTotalVisits);
-        document.getElementById('visit2').addEventListener('change', calculateTotalVisits);
-        document.getElementById('visit3').addEventListener('change', calculateTotalVisits);
-        
         // Form handler
         document.getElementById('activeSearchForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            // Validar se há pelo menos uma turma
+            if (turmas.length === 0) {
+                alert('Adicione pelo menos uma turma antes de salvar!');
+                return;
+            }
+            
+            // Validar se cada turma tem pelo menos um estudante
+            for (let turma of turmas) {
+                if (turma.estudantes.length === 0) {
+                    alert(`A turma "${turma.nome || 'Sem nome'}" deve ter pelo menos um estudante!`);
+                    return;
+                }
+                
+                // Validar se todos os estudantes têm nome
+                for (let estudante of turma.estudantes) {
+                    if (!estudante.nome.trim()) {
+                        alert('Todos os estudantes devem ter nome preenchido!');
+                        return;
+                    }
+                }
+            }
             
             try {
                 const formData = {
@@ -288,21 +586,9 @@
                     municipality: document.getElementById('municipality').value,
                     technician: document.getElementById('technician').value,
                     date: document.getElementById('date').value,
-                    className: document.getElementById('className').value,
-                    shift: document.getElementById('shift').value,
-                    studentName: document.getElementById('studentName').value,
-                    absences: parseInt(document.getElementById('absences').value),
-                    pcd: document.querySelector('input[name="pcd"]').checked,
-                    ministerioPublico: document.querySelector('input[name="ministerioPublico"]').checked,
-                    menorIdade: document.querySelector('input[name="menorIdade"]').checked,
-                    atestadoMedico: document.querySelector('input[name="atestadoMedico"]').checked,
-                    conselhoTutelar: document.querySelector('input[name="conselhoTutelar"]').checked,
-                    visit1: document.getElementById('visit1').checked,
-                    visit2: document.getElementById('visit2').checked,
-                    visit3: document.getElementById('visit3').checked,
-                    totalVisits: parseInt(document.getElementById('totalVisits').textContent),
+                    turmas: turmas, // Nova estrutura com turmas e estudantes
                     observations: document.getElementById('observations').value,
-                    documentLinks: document.getElementById('documentLinks').value,
+                    attachments: await uploadAttachments(),
                     createdBy: localStorage.getItem('userCPF'),
                     createdByRole: localStorage.getItem('userRole'),
                     createdByName: localStorage.getItem('userName'),
@@ -324,6 +610,17 @@
                 alert('Erro ao salvar o registro: ' + error.message);
             }
         });
+
+        // Exportar funções para uso global
+        window.logout = logout;
+        window.removeFile = removeFile;
+        window.clearAllAttachments = clearAllAttachments;
+        window.addTurma = addTurma;
+        window.removeTurma = removeTurma;
+        window.addEstudante = addEstudante;
+        window.removeEstudante = removeEstudante;
+        window.updateTurmaData = updateTurmaData;
+        window.updateEstudanteData = updateEstudanteData;
     </script>
     
     <!-- Script para pesquisa de escola -->

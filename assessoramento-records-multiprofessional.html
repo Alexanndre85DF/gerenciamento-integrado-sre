@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessoramentos Realizados - Equipe Multiprofissional - SRE GURUPI</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+    <div class="header">
+        <h1>Assessoramentos Equipe Multiprofissional Realizados</h1>
+        <button class="logout-btn" onclick="logout()">Sair</button>
+    </div>
+
+    <div class="main-container">
+        <div class="card">
+            <div style="position: relative;">
+                <a href="assessoramento-multiprofessional.html" class="btn btn-secondary" style="position: absolute; top: 0; right: 0; font-size: 12px; padding: 6px 12px; margin: 0; background-color: #28a745; border-color: #28a745;">Voltar ao Menu</a>
+                <h2 style="margin-top: 60px;">Assessoramentos Realizados</h2>
+            </div>
+            <p>Visualize e gerencie os assessoramentos da equipe multiprofissional já realizados</p>
+            
+            <!-- Pesquisa por Escola -->
+            <div class="search-section">
+                <div class="search-box">
+                    <div class="combobox-container">
+                        <input type="text" id="schoolSearch" placeholder="Digite o nome da escola para pesquisar...">
+                        <button class="dropdown-btn">▼</button>
+                        <ul class="dropdown-list" id="schoolSearchList"></ul>
+                    </div>
+                    <button onclick="searchBySchool()" class="btn">Pesquisar</button>
+                </div>
+                                 <button onclick="clearSearch()" class="btn btn-secondary">Limpar Pesquisa</button>
+            </div>
+
+            <!-- Lista de Assessoramentos -->
+            <div id="assessoramentosList" class="records-container">
+                <div class="loading">Carregando assessoramentos...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Visualização -->
+    <div id="viewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Visualizar Assessoramento</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Conteúdo do assessoramento será inserido aqui -->
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal()" class="btn">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyABEloTfC_nT5vfDHpeqYdDjNoPCKwE-Eo",
+            authDomain: "projeto-alex-aaadf.firebaseapp.com",
+            projectId: "projeto-alex-aaadf",
+            storageBucket: "projeto-alex-aaadf.firebasestorage.app",
+            messagingSenderId: "720032595137",
+            appId: "1:720032595137:web:85834232e770a942216840"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Lista de escolas
+        const schools = [
+            "CENTRO DE ENSINO MEDIO ARY RIBEIRO VALADAO FILHO",
+            "CENTRO DE ENSINO MEDIO BOM JESUS",
+            "CENTRO DE ENSINO MEDIO DE GURUPI",            
+            "COL DE TECELAGEM ART NSA SENHORA AUXILIADORA",
+            "COL EST ALAIR SENA CONCEICAO",
+            "COLEGIO AGRICOLA DOM BOSCO",
+            "COLÉGIO ESTADUAL ADELAIDE FRANCISCO SOARES",
+            "COLEGIO ESTADUAL ANITA CASSIMIRO MORENO",
+            "COLEGIO ESTADUAL BENEDITO PEREIRA BANDEIRA",
+            "COLEGIO ESTADUAL CANDIDO FIGUEIRA",
+            "COLEGIO ESTADUAL DE ALVORADA",
+            "COLEGIO ESTADUAL DE TALISMA",
+            "COLEGIO ESTADUAL DOM ALANO",
+            "COLEGIO ESTADUAL ELSEBAO LIMA",
+            "COLEGIO ESTADUAL FAMILIA AGRICOLA JOSE PORFIRIO DE SOUZA",
+            "COLEGIO ESTADUAL GIRASSOL DE TEMPO INTEGRAL JOSE SEABRA LEMOS",
+            "COLEGIO ESTADUAL JOAO TAVARES MARTINS",
+            "COLEGIO ESTADUAL NOSSA SENHORA APARECIDA",
+            "COLEGIO ESTADUAL OLAVO BILAC",
+            "COLEGIO ESTADUAL PORTO DO RIO MARANHAO",
+            "COLEGIO ESTADUAL POSITIVO DE GURUPI",
+            "COLEGIO ESTADUAL PROFESSORA ONEIDES ROSA DE MOURA",
+            "COLEGIO ESTADUAL REGINA SIQUEIRA CAMPOS",
+            "COLEGIO ESTADUAL TARSO DUTRA",
+            "COLEGIO ESTADUAL TIRADENTES",
+            "COLEGIO MILITAR DO ESTADO DO TOCANTINS - ADJULIO BALTHAZAR",
+            "COLEGIO MILITAR DO ESTADO DO TOCANTINS - PROFESSORA MARIA",
+            "COLEGIO MILITAR DO ESTADO DO TOCANTINS PRESIDENTE COSTA E SILVA",
+            "ESC DE TEC ART NOSSA SRA AUXILIADORA",
+            "ESC EST RETIRO",
+            "ESC EST TANCREDO DE ALMEIDA NEVES",
+            "ESCOLA ESTADUAL ANA MARIA DE JESUS",
+            "ESCOLA ESTADUAL DR JOAQUIM PEREIRA DA COSTA",
+            "ESCOLA ESTADUAL FE E ALEGRIA PAROQUIAL BERNARDO SAYAO",
+            "ESCOLA ESTADUAL GERCINA BORGES TEIXEIRA",
+            "ESCOLA ESTADUAL HERCILIA CARVALHO DA SILVA",
+            "ESCOLA ESTADUAL NOSSA SENHORA DO CARMO",
+            "ESCOLA ESTADUAL OLAVO BILAC",
+            "ESCOLA ESTADUAL PADRE JOSE DE ANCHIETA",
+            "ESCOLA ESTADUAL PASSO A PASSO",
+            "ESCOLA ESTADUAL PRESBITERIANA ARAGUAIA",
+            "ESCOLA ESTADUAL PRESBITERIANA EDUCACIONAL",
+            "ESCOLA ESTADUAL RUI BARBOSA",
+            "ESCOLA ESTADUAL SALVADOR CAETANO",
+            "ESCOLA ESTADUAL VALDIR LINS",
+            "ESCOLA ESTADUAL VILA GUARACY",
+            "ESCOLA INDIGENA BARRA DO RIO VERDE",
+            "ESCOLA INDIGENA IJANARI",
+            "ESCOLA INDIGENA IJAWALA",
+            "ESCOLA INDIGENA SANAWE",
+            "ESCOLA INDIGENA TAINA",
+            "ESCOLA INDIGENA TEMANARE",
+            "ESCOLA INDIGENA TEWADURE",
+            "ESCOLA INDIGENA TXUIRI-HINA",
+            "ESCOLA INDIGENA WAHURI",
+            "ESCOLA INDIGENA WATAKURI",
+            "INSTITUTO EDUCACIONAL PASSO A PASSO"
+        ];
+
+        // Verificar se está logado
+        if (!localStorage.getItem('userRole')) {
+            window.location.href = 'index.html';
+        }
+
+        // Variáveis globais
+        let allAssessoramentos = [];
+        let filteredAssessoramentos = [];
+        
+        // Função global para encontrar o nome da escola em diferentes campos possíveis
+        function getSchoolName(assessoramento) {
+            // Lista expandida de campos possíveis para o nome da escola
+            const possibleFields = [
+                'school', 'escola', 'nomeEscola', 'instituicao', 'nomeInstituicao',
+                'nome', 'title', 'titulo', 'escolaNome', 'nomeEscolaInstituicao',
+                'instituicaoNome', 'escolaInstituicao', 'nomeInstituicaoEscola'
+            ];
+            
+            // Primeiro, tentar campos específicos
+            for (const field of possibleFields) {
+                if (assessoramento[field] && typeof assessoramento[field] === 'string' && assessoramento[field].trim() !== '') {
+                    return assessoramento[field];
+                }
+            }
+            
+            // Se não encontrar, procurar por qualquer campo que contenha "escola" ou "colegio"
+            for (const field of Object.keys(assessoramento)) {
+                const valor = assessoramento[field];
+                if (typeof valor === 'string' && valor.length > 0) {
+                    const valorLower = valor.toLowerCase();
+                    if (valorLower.includes('escola') || valorLower.includes('colegio') || valorLower.includes('instituto')) {
+                        return valor;
+                    }
+                }
+            }
+            
+            return null;
+        }
+
+        // Função de logout
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+
+
+
+        // Carregar assessoramentos
+        async function loadAssessoramentos() {
+            try {
+                const assessoramentosRef = collection(db, 'assessoramentos');
+                
+                // Primeiro, tentar com ordenação (pode falhar se não houver índice)
+                try {
+                    const q = query(
+                        assessoramentosRef,
+                        where('department', '==', 'Equipe Multiprofissional'),
+                        orderBy('createdAt', 'desc')
+                    );
+                    
+                    const querySnapshot = await getDocs(q);
+                    allAssessoramentos = [];
+                    
+                    querySnapshot.forEach((doc) => {
+                        allAssessoramentos.push({
+                            id: doc.id,
+                            ...doc.data()
+                        });
+                    });
+                } catch (indexError) {
+                    // Se falhar por índice, fazer consulta sem ordenação e ordenar no cliente
+                    console.log('Índice não encontrado, fazendo consulta sem ordenação...');
+                    
+                    try {
+                        const q = query(
+                            assessoramentosRef,
+                            where('department', '==', 'Equipe Multiprofissional')
+                        );
+                        
+                        const querySnapshot = await getDocs(q);
+                        allAssessoramentos = [];
+                        
+                        querySnapshot.forEach((doc) => {
+                            allAssessoramentos.push({
+                                id: doc.id,
+                                ...doc.data()
+                            });
+                        });
+                        
+                        // Ordenar no cliente por data de criação (mais recente primeiro)
+                        allAssessoramentos.sort((a, b) => {
+                            if (!a.createdAt || !b.createdAt) return 0;
+                            return b.createdAt.toDate() - a.createdAt.toDate();
+                        });
+                    } catch (filterError) {
+                        // Se ainda falhar, carregar todos os assessoramentos e filtrar no cliente
+                        console.log('Filtro falhou, carregando todos os assessoramentos...');
+                        
+                        const querySnapshot = await getDocs(assessoramentosRef);
+                        allAssessoramentos = [];
+                        
+                        querySnapshot.forEach((doc) => {
+                            const data = doc.data();
+                            // Filtrar apenas os da equipe multiprofissional
+                            if (data.department === 'Equipe Multiprofissional') {
+                                allAssessoramentos.push({
+                                    id: doc.id,
+                                    ...data
+                                });
+                            }
+                        });
+                        
+                        // Ordenar no cliente por data de criação (mais recente primeiro)
+                        allAssessoramentos.sort((a, b) => {
+                            if (!a.createdAt || !b.createdAt) return 0;
+                            return b.createdAt.toDate() - a.createdAt.toDate();
+                        });
+                    }
+                }
+                
+                filteredAssessoramentos = [...allAssessoramentos];
+                displayAssessoramentos();
+            } catch (error) {
+                console.error('Erro ao carregar assessoramentos:', error);
+                
+                // Mensagem de erro mais específica
+                let errorMessage = 'Não foi possível carregar os assessoramentos.';
+                
+                if (error.message.includes('index')) {
+                    errorMessage = 'Erro de configuração do banco de dados. Entre em contato com o administrador.';
+                } else if (error.message.includes('permissions')) {
+                    errorMessage = 'Erro de permissões. Verifique se você está logado corretamente.';
+                } else if (error.message.includes('network')) {
+                    errorMessage = 'Erro de conexão. Verifique sua internet e tente novamente.';
+                }
+                
+                document.getElementById('assessoramentosList').innerHTML = `
+                    <div class="no-records">
+                        <h3>Erro ao carregar assessoramentos</h3>
+                        <p>${errorMessage}</p>
+                        <button onclick="loadAssessoramentos()" class="btn btn-primary">Tentar Novamente</button>
+                    </div>
+                `;
+            }
+        }
+
+        // Pesquisar por escola
+        function searchBySchool() {
+            // Verificar se os dados foram carregados
+            if (!allAssessoramentos || allAssessoramentos.length === 0) {
+                console.log('Dados ainda não carregados, aguardando...');
+                setTimeout(searchBySchool, 500); // Tentar novamente em 500ms
+                return;
+            }
+            
+            const searchTerm = document.getElementById('schoolSearch').value.toLowerCase();
+            const container = document.getElementById('assessoramentosList');
+            
+            console.log('Executando pesquisa por:', searchTerm);
+            console.log('Total de assessoramentos disponíveis:', allAssessoramentos.length);
+            
+            // Mostrar loading durante a pesquisa
+            container.innerHTML = '<div class="loading">Pesquisando...</div>';
+            
+            // Pequeno delay para mostrar o loading
+            setTimeout(() => {
+                if (searchTerm.trim() === '') {
+                    filteredAssessoramentos = [...allAssessoramentos];
+                    console.log('Pesquisa vazia: mostrando todos os', allAssessoramentos.length, 'assessoramentos');
+                } else {
+                    // Usar a função global getSchoolName
+                    filteredAssessoramentos = allAssessoramentos.filter(assessoramento => {
+                        const schoolName = getSchoolName(assessoramento);
+                        if (schoolName) {
+                            return schoolName.toLowerCase().includes(searchTerm);
+                        }
+                        return false;
+                    });
+                    
+                    console.log('Pesquisa filtrada: encontrados', filteredAssessoramentos.length, 'resultados');
+                    
+                    // Debug: mostrar quais campos foram encontrados
+                    if (filteredAssessoramentos.length === 0) {
+                        console.log('=== DEBUG: VERIFICANDO CAMPOS DE ESCOLA ===');
+                        allAssessoramentos.slice(0, 3).forEach((ass, index) => {
+                            console.log(`Assessoramento ${index + 1}:`, {
+                                school: ass.school,
+                                escola: ass.escola,
+                                nomeEscola: ass.nomeEscola,
+                                instituicao: ass.instituicao,
+                                nomeInstituicao: ass.nomeInstituicao,
+                                camposDisponiveis: Object.keys(ass)
+                            });
+                            
+                            // Testar a função getSchoolName para este assessoramento
+                            const schoolName = getSchoolName(ass);
+                            console.log(`Nome da escola encontrado para assessoramento ${index + 1}:`, schoolName);
+                        });
+                        console.log('=== FIM DEBUG ===');
+                    }
+                }
+                
+                // Mostrar resultado da pesquisa
+                displayAssessoramentos();
+                
+                // Log para debug
+                console.log(`Pesquisa por "${searchTerm}": ${filteredAssessoramentos.length} resultados encontrados`);
+            }, 100);
+        }
+
+        // Limpar pesquisa
+        function clearSearch() {
+            document.getElementById('schoolSearch').value = '';
+            filteredAssessoramentos = [...allAssessoramentos];
+            
+            // Mostrar loading
+            const container = document.getElementById('assessoramentosList');
+            container.innerHTML = '<div class="loading">Carregando todos os assessoramentos...</div>';
+            
+            // Pequeno delay para mostrar o loading
+            setTimeout(() => {
+                displayAssessoramentos();
+                console.log('Pesquisa limpa: mostrando todos os assessoramentos');
+            }, 100);
+        }
+
+        // Exibir assessoramentos
+        function displayAssessoramentos() {
+            const container = document.getElementById('assessoramentosList');
+            
+            if (filteredAssessoramentos.length === 0) {
+                container.innerHTML = `
+                    <div class="no-records">
+                        <h3>Assessoramentos da Equipe Multiprofissional</h3>
+                        <p>Nenhum assessoramento encontrado.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '<div class="records-grid">';
+            
+            // Usar a função global getSchoolName
+            
+            filteredAssessoramentos.forEach(assessoramento => {
+                const date = assessoramento.createdAt ? 
+                    (assessoramento.createdAt.toDate ? new Date(assessoramento.createdAt.toDate()).toLocaleDateString('pt-BR') : 
+                     new Date(assessoramento.createdAt).toLocaleDateString('pt-BR')) : 'Data não informada';
+                const schoolName = getSchoolName(assessoramento) || 'Escola não informada';
+                
+                html += `
+                    <div class="record-card">
+                        <div class="record-header">
+                            <h4>${schoolName}</h4>
+                            <span class="record-date">${date}</span>
+                        </div>
+                        <div class="record-info">
+                            <p><strong>Município:</strong> ${assessoramento.municipality || 'Não informado'}</p>
+                            <p><strong>Técnico:</strong> ${assessoramento.technician || 'Não informado'}</p>
+                            <p><strong>Tipo:</strong> ${assessoramento.type || 'Assessoramento Multiprofissional'}</p>
+                        </div>
+                        <div class="record-actions">
+                            <button onclick="viewAssessoramento('${assessoramento.id}')" class="btn btn-primary">Visualizar</button>
+                            <button onclick="generatePDF('${assessoramento.id}')" class="btn btn-success">Baixar PDF</button>
+                            <button onclick="deleteAssessoramento('${assessoramento.id}', '${schoolName}')" class="btn btn-danger">Excluir</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        // Excluir assessoramento
+        async function deleteAssessoramento(assessoramentoId, schoolName) {
+            try {
+                // Confirmar exclusão
+                const confirmacao = confirm(`⚠️ ATENÇÃO: Exclusão de Assessoramento\n\nTem certeza que deseja excluir o assessoramento da escola:\n"${schoolName}"?\n\n⚠️ Esta ação NÃO pode ser desfeita!\n\nClique OK para confirmar ou Cancelar para abortar.`);
+                
+                if (!confirmacao) {
+                    return;
+                }
+                
+                // Mostrar loading no botão
+                const deleteBtn = event.target;
+                const originalText = deleteBtn.textContent;
+                deleteBtn.textContent = 'Excluindo...';
+                deleteBtn.disabled = true;
+                
+                // Importar função de exclusão do Firebase
+                const { deleteDoc, doc } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
+                
+                // Excluir documento do Firebase
+                await deleteDoc(doc(db, 'assessoramentos', assessoramentoId));
+                
+                console.log('Assessoramento excluído com sucesso:', assessoramentoId);
+                
+                // Remover da lista local
+                allAssessoramentos = allAssessoramentos.filter(a => a.id !== assessoramentoId);
+                filteredAssessoramentos = filteredAssessoramentos.filter(a => a.id !== assessoramentoId);
+                
+                // Atualizar interface
+                displayAssessoramentos();
+                
+                // Mostrar mensagem de sucesso
+                alert('Assessoramento excluído com sucesso!');
+                
+            } catch (error) {
+                console.error('Erro ao excluir assessoramento:', error);
+                
+                // Mensagem de erro específica
+                let errorMessage = 'Erro ao excluir assessoramento. Tente novamente.';
+                
+                if (error.message.includes('permissions')) {
+                    errorMessage = 'Erro de permissões. Você não tem autorização para excluir este assessoramento.';
+                } else if (error.message.includes('not-found')) {
+                    errorMessage = 'Assessoramento não encontrado. Pode ter sido excluído por outro usuário.';
+                } else if (error.message.includes('network')) {
+                    errorMessage = 'Erro de conexão. Verifique sua internet e tente novamente.';
+                }
+                
+                alert(errorMessage);
+                
+                // Restaurar botão
+                const deleteBtn = event.target;
+                if (deleteBtn) {
+                    deleteBtn.textContent = 'Excluir';
+                    deleteBtn.disabled = false;
+                }
+            }
+        }
+
+        // Gerar PDF do assessoramento
+        async function generatePDF(assessoramentoId) {
+            try {
+                const assessoramento = allAssessoramentos.find(a => a.id === assessoramentoId);
+                if (!assessoramento) {
+                    alert('Assessoramento não encontrado');
+                    return;
+                }
+
+                // Mostrar loading no botão
+                const pdfBtn = event.target;
+                const originalText = pdfBtn.textContent;
+                pdfBtn.textContent = 'Gerando PDF...';
+                pdfBtn.disabled = true;
+
+                // Criar novo documento PDF
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                // Configurações do PDF
+                const pageWidth = doc.internal.pageSize.getWidth();
+                const margin = 20;
+                const contentWidth = pageWidth - (margin * 2);
+                let yPosition = 20;
+
+                // Função para adicionar texto com quebra de linha
+                const addText = (text, x, y, maxWidth) => {
+                    const lines = doc.splitTextToSize(text, maxWidth);
+                    doc.text(lines, x, y);
+                    return y + (lines.length * 7);
+                };
+
+                // Função para adicionar nova página se necessário
+                const checkNewPage = (y, requiredSpace = 20) => {
+                    if (y + requiredSpace > doc.internal.pageSize.getHeight() - margin) {
+                        doc.addPage();
+                        return margin;
+                    }
+                    return y;
+                };
+
+                // Cabeçalho
+                doc.setFontSize(20);
+                doc.setFont('helvetica', 'bold');
+                doc.text('SRE GURUPI - EQUIPE MULTIPROFISSIONAL', pageWidth / 2, yPosition, { align: 'center' });
+                yPosition += 15;
+
+                doc.setFontSize(16);
+                doc.text('QUESTIONÁRIO DE BUSCA ATIVA', pageWidth / 2, yPosition, { align: 'center' });
+                yPosition += 20;
+
+                // Informações Gerais
+                doc.setFontSize(14);
+                doc.setFont('helvetica', 'bold');
+                doc.text('INFORMAÇÕES GERAIS', margin, yPosition);
+                yPosition += 10;
+
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'normal');
+                yPosition = addText(`Escola: ${assessoramento.school || 'Não informada'}`, margin, yPosition, contentWidth);
+                yPosition += 5;
+                yPosition = addText(`Município: ${assessoramento.municipality || 'Não informado'}`, margin, yPosition, contentWidth);
+                yPosition += 5;
+                yPosition = addText(`Técnico: ${assessoramento.technician || 'Não informado'}`, margin, yPosition, contentWidth);
+                yPosition += 5;
+                yPosition = addText(`Data: ${assessoramento.date || 'Não informada'}`, margin, yPosition, contentWidth);
+                yPosition += 5;
+                yPosition = addText(`Tipo: ${assessoramento.type || 'Questionário de Busca Ativa'}`, margin, yPosition, contentWidth);
+                yPosition += 5;
+                yPosition = addText(`Data de criação: ${assessoramento.createdAt ? new Date(assessoramento.createdAt.toDate()).toLocaleDateString('pt-BR') : 'Não informada'}`, margin, yPosition, contentWidth);
+                yPosition += 15;
+
+                // Verificar se precisa de nova página
+                yPosition = checkNewPage(yPosition, 50);
+
+                // Respostas do Questionário
+                if (assessoramento.respostas && Object.keys(assessoramento.respostas).length > 0) {
+                    doc.setFontSize(14);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('RESPOSTAS DO QUESTIONÁRIO', margin, yPosition);
+                    yPosition += 15;
+
+                    doc.setFontSize(12);
+                    doc.setFont('helvetica', 'normal');
+
+                    // Mostrar as 20 questões com suas respostas
+                    for (let i = 1; i <= 20; i++) {
+                        const questaoKey = `questao${i}`;
+                        const resposta = assessoramento.respostas[questaoKey];
+                        
+                        if (resposta) {
+                            // Verificar se precisa de nova página
+                            yPosition = checkNewPage(yPosition, 25);
+
+                            doc.setFont('helvetica', 'bold');
+                            doc.text(`Questão ${i}:`, margin, yPosition);
+                            yPosition += 7;
+
+                            doc.setFont('helvetica', 'normal');
+                            yPosition = addText(resposta, margin + 10, yPosition, contentWidth - 10);
+                            yPosition += 8;
+                        }
+                    }
+                } else {
+                    // Tentar encontrar respostas em outros campos
+                    const possibleResponseFields = ['respostas', 'respostas_questionario', 'questionario_respostas', 'answers'];
+                    let foundResponses = false;
+                    
+                    for (const field of possibleResponseFields) {
+                        if (assessoramento[field] && Object.keys(assessoramento[field]).length > 0) {
+                            doc.setFontSize(14);
+                            doc.setFont('helvetica', 'bold');
+                            doc.text(`RESPOSTAS DO QUESTIONÁRIO (Campo: ${field})`, margin, yPosition);
+                            yPosition += 15;
+
+                            doc.setFontSize(12);
+                            doc.setFont('helvetica', 'normal');
+
+                            Object.keys(assessoramento[field]).forEach(key => {
+                                const resposta = assessoramento[field][key];
+                                if (resposta) {
+                                    yPosition = checkNewPage(yPosition, 25);
+
+                                    doc.setFont('helvetica', 'bold');
+                                    doc.text(`${key}:`, margin, yPosition);
+                                    yPosition += 7;
+
+                                    doc.setFont('helvetica', 'normal');
+                                    yPosition = addText(resposta, margin + 10, yPosition, contentWidth - 10);
+                                    yPosition += 8;
+                                }
+                            });
+                            foundResponses = true;
+                            break;
+                        }
+                    }
+
+                    if (!foundResponses) {
+                        doc.setFontSize(14);
+                        doc.setFont('helvetica', 'bold');
+                        doc.text('RESPOSTAS DO QUESTIONÁRIO', margin, yPosition);
+                        yPosition += 15;
+
+                        doc.setFontSize(12);
+                        doc.setFont('helvetica', 'normal');
+                        doc.text('Nenhuma resposta encontrada nos dados salvos.', margin, yPosition);
+                        yPosition += 15;
+                    }
+                }
+
+                // Verificar se precisa de nova página
+                yPosition = checkNewPage(yPosition, 50);
+
+                // Observações do Questionário
+                if (assessoramento.observacoes && Object.keys(assessoramento.observacoes).length > 0) {
+                    doc.setFontSize(14);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('OBSERVAÇÕES DO QUESTIONÁRIO', margin, yPosition);
+                    yPosition += 15;
+
+                    doc.setFontSize(12);
+                    doc.setFont('helvetica', 'normal');
+
+                    // Mostrar observações para cada questão
+                    for (let i = 1; i <= 20; i++) {
+                        const obsKey = `obs${i}`;
+                        const observacao = assessoramento.observacoes[obsKey];
+                        
+                        if (observacao && observacao.trim() !== '') {
+                            yPosition = checkNewPage(yPosition, 25);
+
+                            doc.setFont('helvetica', 'bold');
+                            doc.text(`Observação Questão ${i}:`, margin, yPosition);
+                            yPosition += 7;
+
+                            doc.setFont('helvetica', 'normal');
+                            yPosition = addText(observacao, margin + 10, yPosition, contentWidth - 10);
+                            yPosition += 8;
+                        }
+                    }
+                } else {
+                    // Tentar encontrar observações em outros campos
+                    const possibleObservationFields = ['observacoes', 'observacoes_questionario', 'questionario_observacoes', 'observations'];
+                    let foundObservations = false;
+                    
+                    for (const field of possibleObservationFields) {
+                        if (assessoramento[field] && Object.keys(assessoramento[field]).length > 0) {
+                            doc.setFontSize(14);
+                            doc.setFont('helvetica', 'bold');
+                            doc.text(`OBSERVAÇÕES DO QUESTIONÁRIO (Campo: ${field})`, margin, yPosition);
+                            yPosition += 15;
+
+                            doc.setFontSize(12);
+                            doc.setFont('helvetica', 'normal');
+
+                            Object.keys(assessoramento[field]).forEach(key => {
+                                const observacao = assessoramento[field][key];
+                                if (observacao && observacao.trim() !== '') {
+                                    yPosition = checkNewPage(yPosition, 25);
+
+                                    doc.setFont('helvetica', 'bold');
+                                    doc.text(`${key}:`, margin, yPosition);
+                                    yPosition += 7;
+
+                                    doc.setFont('helvetica', 'normal');
+                                    yPosition = addText(observacao, margin + 10, yPosition, contentWidth - 10);
+                                    yPosition += 8;
+                                }
+                            });
+                            foundObservations = true;
+                            break;
+                        }
+                    }
+
+                    if (!foundObservations) {
+                        doc.setFontSize(14);
+                        doc.setFont('helvetica', 'bold');
+                        doc.text('OBSERVAÇÕES DO QUESTIONÁRIO', margin, yPosition);
+                        yPosition += 15;
+
+                        doc.setFontSize(12);
+                        doc.setFont('helvetica', 'normal');
+                        doc.text('Nenhuma observação encontrada nos dados salvos.', margin, yPosition);
+                        yPosition += 15;
+                    }
+                }
+
+                // Verificar se precisa de nova página
+                yPosition = checkNewPage(yPosition, 50);
+
+                // Outros campos se existirem
+                if (assessoramento.observations) {
+                    doc.setFontSize(14);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('OBSERVAÇÕES GERAIS', margin, yPosition);
+                    yPosition += 15;
+
+                    doc.setFontSize(12);
+                    doc.setFont('helvetica', 'normal');
+                    yPosition = addText(assessoramento.observations, margin, yPosition, contentWidth);
+                    yPosition += 15;
+                }
+
+                if (assessoramento.recommendations) {
+                    yPosition = checkNewPage(yPosition, 30);
+
+                    doc.setFontSize(14);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('RECOMENDAÇÕES', margin, yPosition);
+                    yPosition += 15;
+
+                    doc.setFontSize(12);
+                    doc.setFont('helvetica', 'normal');
+                    yPosition = addText(assessoramento.recommendations, margin, yPosition, contentWidth);
+                    yPosition += 15;
+                }
+
+                if (assessoramento.documentLinks) {
+                    yPosition = checkNewPage(yPosition, 30);
+
+                    doc.setFontSize(14);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('LINKS DE DOCUMENTOS', margin, yPosition);
+                    yPosition += 15;
+
+                    doc.setFontSize(12);
+                    doc.setFont('helvetica', 'normal');
+                    yPosition = addText(assessoramento.documentLinks, margin, yPosition, contentWidth);
+                    yPosition += 15;
+                }
+
+                // Rodapé
+                yPosition = checkNewPage(yPosition, 30);
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'italic');
+                doc.text(`Documento gerado em: ${new Date().toLocaleString('pt-BR')}`, pageWidth / 2, yPosition, { align: 'center' });
+
+                // Nome do arquivo
+                const fileName = `Assessoramento_${assessoramento.school?.replace(/[^a-zA-Z0-9]/g, '_') || 'Escola'}_${assessoramento.date?.replace(/-/g, '') || new Date().toISOString().split('T')[0].replace(/-/g, '')}.pdf`;
+
+                // Salvar o PDF
+                doc.save(fileName);
+
+                // Restaurar botão
+                pdfBtn.textContent = originalText;
+                pdfBtn.disabled = false;
+
+                // Mensagem de sucesso
+                alert('PDF gerado com sucesso!');
+
+            } catch (error) {
+                console.error('Erro ao gerar PDF:', error);
+                alert('Erro ao gerar PDF. Tente novamente.');
+                
+                // Restaurar botão
+                const pdfBtn = event.target;
+                if (pdfBtn) {
+                    pdfBtn.textContent = 'Baixar PDF';
+                    pdfBtn.disabled = false;
+                }
+            }
+        }
+
+        // Visualizar assessoramento
+        async function viewAssessoramento(assessoramentoId) {
+            try {
+                const assessoramento = allAssessoramentos.find(a => a.id === assessoramentoId);
+                if (!assessoramento) return;
+                
+                // Preencher modal
+                document.getElementById('modalTitle').textContent = `Assessoramento - ${assessoramento.school || 'Escola não informada'}`;
+                
+                let modalContent = `
+                    <div class="record-details">
+                        <div class="detail-section">
+                            <h3>Informações Gerais</h3>
+                            <p><strong>Escola:</strong> ${assessoramento.school || 'Não informada'}</p>
+                            <p><strong>Município:</strong> ${assessoramento.municipality || 'Não informado'}</p>
+                            <p><strong>Técnico:</strong> ${assessoramento.technician || 'Não informado'}</p>
+                            <p><strong>Data:</strong> ${assessoramento.date || 'Não informada'}</p>
+                            <p><strong>Tipo:</strong> ${assessoramento.type || 'Questionário de Busca Ativa'}</p>
+                            <p><strong>Data de criação:</strong> ${assessoramento.createdAt ? new Date(assessoramento.createdAt.toDate()).toLocaleDateString('pt-BR') : 'Não informada'}</p>
+                        </div>
+                `;
+                
+                // Adicionar respostas do questionário
+                if (assessoramento.respostas && Object.keys(assessoramento.respostas).length > 0) {
+                    modalContent += `
+                        <div class="detail-section">
+                            <h3>Respostas do Questionário</h3>
+                    `;
+                    
+                    // Mostrar as 20 questões com suas respostas
+                    for (let i = 1; i <= 20; i++) {
+                        const questaoKey = `questao${i}`;
+                        const resposta = assessoramento.respostas[questaoKey];
+                        
+                        if (resposta) {
+                            modalContent += `
+                                <div class="question-item">
+                                    <p><strong>Questão ${i}:</strong> ${resposta}</p>
+                                </div>
+                            `;
+                        }
+                    }
+                    
+                    modalContent += '</div>';
+                } else {
+                    // Debug: mostrar estrutura dos dados
+                    console.log('Estrutura dos dados do assessoramento:', assessoramento);
+                    console.log('Campo respostas:', assessoramento.respostas);
+                    console.log('Tipo do campo respostas:', typeof assessoramento.respostas);
+                    
+                    // Tentar encontrar respostas em outros campos possíveis
+                    const possibleResponseFields = ['respostas', 'respostas_questionario', 'questionario_respostas', 'answers'];
+                    let foundResponses = false;
+                    
+                    for (const field of possibleResponseFields) {
+                        if (assessoramento[field] && Object.keys(assessoramento[field]).length > 0) {
+                            console.log(`Encontrado campo de respostas: ${field}`, assessoramento[field]);
+                            foundResponses = true;
+                            
+                            modalContent += `
+                                <div class="detail-section">
+                                    <h3>Respostas do Questionário (Campo: ${field})</h3>
+                            `;
+                            
+                            // Mostrar todas as respostas encontradas
+                            Object.keys(assessoramento[field]).forEach(key => {
+                                const resposta = assessoramento[field][key];
+                                if (resposta) {
+                                    modalContent += `
+                                        <div class="question-item">
+                                            <p><strong>${key}:</strong> ${resposta}</p>
+                                        </div>
+                                    `;
+                                }
+                            });
+                            
+                            modalContent += '</div>';
+                            break;
+                        }
+                    }
+                    
+                    if (!foundResponses) {
+                        modalContent += `
+                            <div class="detail-section">
+                                <h3>Respostas do Questionário</h3>
+                                <p class="no-data">Nenhuma resposta encontrada nos dados salvos.</p>
+                                <p class="debug-info">Campos disponíveis: ${Object.keys(assessoramento).join(', ')}</p>
+                            </div>
+                        `;
+                    }
+                }
+                
+                // Adicionar observações do questionário
+                if (assessoramento.observacoes && Object.keys(assessoramento.observacoes).length > 0) {
+                    modalContent += `
+                        <div class="detail-section">
+                            <h3>Observações do Questionário</h3>
+                    `;
+                    
+                    // Mostrar observações para cada questão
+                    for (let i = 1; i <= 20; i++) {
+                        const obsKey = `obs${i}`;
+                        const observacao = assessoramento.observacoes[obsKey];
+                        
+                        if (observacao && observacao.trim() !== '') {
+                            modalContent += `
+                                <div class="observation-item">
+                                    <p><strong>Observação Questão ${i}:</strong> ${observacao}</p>
+                                </div>
+                            `;
+                        }
+                    }
+                    
+                    modalContent += '</div>';
+                } else {
+                    // Debug: mostrar estrutura das observações
+                    console.log('Campo observacoes:', assessoramento.observacoes);
+                    console.log('Tipo do campo observacoes:', typeof assessoramento.observacoes);
+                    
+                    // Tentar encontrar observações em outros campos possíveis
+                    const possibleObservationFields = ['observacoes', 'observacoes_questionario', 'questionario_observacoes', 'observations'];
+                    let foundObservations = false;
+                    
+                    for (const field of possibleObservationFields) {
+                        if (assessoramento[field] && Object.keys(assessoramento[field]).length > 0) {
+                            console.log(`Encontrado campo de observações: ${field}`, assessoramento[field]);
+                            foundObservations = true;
+                            
+                            modalContent += `
+                                <div class="detail-section">
+                                    <h3>Observações do Questionário (Campo: ${field})</h3>
+                            `;
+                            
+                            // Mostrar todas as observações encontradas
+                            Object.keys(assessoramento[field]).forEach(key => {
+                                const observacao = assessoramento[field][key];
+                                if (observacao && observacao.trim() !== '') {
+                                    modalContent += `
+                                        <div class="observation-item">
+                                            <p><strong>${key}:</strong> ${observacao}</p>
+                                        </div>
+                                    `;
+                                }
+                            });
+                            
+                            modalContent += '</div>';
+                            break;
+                        }
+                    }
+                    
+                    if (!foundObservations) {
+                        modalContent += `
+                            <div class="detail-section">
+                                <h3>Observações do Questionário</h3>
+                                <p class="no-data">Nenhuma observação encontrada nos dados salvos.</p>
+                            </div>
+                        `;
+                    }
+                }
+                
+                // Adicionar outros campos se existirem
+                if (assessoramento.observations) {
+                    modalContent += `
+                        <div class="detail-section">
+                            <h3>Observações Gerais</h3>
+                            <p>${assessoramento.observations}</p>
+                        </div>
+                    `;
+                }
+                
+                if (assessoramento.recommendations) {
+                    modalContent += `
+                        <div class="detail-section">
+                            <h3>Recomendações</h3>
+                            <p>${assessoramento.recommendations}</p>
+                        </div>
+                    `;
+                }
+                
+                if (assessoramento.documentLinks) {
+                    modalContent += `
+                        <div class="detail-section">
+                            <h3>Links de Documentos</h3>
+                            <p>${assessoramento.documentLinks}</p>
+                        </div>
+                    `;
+                }
+                
+                modalContent += '</div>';
+                document.getElementById('modalBody').innerHTML = modalContent;
+                
+                // Mostrar modal
+                document.getElementById('viewModal').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Erro ao visualizar assessoramento:', error);
+                alert('Erro ao visualizar assessoramento');
+            }
+        }
+
+        // Fechar modal
+        function closeModal() {
+            document.getElementById('viewModal').style.display = 'none';
+        }
+
+        // Fechar modal ao clicar fora
+        window.onclick = function(event) {
+            const modal = document.getElementById('viewModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Funções do combobox de escolas
+        function filterSchools(searchTerm) {
+            console.log('Filtrando escolas para:', searchTerm);
+            
+            const dropdownList = document.getElementById('schoolSearchList');
+            
+            if (!dropdownList) {
+                console.error('Dropdown list não encontrado!');
+                return;
+            }
+            
+            const filteredSchools = schools.filter(school => 
+                school.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            
+            console.log('Escolas filtradas encontradas:', filteredSchools.length);
+            
+            dropdownList.innerHTML = '';
+            
+            if (searchTerm.trim() === '') {
+                dropdownList.style.display = 'none';
+                return;
+            }
+            
+            filteredSchools.forEach(school => {
+                const li = document.createElement('li');
+                li.textContent = school;
+                li.onclick = () => selectSchool(school);
+                dropdownList.appendChild(li);
+            });
+            
+            dropdownList.style.display = filteredSchools.length > 0 ? 'block' : 'none';
+        }
+
+        function selectSchool(schoolName) {
+            console.log('Escola selecionada:', schoolName);
+            
+            const input = document.getElementById('schoolSearch');
+            const dropdownList = document.getElementById('schoolSearchList');
+            
+            if (input) {
+                input.value = schoolName;
+                console.log('Valor do input definido como:', schoolName);
+            }
+            
+            if (dropdownList) {
+                dropdownList.style.display = 'none';
+            }
+            
+            // Pequeno delay para garantir que o input foi atualizado
+            setTimeout(() => {
+                console.log('Executando pesquisa automática para:', schoolName);
+                searchBySchool();
+            }, 100);
+        }
+
+        function toggleSchoolDropdown() {
+            const dropdownList = document.getElementById('schoolSearchList');
+            const currentValue = document.getElementById('schoolSearch').value;
+            
+            if (!dropdownList) return;
+            
+            if (dropdownList.style.display === 'block') {
+                dropdownList.style.display = 'none';
+            } else {
+                if (currentValue.trim() === '') {
+                    dropdownList.innerHTML = '';
+                    schools.forEach(school => {
+                        const li = document.createElement('li');
+                        li.textContent = school;
+                        li.onclick = () => selectSchool(school);
+                        dropdownList.appendChild(li);
+                    });
+                }
+                dropdownList.style.display = 'block';
+            }
+        }
+
+        // Fechar dropdowns ao clicar fora
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.combobox-container')) {
+                document.querySelectorAll('.dropdown-list').forEach(list => {
+                    list.style.display = 'none';
+                });
+            }
+        });
+
+        // Inicializar combobox
+        function initializeCombobox() {
+            const input = document.getElementById('schoolSearch');
+            const dropdownBtn = document.querySelector('.dropdown-btn');
+            
+            if (input && dropdownBtn) {
+                input.addEventListener('keyup', function(e) {
+                    filterSchools(e.target.value);
+                });
+                
+                dropdownBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    toggleSchoolDropdown();
+                });
+            }
+        }
+
+        // Inicializar quando DOM estiver carregado
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM carregado, inicializando sistema...');
+            
+            // Primeiro carregar os assessoramentos
+            loadAssessoramentos().then(() => {
+                console.log('Assessoramentos carregados, inicializando combobox...');
+                // Depois inicializar o combobox
+                initializeCombobox();
+            }).catch(error => {
+                console.error('Erro ao carregar assessoramentos:', error);
+                // Mesmo com erro, tentar inicializar o combobox
+                initializeCombobox();
+            });
+        });
+
+
+
+        // Exportar funções para o escopo global
+        window.logout = logout;
+        window.searchBySchool = searchBySchool;
+        window.clearSearch = clearSearch;
+        window.viewAssessoramento = viewAssessoramento;
+        window.generatePDF = generatePDF;
+        window.deleteAssessoramento = deleteAssessoramento;
+        window.closeModal = closeModal;
+        window.filterSchools = filterSchools;
+        window.selectSchool = selectSchool;
+        window.toggleSchoolDropdown = toggleSchoolDropdown;
+        window.getSchoolName = getSchoolName;
+    </script>
+</body>
+</html>

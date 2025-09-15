@@ -120,69 +120,14 @@
                     </div>
                 </div>
 
-                <!-- Dados do Estudante -->
+                <!-- Sistema de Turmas Dinâmicas -->
                 <div class="form-section">
-                    <h3>Dados do Estudante</h3>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="studentName">Nome do(a) Estudante:</label>
-                            <input type="text" id="studentName" name="studentName" placeholder="Nome completo" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="studentGrade">Nota:</label>
-                            <input type="number" id="studentGrade" name="studentGrade" min="0" max="10" step="0.1" placeholder="0.0" required>
-                        </div>
+                    <div class="section-header">
+                        <h3>Turmas e Estudantes Abaixo da Média</h3>
+                        <button type="button" class="btn-secondary" onclick="addTurma()">➕ Adicionar Turma</button>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="studentSituation">Situação:</label>
-                            <select id="studentSituation" name="studentSituation" required>
-                                <option value="">Selecione</option>
-                                <option value="Pendente">Pendente</option>
-                                <option value="Resolvido">Resolvido</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="seriesClass">Série/Turma:</label>
-                            <input type="text" id="seriesClass" name="seriesClass" placeholder="Ex: 1º ano A, 2º ano B" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="curricularComponents">Número de Componentes Curriculares Abaixo da Média:</label>
-                            <input type="number" id="curricularComponents" name="curricularComponents" min="0" placeholder="Digite o número" required>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Disciplinas Abaixo da Média -->
-                <div class="form-section">
-                    <h3>Disciplinas Abaixo da Média</h3>
-                    <div class="form-group">
-                        <div class="checkbox-group">
-                            <label><input type="checkbox" name="portuguese" value="true"> Língua Portuguesa</label>
-                            <label><input type="checkbox" name="mathematics" value="true"> Matemática</label>
-                            <label><input type="checkbox" name="history" value="true"> História</label>
-                            <label><input type="checkbox" name="geography" value="true"> Geografia</label>
-                            <label><input type="checkbox" name="science" value="true"> Ciências</label>
-                            <label><input type="checkbox" name="physicalEducation" value="true"> Educação Física</label>
-                            <label><input type="checkbox" name="arts" value="true"> Arte</label>
-                            <label><input type="checkbox" name="english" value="true"> Inglês</label>
-                            <label><input type="checkbox" name="philosophy" value="true"> Filosofia</label>
-                            <label><input type="checkbox" name="sociology" value="true"> Sociologia</label>
-                            <label><input type="checkbox" name="biology" value="true"> Biologia</label>
-                            <label><input type="checkbox" name="physics" value="true"> Física</label>
-                            <label><input type="checkbox" name="chemistry" value="true"> Química</label>
-                            <label><input type="checkbox" name="literature" value="true"> Literatura</label>
-                            <label><input type="checkbox" name="spanish" value="true"> Espanhol</label>
-                        </div>
-
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label><input type="checkbox" name="others" value="true"> Outros:</label>
-                            <input type="text" id="otherSubjects" name="otherSubjects" placeholder="Especifique quais disciplinas" disabled>
-                        </div>
+                    <div id="turmasContainer">
+                        <!-- As turmas serão adicionadas aqui dinamicamente -->
                     </div>
                 </div>
 
@@ -190,23 +135,28 @@
                 <div class="form-section">
                     <h3>Observações:</h3>
                     <div class="form-group">
-                        <textarea id="observations" name="observations" rows="4" placeholder="Digite suas observações..."></textarea>
+                        <textarea id="observations" name="observations" rows="4" placeholder="Digite suas observações gerais sobre os estudantes abaixo da média..."></textarea>
                     </div>
                 </div>
 
-                <!-- Links de Documentos -->
+                <!-- Anexos -->
                 <div class="form-section">
-                    <h3>Links de Documentos:</h3>
-                    <p class="form-description">Insira links para Google Drive, Google Docs, Planilhas ou outros documentos online</p>
+                    <h3>Anexos:</h3>
+                    <p class="form-description">Faça upload de documentos relacionados (PDF, Word, Excel, imagens, etc.)</p>
                     <div class="form-group">
-                        <textarea id="documentLinks" name="documentLinks" rows="4" placeholder="Ex: https://drive.google.com/...&#10;https://docs.google.com/..."></textarea>
+                        <input type="file" id="attachments" name="attachments" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.txt" style="margin-bottom: 10px;">
+                        <div id="attachmentsList" class="attachments-list"></div>
+                        <small style="color: #666; font-size: 12px;">Formatos aceitos: PDF, Word, Excel, imagens, texto. Máximo 5 arquivos.</small>
                     </div>
                 </div>
+
+                <!-- Mensagem de status -->
+                <div id="statusMessage" class="status-message" style="display: none;"></div>
 
                 <!-- Botões -->
                 <div class="form-actions">
-                    <button type="submit" class="btn-primary">Salvar Registro</button>
-                    <button type="button" class="btn-secondary" onclick="window.history.back()">Voltar</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Salvar Registro</button>
+                    <button type="button" class="btn btn-secondary" onclick="window.history.back()">Voltar</button>
                 </div>
             </form>
         </div>
@@ -215,10 +165,11 @@
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
 
         // Configuração do Firebase
         const firebaseConfig = {
-            apiKey: "AIzaSyABE1oTfC_nT5vfDHpeqYdDjNoPCKwE-Eo",
+            apiKey: "AIzaSyABEloTfC_nT5vfDHpeqYdDjNoPCKwE-Eo",
             authDomain: "projeto-alex-aaadf.firebaseapp.com",
             projectId: "projeto-alex-aaadf",
             storageBucket: "projeto-alex-aaadf.firebasestorage.app",
@@ -228,6 +179,125 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // ===== SISTEMA DE TURMAS DINÂMICAS =====
+        let turmas = [];
+        let turmaCounter = 0;
+
+        // Função para adicionar uma nova turma
+        function addTurma() {
+            turmaCounter++;
+            const turmaId = `turma_${turmaCounter}`;
+            
+            const turma = {
+                id: turmaId,
+                nome: '',
+                numeroEstudantes: 0,
+                componentesCurriculares: '',
+                situacao: ''
+            };
+            
+            turmas.push(turma);
+            displayTurmas();
+        }
+
+        // Função para remover uma turma
+        function removeTurma(turmaId) {
+            turmas = turmas.filter(t => t.id !== turmaId);
+            displayTurmas();
+        }
+
+        // Função para atualizar dados da turma
+        function updateTurmaData(turmaId, field, value) {
+            const turma = turmas.find(t => t.id === turmaId);
+            if (turma) {
+                turma[field] = value;
+            }
+        }
+
+        // Função para exibir todas as turmas
+        function displayTurmas() {
+            const container = document.getElementById('turmasContainer');
+            
+            if (turmas.length === 0) {
+                container.innerHTML = '<p style="color: #666; font-style: italic; text-align: center; padding: 20px;">Nenhuma turma adicionada. Clique em "Adicionar Turma" para começar.</p>';
+                return;
+            }
+            
+            let html = '';
+            
+            turmas.forEach((turma, turmaIndex) => {
+                html += `
+                    <div class="turma-card" style="border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-bottom: 20px; background: #f9f9f9;">
+                        <div class="turma-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h4 style="margin: 0; color: #2c3e50;">🏫 Turma ${turmaIndex + 1}</h4>
+                            <button type="button" class="btn-danger" onclick="removeTurma('${turma.id}')" style="background: #dc3545; color: white; border: none; padding: 8px 12px; border-radius: 4px; font-size: 12px;">🗑️ Remover</button>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Nome da Turma:</label>
+                                <input 
+                                    type="text" 
+                                    placeholder="Nome da turma" 
+                                    value="${turma.nome}"
+                                    onchange="updateTurmaData('${turma.id}', 'nome', this.value)"
+                                    required
+                                    style="width: 100%;"
+                                >
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Número de estudantes abaixo da média:</label>
+                                <input 
+                                    type="number" 
+                                    min="0" 
+                                    placeholder="Quantidade de estudantes" 
+                                    value="${turma.numeroEstudantes}"
+                                    onchange="updateTurmaData('${turma.id}', 'numeroEstudantes', this.value)"
+                                    required
+                                    style="width: 100%;"
+                                >
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Componentes Curriculares (escreva quais):</label>
+                                <textarea 
+                                    placeholder="Ex: Matemática, Português, História..." 
+                                    onchange="updateTurmaData('${turma.id}', 'componentesCurriculares', this.value)"
+                                    required
+                                    style="width: 100%; height: 80px; resize: vertical;"
+                                >${turma.componentesCurriculares}</textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Situação:</label>
+                                <select 
+                                    onchange="updateTurmaData('${turma.id}', 'situacao', this.value)"
+                                    required
+                                    style="width: 100%;"
+                                >
+                                    <option value="">Selecione</option>
+                                    <option value="Em análise" ${turma.situacao === 'Em análise' ? 'selected' : ''}>Em análise</option>
+                                    <option value="Acompanhamento" ${turma.situacao === 'Acompanhamento' ? 'selected' : ''}>Acompanhamento</option>
+                                    <option value="Intervenção" ${turma.situacao === 'Intervenção' ? 'selected' : ''}>Intervenção</option>
+                                    <option value="Resolvido" ${turma.situacao === 'Resolvido' ? 'selected' : ''}>Resolvido</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
 
         // Verificar autenticação
         function checkAuth() {
@@ -249,26 +319,223 @@
             window.location.href = '../index.html';
         }
 
+        // Mostrar mensagem de status
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.textContent = message;
+            statusDiv.className = `status-message ${type}`;
+            statusDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Gerenciar anexos múltiplos
+        let selectedFiles = [];
+
+        document.getElementById('attachments').addEventListener('change', function(e) {
+            const newFiles = Array.from(e.target.files);
+            
+            // Adicionar novos arquivos aos existentes (evitando duplicatas)
+            newFiles.forEach(newFile => {
+                // Verificar se o arquivo já existe (por nome e tamanho)
+                const isDuplicate = selectedFiles.some(existingFile => 
+                    existingFile.name === newFile.name && existingFile.size === newFile.size
+                );
+                
+                if (!isDuplicate && selectedFiles.length < 5) {
+                    selectedFiles.push(newFile);
+                }
+            });
+            
+            // Verificar limite máximo
+            if (selectedFiles.length > 5) {
+                alert('Máximo de 5 arquivos permitido!');
+                // Manter apenas os primeiros 5
+                selectedFiles = selectedFiles.slice(0, 5);
+            }
+            
+            displayAttachments();
+            
+            // Limpar o input para permitir seleção do mesmo arquivo novamente
+            e.target.value = '';
+        });
+
+        function displayAttachments() {
+            const attachmentsList = document.getElementById('attachmentsList');
+            attachmentsList.innerHTML = '';
+            
+            if (selectedFiles.length === 0) {
+                attachmentsList.innerHTML = '<p style="color: #666; font-style: italic; text-align: center; padding: 10px;">Nenhum arquivo selecionado</p>';
+                return;
+            }
+            
+            // Adicionar cabeçalho com contador e botão limpar tudo
+            const headerDiv = document.createElement('div');
+            headerDiv.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 5px 0; border-bottom: 1px solid #dee2e6;';
+            headerDiv.innerHTML = `
+                <span style="font-weight: 600; color: #333;">📎 Anexos (${selectedFiles.length}/5)</span>
+                ${selectedFiles.length > 0 ? '<button type="button" onclick="clearAllAttachments()" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 3px; font-size: 12px; cursor: pointer;">Limpar Todos</button>' : ''}
+            `;
+            attachmentsList.appendChild(headerDiv);
+            
+            selectedFiles.forEach((file, index) => {
+                const fileDiv = document.createElement('div');
+                fileDiv.className = 'attachment-item';
+                fileDiv.innerHTML = `
+                    <span>📎 ${file.name} <small style="color: #666;">(${(file.size / 1024).toFixed(1)} KB)</small></span>
+                    <button type="button" onclick="removeFile(${index})" class="btn-remove">❌</button>
+                `;
+                attachmentsList.appendChild(fileDiv);
+            });
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            displayAttachments();
+            console.log(`Arquivo removido. Total de anexos: ${selectedFiles.length}`);
+        }
+
+        function clearAllAttachments() {
+            selectedFiles = [];
+            displayAttachments();
+            console.log('Todos os anexos foram removidos');
+        }
+
+        // Função para fazer upload dos anexos
+        async function uploadAttachments() {
+            console.log('🔄 Iniciando upload de anexos...');
+            console.log('📁 Arquivos selecionados:', selectedFiles.length);
+            
+            if (selectedFiles.length === 0) {
+                console.log('❌ Nenhum arquivo para fazer upload');
+                return [];
+            }
+            
+            const uploadPromises = selectedFiles.map(async (file, index) => {
+                try {
+                    console.log(`📤 Fazendo upload do arquivo ${index + 1}/${selectedFiles.length}: ${file.name}`);
+                    
+                    const timestamp = Date.now();
+                    const fileName = `${timestamp}_${file.name}`;
+                    const storageRef = ref(storage, `attachments/${fileName}`);
+                    
+                    console.log(`📁 Referência do storage criada: ${fileName}`);
+                    
+                    const snapshot = await uploadBytes(storageRef, file);
+                    console.log(`✅ Upload concluído para: ${file.name}`);
+                    
+                    const downloadURL = await getDownloadURL(snapshot.ref);
+                    console.log(`🔗 Download URL obtida para: ${file.name}`);
+                    
+                    const attachmentData = {
+                        name: file.name,
+                        type: file.type,
+                        size: file.size,
+                        downloadURL: downloadURL,
+                        uploadedAt: new Date().toISOString()
+                    };
+                    
+                    console.log(`📋 Dados do anexo preparados:`, attachmentData);
+                    return attachmentData;
+                    
+                } catch (error) {
+                    console.error(`❌ Erro ao fazer upload de ${file.name}:`, error);
+                    throw new Error(`Falha no upload de ${file.name}: ${error.message}`);
+                }
+            });
+            
+            try {
+                const results = await Promise.all(uploadPromises);
+                console.log(`🎉 Upload de todos os anexos concluído! Total: ${results.length}`);
+                console.log('📋 Resultados finais:', results);
+                return results;
+            } catch (error) {
+                console.error('❌ Erro geral no upload dos anexos:', error);
+                throw error;
+            }
+        }
+
+        // Validar formulário
+        function validateForm() {
+            const requiredFields = ['school', 'municipality', 'technician', 'date'];
+            
+            for (const fieldId of requiredFields) {
+                const field = document.getElementById(fieldId);
+                if (!field.value.trim()) {
+                    showStatus(`Por favor, preencha o campo: ${field.previousElementSibling.textContent.replace(':', '')}`, 'error');
+                    field.focus();
+                    return false;
+                }
+            }
+            
+            // Validar se há pelo menos uma turma
+            if (turmas.length === 0) {
+                showStatus('Adicione pelo menos uma turma antes de salvar!', 'error');
+                return false;
+            }
+            
+            // Validar se cada turma tem todos os campos obrigatórios
+            for (let turma of turmas) {
+                if (!turma.nome.trim()) {
+                    showStatus(`A turma ${turmas.indexOf(turma) + 1} deve ter um nome!`, 'error');
+                    return false;
+                }
+                if (turma.numeroEstudantes <= 0) {
+                    showStatus(`A turma "${turma.nome}" deve ter um número válido de estudantes!`, 'error');
+                    return false;
+                }
+                if (!turma.componentesCurriculares.trim()) {
+                    showStatus(`A turma "${turma.nome}" deve ter componentes curriculares!`, 'error');
+                    return false;
+                }
+                if (!turma.situacao) {
+                    showStatus(`A turma "${turma.nome}" deve ter uma situação selecionada!`, 'error');
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
         // Inicializar
         checkAuth();
         
         // Definir data atual como padrão
         document.getElementById('date').value = new Date().toISOString().split('T')[0];
         
-        // Habilitar/desabilitar campo "Outros" baseado no checkbox
-        document.querySelector('input[name="others"]').addEventListener('change', function() {
-            const otherSubjectsField = document.getElementById('otherSubjects');
-            otherSubjectsField.disabled = !this.checked;
-            if (!this.checked) {
-                otherSubjectsField.value = '';
-            }
-        });
-        
         // Form handler
         document.getElementById('belowAverageForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            if (!validateForm()) {
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.textContent;
+            
             try {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Salvando...';
+                showStatus('Salvando registro...', 'info');
+                
+                console.log('Iniciando salvamento...');
+                
+                // Fazer upload dos anexos primeiro
+                let attachments = [];
+                try {
+                    attachments = await uploadAttachments();
+                    console.log('Anexos enviados:', attachments);
+                } catch (uploadError) {
+                    console.error('Erro no upload dos anexos:', uploadError);
+                    showStatus('Erro no upload dos anexos: ' + uploadError.message, 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                    return;
+                }
+                
                 const formData = {
                     department: 'Supervisão',
                     indicator: 'Estudantes Abaixo da Média',
@@ -276,56 +543,51 @@
                     municipality: document.getElementById('municipality').value,
                     technician: document.getElementById('technician').value,
                     date: document.getElementById('date').value,
-                    studentName: document.getElementById('studentName').value,
-                    studentGrade: parseFloat(document.getElementById('studentGrade').value),
-                    studentSituation: document.getElementById('studentSituation').value,
-                    seriesClass: document.getElementById('seriesClass').value,
-                    curricularComponents: parseInt(document.getElementById('curricularComponents').value),
-                    subjects: {
-                        portuguese: document.querySelector('input[name="portuguese"]').checked,
-                        mathematics: document.querySelector('input[name="mathematics"]').checked,
-                        history: document.querySelector('input[name="history"]').checked,
-                        geography: document.querySelector('input[name="geography"]').checked,
-                        science: document.querySelector('input[name="science"]').checked,
-                        physicalEducation: document.querySelector('input[name="physicalEducation"]').checked,
-                        arts: document.querySelector('input[name="arts"]').checked,
-                        english: document.querySelector('input[name="english"]').checked,
-                        philosophy: document.querySelector('input[name="philosophy"]').checked,
-                        sociology: document.querySelector('input[name="sociology"]').checked,
-                        biology: document.querySelector('input[name="biology"]').checked,
-                        physics: document.querySelector('input[name="physics"]').checked,
-                        chemistry: document.querySelector('input[name="chemistry"]').checked,
-                        literature: document.querySelector('input[name="literature"]').checked,
-                        spanish: document.querySelector('input[name="spanish"]').checked,
-                        others: document.querySelector('input[name="others"]').checked,
-                        otherSubjects: document.getElementById('otherSubjects').value
-                    },
+                    turmas: turmas, // Nova estrutura com turmas dinâmicas
                     observations: document.getElementById('observations').value,
-                    documentLinks: document.getElementById('documentLinks').value,
-                    createdBy: localStorage.getItem('userCPF'),
-                    createdByRole: localStorage.getItem('userRole'),
-                    createdByName: localStorage.getItem('userName'),
+                    attachments: attachments,
+                    createdBy: localStorage.getItem('userCPF') || 'Usuário não identificado',
+                    createdByRole: localStorage.getItem('userRole') || 'N/A',
+                    createdByName: localStorage.getItem('userName') || 'N/A',
                     createdAt: serverTimestamp(),
                     status: 'active'
                 };
 
-                await addDoc(collection(db, 'records'), formData);
-                
-                alert('Registro salvo com sucesso! Redirecionando para a página de registros unificados...');
-                
-                // Redirecionar para a página de registros unificados após salvar
-                setTimeout(() => {
-                    window.location.href = '../monitoring-records-unified.html';
-                }, 1500);
+                console.log('Dados do formulário:', formData);
+
+                // Tentar salvar no Firebase
+                try {
+                    const docRef = await addDoc(collection(db, 'records'), formData);
+                    console.log('Documento salvo com ID:', docRef.id);
+                    
+                    showStatus('Registro salvo com sucesso! Redirecionando...', 'success');
+                    
+                    // Redirecionar para registros unificados
+                    setTimeout(() => {
+                        window.location.href = '../monitoring-records-unified.html';
+                    }, 2000);
+                    
+                } catch (firebaseError) {
+                    console.error('Erro no Firebase:', firebaseError);
+                    showStatus('Erro ao salvar no Firebase: ' + firebaseError.message, 'error');
+                }
                 
             } catch (error) {
                 console.error('Erro ao salvar:', error);
-                alert('Erro ao salvar o registro: ' + error.message);
+                showStatus('Erro ao salvar o registro: ' + error.message, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
             }
         });
+
+        // Exportar funções para uso global
+        window.logout = logout;
+        window.removeFile = removeFile;
+        window.clearAllAttachments = clearAllAttachments;
+        window.addTurma = addTurma;
+        window.removeTurma = removeTurma;
+        window.updateTurmaData = updateTurmaData;
     </script>
-    
-    <!-- Script para pesquisa de escola -->
-    <script src="../js/school-search.js"></script>
 </body>
 </html>

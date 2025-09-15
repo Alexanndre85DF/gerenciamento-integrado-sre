@@ -1,32 +1,36 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <title>Aulas Previstas e Aulas Dadas - Equipe Multiprofissional - SRE GURUPI</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório Assessoramento - Currículo - SRE GURUPI</title>
     <link rel="stylesheet" href="../styles.css">
-
+    <script src="../js/schools.js"></script>
+    <script src="../js/municipalities.js"></script>
 </head>
 <body>
     <div class="header">
-        <h1>Aulas Previstas e Aulas Dadas - Equipe Multiprofissional</h1>
+        <h1>Relatório Assessoramento - Currículo</h1>
         <button class="logout-btn" onclick="logout()">Sair</button>
     </div>
 
     <div class="main-container">
+        <!-- Formulário de Criação -->
         <div class="card">
-            <h2>Formulário de Aulas Previstas e Aulas Dadas</h2>
+            <h2>Criar Novo Relatório</h2>
             
-            <form id="plannedClassesForm" class="form-container">
-                <!-- Cabeçalho Padrão -->
+            <form id="assessoramentoForm" class="form-container">
+                <!-- Informações Gerais -->
                 <div class="form-section">
-                    <h3>Informações Gerais</h3>
+                    <h3>Informações do Relatório</h3>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="school">Nome da Escola:</label>
+                            <label for="school">Escola:</label>
                             <select id="school" name="school" required>
                                 <option value="">Selecione a escola</option>
                                 <option value="CENTRO DE ENSINO MEDIO ARY RIBEIRO VALADAO FILHO">CENTRO DE ENSINO MEDIO ARY RIBEIRO VALADAO FILHO</option>
                                 <option value="CENTRO DE ENSINO MEDIO BOM JESUS">CENTRO DE ENSINO MEDIO BOM JESUS</option>
-                                <option value="CENTRO DE ENSINO MEDIO DE GURUPI">CENTRO DE ENSINO MEDIO DE GURUPI</option>                                
+                                <option value="CENTRO DE ENSINO MEDIO DE GURUPI">CENTRO DE ENSINO MEDIO DE GURUPI</option>
                                 <option value="COL DE TECELAGEM ART NSA SENHORA AUXILIADORA">COL DE TECELAGEM ART NSA SENHORA AUXILIADORA</option>
                                 <option value="COL EST ALAIR SENA CONCEICAO">COL EST ALAIR SENA CONCEICAO</option>
                                 <option value="COLÉGIO AGRICOLA DOM BOSCO">COLÉGIO AGRICOLA DOM BOSCO</option>
@@ -87,7 +91,6 @@
                             <label for="municipality">Município:</label>
                             <select id="municipality" name="municipality" required>
                                 <option value="">Selecione o município</option>
-                                <option value="Aliança do Tocantins">Aliança do Tocantins</option>
                                 <option value="Alvorada">Alvorada</option>
                                 <option value="Araguaçu">Araguaçu</option>
                                 <option value="Cariri do Tocantins">Cariri do Tocantins</option>
@@ -104,6 +107,7 @@
                                 <option value="São Valério">São Valério</option>
                                 <option value="Sucupira">Sucupira</option>
                                 <option value="Talismã">Talismã</option>
+
                             </select>
                         </div>
                     </div>
@@ -113,128 +117,22 @@
                             <input type="text" id="technician" name="technician" required>
                         </div>
                         <div class="form-group">
-                            <label for="date">Data do Registro:</label>
+                            <label for="date">Data do Relatório:</label>
                             <input type="date" id="date" name="date" required>
                         </div>
                     </div>
-                </div>
-
-                <!-- Informações do Registro -->
-                <div class="form-section">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="referenceDate">Data de Referência:</label>
-                            <input type="date" id="referenceDate" name="referenceDate" required>
+                            <label for="department">Departamento:</label>
+                            <input type="text" id="department" name="department" value="Currículo" readonly style="background-color: #f8f9fa;">
                         </div>
-                        <div class="form-group">
-                            <label for="classId">ID da Turma:</label>
-                            <input type="text" id="classId" name="classId" placeholder="ID da turma" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="className">Nome da Turma:</label>
-                            <input type="text" id="className" name="className" placeholder="Nome da turma" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="discipline">Disciplina:</label>
-                            <input type="text" id="discipline" name="discipline" placeholder="Nome da disciplina" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="periodStart">Período Inicial:</label>
-                            <input type="date" id="periodStart" name="periodStart" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="periodEnd">Período Final:</label>
-                            <input type="date" id="periodEnd" name="periodEnd" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="professorName">Nome do(a) Professor(a):</label>
-                            <input type="text" id="professorName" name="professorName" placeholder="Nome completo" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="bimester">Bimestre:</label>
-                            <select id="bimester" name="bimester" required>
-                                <option value="">Selecione</option>
-                                <option value="1º Bimestre">1º Bimestre</option>
-                                <option value="2º Bimestre">2º Bimestre</option>
-                                <option value="3º Bimestre">3º Bimestre</option>
-                                <option value="4º Bimestre">4º Bimestre</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="situation">Situação:</label>
-                            <select id="situation" name="situation" required>
-                                <option value="">Selecione</option>
-                                <option value="Em andamento">Em andamento</option>
-                                <option value="Concluído">Concluído</option>
-                                <option value="Pendente">Pendente</option>
-                                <option value="Suspenso">Suspenso</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Aulas Previstas e Dadas -->
-                <div class="form-section">
-                    <h3>Aulas Previstas e Dadas:</h3>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="plannedClasses">Aulas Previstas:</label>
-                            <input type="number" id="plannedClasses" name="plannedClasses" value="0" min="0" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="givenClasses">Aulas Dadas:</label>
-                            <input type="number" id="givenClasses" name="givenClasses" value="0" min="0" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Total Previsto: <span id="totalPlanned">0</span></label>
-                        </div>
-                        <div class="form-group">
-                            <label>Total Dado: <span id="totalGiven">0</span></label>
-                        </div>
-                        <div class="form-group">
-                            <label>Taxa de Cumprimento: <span id="completionRate">0%</span></label>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Motivos de não realização -->
-                <div class="form-section">
-                    <h3>Motivos de não realização/registro:</h3>
-                    <div class="form-group">
-                        <div class="checkbox-group">
-                            <label><input type="checkbox" name="teacherAbsence" value="true"> Falta do Docente</label>
-                            <label><input type="checkbox" name="schoolEvent" value="true"> Evento Escolar</label>
-                            <label><input type="checkbox" name="holiday" value="true"> Feriado</label>
-                            <label><input type="checkbox" name="strike" value="true"> Greve/Suspensão</label>
-                            <label><input type="checkbox" name="sgeUnavailable" value="true"> Indisponibilidade SGE</label>
-                            <label><input type="checkbox" name="professorNotLaunched" value="true"> Não Lançamento SGE Professor</label>
-                            <label><input type="checkbox" name="others" value="true"> Outros</label>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Observações -->
-                <div class="form-section">
-                    <h3>Observações:</h3>
-                    <div class="form-group">
-                        <textarea id="observations" name="observations" rows="4" placeholder="Digite suas observações..."></textarea>
                     </div>
                 </div>
 
                 <!-- Anexos -->
                 <div class="form-section">
                     <h3>Anexos:</h3>
-                    <p class="form-description">Faça upload de documentos relacionados (PDF, Word, Excel, imagens, etc.)</p>
+                    <p class="form-description">Faça upload dos relatórios do currículo (PDF, Word, Excel, imagens, etc.)</p>
                     <div class="form-group">
                         <input type="file" id="attachments" name="attachments" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.txt" style="margin-bottom: 10px;">
                         <div id="attachmentsList" class="attachments-list"></div>
@@ -244,21 +142,29 @@
 
                 <!-- Botões -->
                 <div class="form-actions">
-                    <button type="submit" class="btn-primary">Salvar Registro</button>
+                    <button type="submit" class="btn-primary">Salvar Relatório</button>
                     <button type="button" class="btn-secondary" onclick="window.history.back()">Voltar</button>
                 </div>
             </form>
+        </div>
+
+        <!-- Lista de Relatórios Salvos -->
+        <div class="card" style="margin-top: 30px;">
+            <h2>Relatórios Salvos</h2>
+            <div id="reportsList">
+                <p style="text-align: center; color: #666; font-style: italic;">Carregando relatórios...</p>
+            </div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, serverTimestamp, deleteDoc, doc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
         import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
 
         // Configuração do Firebase
         const firebaseConfig = {
-            apiKey: "AIzaSyABE1oTfC_nT5vfDHpeqYdDjNoPCKwE-Eo",
+            apiKey: "AIzaSyABEloTfC_nT5vfDHpeqYdDjNoPCKwE-Eo",
             authDomain: "projeto-alex-aaadf.firebaseapp.com",
             projectId: "projeto-alex-aaadf",
             storageBucket: "projeto-alex-aaadf.firebasestorage.app",
@@ -270,33 +176,24 @@
         const db = getFirestore(app);
         const storage = getStorage(app);
 
-        // ===== SISTEMA DE ANEXOS MÚLTIPLOS =====
+        // Sistema de anexos
         let selectedFiles = [];
 
-        // Event listener para seleção de arquivos
         document.getElementById('attachments').addEventListener('change', function(e) {
             const newFiles = Array.from(e.target.files);
-            
-            // Adicionar novos arquivos aos existentes (evitando duplicatas)
             newFiles.forEach(newFile => {
-                // Verificar se o arquivo já existe (por nome e tamanho)
                 const isDuplicate = selectedFiles.some(existingFile => 
                     existingFile.name === newFile.name && existingFile.size === newFile.size
                 );
-                
                 if (!isDuplicate) {
                     selectedFiles.push(newFile);
                 }
             });
-            
-            // Verificar limite máximo
             if (selectedFiles.length > 5) {
-                alert('Máximo de 5 arquivos permitido! Removendo arquivos excedentes.');
+                alert('Máximo de 5 arquivos permitido!');
                 selectedFiles = selectedFiles.slice(0, 5);
             }
-            
             displayAttachments();
-            console.log(`📁 Total de anexos selecionados: ${selectedFiles.length}`);
         });
 
         function displayAttachments() {
@@ -308,7 +205,6 @@
                 return;
             }
             
-            // Cabeçalho com contador e botão limpar tudo
             const headerDiv = document.createElement('div');
             headerDiv.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 8px; background: #f8f9fa; border-radius: 5px;';
             headerDiv.innerHTML = `
@@ -332,40 +228,43 @@
         function removeFile(index) {
             selectedFiles.splice(index, 1);
             displayAttachments();
-            console.log(`Arquivo removido. Total de anexos: ${selectedFiles.length}`);
         }
 
         function clearAllAttachments() {
             selectedFiles = [];
             displayAttachments();
-            console.log('Todos os anexos foram removidos');
         }
 
-        // Função para fazer upload dos anexos
         async function uploadAttachments() {
             if (selectedFiles.length === 0) return [];
             
-            console.log(`🚀 Iniciando upload de ${selectedFiles.length} arquivo(s)...`);
-            
-            const uploadPromises = selectedFiles.map(async (file, index) => {
+            const uploadPromises = selectedFiles.map(async (file) => {
                 try {
-                    console.log(`📤 Fazendo upload do arquivo ${index + 1}/${selectedFiles.length}: ${file.name}`);
-                    
                     const timestamp = Date.now();
                     const fileName = `${timestamp}_${file.name}`;
-                    const storageRef = ref(storage, `attachments/${fileName}`);
+                    const storageRef = ref(storage, `assessoramento/${fileName}`);
                     
+                    // Upload do arquivo
                     const snapshot = await uploadBytes(storageRef, file);
+                    
+                    // Gerar URL com parâmetros específicos
                     const downloadURL = await getDownloadURL(snapshot.ref);
                     
-                    console.log(`✅ Upload concluído: ${file.name}`);
+                    // Log para debug
+                    console.log('✅ Upload concluído:', {
+                        fileName: fileName,
+                        downloadURL: downloadURL,
+                        size: file.size,
+                        type: file.type
+                    });
                     
                     return {
                         name: file.name,
                         type: file.type,
                         size: file.size,
                         downloadURL: downloadURL,
-                        uploadedAt: new Date().toISOString()
+                        uploadedAt: new Date().toISOString(),
+                        storagePath: `assessoramento/${fileName}`
                     };
                 } catch (error) {
                     console.error(`❌ Erro no upload de ${file.name}:`, error);
@@ -373,11 +272,7 @@
                 }
             });
             
-            const uploadedAttachments = await Promise.all(uploadPromises);
-            console.log(`🎉 Todos os ${uploadedAttachments.length} anexos foram enviados com sucesso!`);
-            console.log('📋 Resumo dos anexos:', uploadedAttachments.map(att => `${att.name} (${(att.size/1024).toFixed(1)} KB)`));
-            
-            return uploadedAttachments;
+            return await Promise.all(uploadPromises);
         }
 
         // Verificar autenticação
@@ -400,63 +295,148 @@
             window.location.href = '../index.html';
         }
 
-        // Função para calcular totais
-        function calculateTotals() {
-            const planned = parseInt(document.getElementById('plannedClasses').value) || 0;
-            const given = parseInt(document.getElementById('givenClasses').value) || 0;
-            
-            document.getElementById('totalPlanned').textContent = planned;
-            document.getElementById('totalGiven').textContent = given;
-            
-            const rate = planned > 0 ? Math.round((given / planned) * 100) : 0;
-            document.getElementById('completionRate').textContent = rate + '%';
+        // Função para obter ícone baseado no tipo de arquivo
+        function getFileIcon(fileType) {
+            if (!fileType) return '📄';
+            if (fileType.includes('pdf')) return '📄';
+            if (fileType.includes('word') || fileType.includes('doc')) return '📝';
+            if (fileType.includes('excel') || fileType.includes('sheet') || fileType.includes('xls')) return '📊';
+            if (fileType.includes('image') || fileType.includes('jpg') || fileType.includes('jpeg') || fileType.includes('png')) return '🖼️';
+            if (fileType.includes('text') || fileType.includes('txt')) return '📝';
+            return '📎';
+        }
+
+        // Função para excluir relatório
+        async function deleteReport(reportId) {
+            if (!confirm('⚠️ Tem certeza que deseja excluir este relatório? Esta ação não pode ser desfeita.')) {
+                return;
+            }
+
+            try {
+                console.log('🗑️ Tentando excluir relatório:', reportId);
+                
+                // Excluir documento do Firestore
+                await deleteDoc(doc(db, 'reports', reportId));
+                console.log('✅ Relatório excluído com sucesso!');
+                
+                alert('Relatório excluído com sucesso!');
+                
+                // Recarregar lista de relatórios
+                loadReports();
+                
+            } catch (error) {
+                console.error('❌ Erro ao excluir relatório:', error);
+                alert('Erro ao excluir o relatório: ' + error.message);
+            }
+        }
+
+        // Carregar relatórios salvos
+        async function loadReports() {
+            try {
+                const reportsList = document.getElementById('reportsList');
+                reportsList.innerHTML = '<p style="text-align: center; color: #666; font-style: italic;">Carregando relatórios...</p>';
+
+                // Teste simples primeiro - sem filtros
+                console.log('🔍 Tentando carregar relatórios...');
+                console.log('👤 Usuário logado:', {
+                    role: localStorage.getItem('userRole'),
+                    cpf: localStorage.getItem('userCPF'),
+                    name: localStorage.getItem('userName')
+                });
+
+                // Primeiro, vamos tentar listar TODOS os documentos da coleção reports
+                const simpleQuery = query(collection(db, 'reports'));
+                console.log('📋 Query simples criada');
+                
+                const querySnapshot = await getDocs(simpleQuery);
+                console.log('✅ Query executada com sucesso');
+                console.log('📊 Total de documentos encontrados:', querySnapshot.size);
+                
+                if (querySnapshot.empty) {
+                    reportsList.innerHTML = '<p style="text-align: center; color: #666; font-style: italic;">Nenhum relatório encontrado na coleção.</p>';
+                    return;
+                }
+
+                // Mostrar todos os documentos
+                let html = '';
+                querySnapshot.forEach((doc) => {
+                    const report = doc.data();
+                    console.log('📄 Documento:', doc.id, report);
+                    
+                    const date = report.createdAt ? 
+                        (report.createdAt.toDate ? new Date(report.createdAt.toDate()).toLocaleDateString('pt-BR') : 
+                         new Date(report.createdAt).toLocaleDateString('pt-BR')) : 'Data não disponível';
+                    
+                    html += `
+                        <div class="report-item" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin-bottom: 20px; background-color: #fafafa;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                                <div>
+                                    <h4 style="margin: 0 0 10px 0; color: #333;">${report.school || 'N/A'}</h4>
+                                    <p style="margin: 5px 0; color: #666;"><strong>Município:</strong> ${report.municipality || 'N/A'}</p>
+                                    <p style="margin: 5px 0; color: #666;"><strong>Técnico:</strong> ${report.technician || 'N/A'}</p>
+                                    <p style="margin: 5px 0; color: #666;"><strong>Data:</strong> ${date}</p>
+                                    <p style="margin: 5px 0; color: #666;"><strong>Departamento:</strong> ${report.department || 'N/A'}</p>
+                                    <p style="margin: 5px 0; color: #666;"><strong>Tipo:</strong> ${report.type || 'N/A'}</p>
+                                </div>
+                                <div style="text-align: right;">
+                                    <small style="color: #999; font-size: 12px; display: block; margin-bottom: 10px;">ID: ${doc.id}</small>
+                                    <button onclick="deleteReport('${doc.id}')" style="background: #dc3545; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-size: 14px; transition: background-color 0.2s;">🗑️ Excluir</button>
+                                </div>
+                            </div>
+                            
+                            ${report.attachments && report.attachments.length > 0 ? `
+                                <div style="margin-top: 15px;">
+                                    <h5 style="margin: 0 0 10px 0; color: #555;">📎 Anexos:</h5>
+                                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                                        ${report.attachments.map(attachment => {
+                                            const fileIcon = getFileIcon(attachment.type);
+                                            return `
+                                                <a href="${attachment.downloadURL}" target="_blank" class="attachment-link" style="display: inline-flex; align-items: center; padding: 8px 12px; background-color: #e9ecef; border-radius: 6px; text-decoration: none; color: #495057; font-size: 14px; transition: background-color 0.2s;" onclick="testAttachmentURL('${attachment.downloadURL}', '${attachment.name}')">
+                                                    <span style="margin-right: 8px; font-size: 16px;">${fileIcon}</span>
+                                                    ${attachment.name}
+                                                    <small style="margin-left: 8px; color: #6c757d;">(${(attachment.size / 1024).toFixed(1)} KB)</small>
+                                                </a>
+                                            `;
+                                        }).join('')}
+                                    </div>
+                                </div>
+                            ` : '<p style="color: #999; font-style: italic; margin-top: 15px;">Nenhum anexo</p>'}
+                        </div>
+                    `;
+                });
+
+                reportsList.innerHTML = html;
+            } catch (error) {
+                console.error('❌ Erro ao carregar relatórios:', error);
+                document.getElementById('reportsList').innerHTML = '<p style="text-align: center; color: #dc3545;">Erro ao carregar relatórios: ' + error.message + '</p>';
+            }
         }
 
         // Inicializar
         checkAuth();
-        
-        // Definir data atual como padrão
         document.getElementById('date').value = new Date().toISOString().split('T')[0];
-        
-        // Event listeners para cálculo automático
-        document.getElementById('plannedClasses').addEventListener('input', calculateTotals);
-        document.getElementById('givenClasses').addEventListener('input', calculateTotals);
+        loadReports();
         
         // Form handler
-        document.getElementById('plannedClassesForm').addEventListener('submit', async (e) => {
+        document.getElementById('assessoramentoForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
             try {
+                console.log('🚀 Tentando salvar relatório...');
+                console.log('👤 Dados do usuário:', {
+                    role: localStorage.getItem('userRole'),
+                    cpf: localStorage.getItem('userCPF'),
+                    name: localStorage.getItem('userName')
+                });
+
                 const formData = {
-                    department: 'Equipe Multiprofissional',
-                    indicator: 'Aulas Previstas e Aulas Dadas',
                     school: document.getElementById('school').value,
                     municipality: document.getElementById('municipality').value,
                     technician: document.getElementById('technician').value,
                     date: document.getElementById('date').value,
-                    referenceDate: document.getElementById('referenceDate').value,
-                    classId: document.getElementById('classId').value,
-                    className: document.getElementById('className').value,
-                    discipline: document.getElementById('discipline').value,
-                    periodStart: document.getElementById('periodStart').value,
-                    periodEnd: document.getElementById('periodEnd').value,
-                    plannedClasses: parseInt(document.getElementById('plannedClasses').value),
-                    givenClasses: parseInt(document.getElementById('givenClasses').value),
-                    totalPlanned: parseInt(document.getElementById('totalPlanned').textContent),
-                    totalGiven: parseInt(document.getElementById('totalGiven').textContent),
-                    completionRate: document.getElementById('completionRate').textContent,
-                    professorName: document.getElementById('professorName').value,
-                    bimester: document.getElementById('bimester').value,
-                    situation: document.getElementById('situation').value,
-                    teacherAbsence: document.querySelector('input[name="teacherAbsence"]').checked,
-                    schoolEvent: document.querySelector('input[name="schoolEvent"]').checked,
-                    holiday: document.querySelector('input[name="holiday"]').checked,
-                    strike: document.querySelector('input[name="strike"]').checked,
-                    sgeUnavailable: document.querySelector('input[name="sgeUnavailable"]').checked,
-                    professorNotLaunched: document.querySelector('input[name="professorNotLaunched"]').checked,
-                    others: document.querySelector('input[name="others"]').checked,
-                    observations: document.getElementById('observations').value,
-                    attachments: await uploadAttachments(), // Anexos do Firebase Storage
+                    department: document.getElementById('department').value,
+                    type: 'assessoramento',
+                    attachments: await uploadAttachments(),
                     createdBy: localStorage.getItem('userCPF'),
                     createdByRole: localStorage.getItem('userRole'),
                     createdByName: localStorage.getItem('userName'),
@@ -464,27 +444,61 @@
                     status: 'active'
                 };
 
-                await addDoc(collection(db, 'records'), formData);
+                console.log('📋 Dados do formulário:', formData);
+                console.log('📁 Tentando salvar na coleção "reports"...');
+
+                const docRef = await addDoc(collection(db, 'reports'), formData);
+                console.log('✅ Documento salvo com sucesso! ID:', docRef.id);
                 
-                alert('Registro salvo com sucesso! Redirecionando para a página de registros unificados...');
+                alert('Relatório salvo com sucesso! ID: ' + docRef.id);
                 
-                // Redirecionar para a página de registros unificados após salvar
-                setTimeout(() => {
-                    window.location.href = '../monitoring-records-unified.html';
-                }, 1500);
+                // Limpar formulário
+                document.getElementById('assessoramentoForm').reset();
+                document.getElementById('date').value = new Date().toISOString().split('T')[0];
+                selectedFiles = [];
+                displayAttachments();
+                
+                // Recarregar lista de relatórios
+                loadReports();
                 
             } catch (error) {
-                console.error('Erro ao salvar:', error);
-                alert('Erro ao salvar o registro: ' + error.message);
+                console.error('❌ Erro ao salvar:', error);
+                console.error('🔍 Detalhes do erro:', {
+                    code: error.code,
+                    message: error.message,
+                    stack: error.stack
+                });
+                alert('Erro ao salvar o relatório: ' + error.message);
             }
         });
+
+        // Função para testar URL do anexo
+        function testAttachmentURL(url, fileName) {
+            console.log('🔗 Testando URL:', url);
+            console.log('📄 Arquivo:', fileName);
+            
+            // Testar se a URL é válida
+            fetch(url)
+                .then(response => {
+                    if (response.ok) {
+                        console.log('✅ URL válida:', response.status);
+                    } else {
+                        console.log('❌ URL inválida:', response.status);
+                        alert(`Erro ao acessar arquivo: ${fileName}\nStatus: ${response.status}`);
+                    }
+                })
+                .catch(error => {
+                    console.error('❌ Erro ao testar URL:', error);
+                    alert(`Erro de conexão ao acessar arquivo: ${fileName}\nErro: ${error.message}`);
+                });
+        }
 
         // Exportar funções para uso global
         window.logout = logout;
         window.removeFile = removeFile;
         window.clearAllAttachments = clearAllAttachments;
+        window.deleteReport = deleteReport;
+        window.testAttachmentURL = testAttachmentURL;
     </script>
-    
-
 </body>
 </html>

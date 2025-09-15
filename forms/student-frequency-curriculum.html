@@ -111,7 +111,19 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="technician">Técnico(a):</label>
-                            <input type="text" id="technician" name="technician" required>
+                            <select id="technician" name="technician" required>
+                                <option value="">Selecione o técnico</option>
+                                <option value="Alexandre Pereira Tolentino">Alexandre Pereira Tolentino</option>
+                                <option value="Sayonara Santos de Morais">Sayonara Santos de Morais</option>
+                                <option value="Alline Lemos Lira">Alline Lemos Lira</option>
+                                <option value="Alaíde de Miranda Santiago">Alaíde de Miranda Santiago</option>
+                                <option value="Noadia Gomes Martins">Noadia Gomes Martins</option>
+                                <option value="Jorge Montané Vila">Jorge Montané Vila</option>
+                                <option value="Fábio Costa do Amaral">Fábio Costa do Amaral</option>
+                                <option value="Darlene de Carvalho Silva">Darlene de Carvalho Silva</option>
+                                <option value="Kárita Santos Lemos">Kárita Santos Lemos</option>
+                                <option value="Luso Soares Madureira">Luso Soares Madureira</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="date">Data do Registro:</label>
@@ -120,42 +132,25 @@
                     </div>
                 </div>
 
-                <!-- Informações do Estudante -->
+                <!-- Sistema de Turmas Dinâmicas -->
                 <div class="form-section">
-                    <h3>Informações do Estudante</h3>
+                    <h3>Turmas da Escola</h3>
+                    
                     <div class="form-row">
-                        <div class="form-group">
-                            <label for="studentName">Nome do(a) estudante:</label>
-                            <input type="text" id="studentName" name="studentName" placeholder="Nome completo" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="consecutiveAbsences">Nº de faltas consecutivas:</label>
-                            <input type="number" id="consecutiveAbsences" name="consecutiveAbsences" value="0" min="0" required>
+                        <div class="form-group" style="width: 100%;">
+                            <label for="newTurma">Adicionar Nova Turma:</label>
+                            <div style="display: flex; gap: 10px; align-items: flex-end;">
+                                <input type="text" id="newTurma" placeholder="Ex: 1º ano A, 2º ano B" style="flex: 1;">
+                                <button type="button" id="addTurmaBtn" class="btn btn-secondary" style="white-space: nowrap;">+ Adicionar Turma</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="etapa">Etapa:</label>
-                            <select id="etapa" name="etapa" required>
-                                <option value="">Selecione</option>
-                                <option value="Ensino Fundamental">Ensino Fundamental</option>
-                                <option value="Ensino Médio">Ensino Médio</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="turmaId">ID da Turma:</label>
-                            <input type="text" id="turmaId" name="turmaId" placeholder="Digite o ID da turma" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="status">Status:</label>
-                            <select id="status" name="status" required>
-                                <option value="">Selecione</option>
-                                <option value="Pendente">Pendente</option>
-                                <option value="Resolvido">Resolvido</option>
-                            </select>
-                        </div>
+
+                    <!-- Lista de Turmas Adicionadas -->
+                    <div id="turmasContainer" class="form-section">
+                        <p style="color: #666; font-style: italic; text-align: center; padding: 20px;">
+                            Nenhuma turma adicionada. Clique em "Adicionar Turma" para começar.
+                        </p>
                     </div>
                 </div>
 
@@ -167,12 +162,14 @@
                     </div>
                 </div>
 
-                <!-- Links de Documentos -->
+                <!-- Anexos -->
                 <div class="form-section">
-                    <h3>Links de Documentos:</h3>
-                    <p class="form-description">Insira links para Google Drive, Google Docs, Planilhas ou outros documentos online</p>
+                    <h3>Anexos:</h3>
+                    <p class="form-description">Faça upload de documentos relacionados (PDF, Word, Excel, imagens, etc.)</p>
                     <div class="form-group">
-                        <textarea id="documentLinks" name="documentLinks" rows="4" placeholder="Ex: https://drive.google.com/...&#10;https://docs.google.com/..."></textarea>
+                        <input type="file" id="attachments" name="attachments" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.txt" style="margin-bottom: 10px;">
+                        <div id="attachmentsList" class="attachments-list"></div>
+                        <small style="color: #666; font-size: 12px;">Formatos aceitos: PDF, Word, Excel, imagens, texto. Máximo 5 arquivos.</small>
                     </div>
                 </div>
 
@@ -191,6 +188,7 @@
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
 
         // Configuração do Firebase
         const firebaseConfig = {
@@ -204,6 +202,7 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const storage = getStorage(app);
 
         // Verificar autenticação
         function checkAuth() {
@@ -246,9 +245,151 @@
             }, 5000);
         }
 
+        // Gerenciar anexos múltiplos
+        let selectedFiles = [];
+
+        document.getElementById('attachments').addEventListener('change', function(e) {
+            const newFiles = Array.from(e.target.files);
+            
+            // Adicionar novos arquivos aos existentes (evitando duplicatas)
+            newFiles.forEach(newFile => {
+                // Verificar se o arquivo já existe (por nome e tamanho)
+                const isDuplicate = selectedFiles.some(existingFile => 
+                    existingFile.name === newFile.name && existingFile.size === newFile.size
+                );
+                
+                if (!isDuplicate && selectedFiles.length < 5) {
+                    selectedFiles.push(newFile);
+                }
+            });
+            
+            // Verificar limite máximo
+            if (selectedFiles.length > 5) {
+                alert('Máximo de 5 arquivos permitido!');
+                // Manter apenas os primeiros 5
+                selectedFiles = selectedFiles.slice(0, 5);
+            }
+            
+            displayAttachments();
+            
+            // Limpar o input para permitir seleção do mesmo arquivo novamente
+            e.target.value = '';
+        });
+
+        function displayAttachments() {
+            const attachmentsList = document.getElementById('attachmentsList');
+            attachmentsList.innerHTML = '';
+            
+            if (selectedFiles.length === 0) {
+                attachmentsList.innerHTML = '<p style="color: #666; font-style: italic; text-align: center; padding: 10px;">Nenhum arquivo selecionado</p>';
+                return;
+            }
+            
+            // Adicionar cabeçalho com contador e botão limpar tudo
+            const headerDiv = document.createElement('div');
+            headerDiv.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 5px 0; border-bottom: 1px solid #dee2e6;';
+            headerDiv.innerHTML = `
+                <span style="font-weight: 600; color: #333;">📎 Anexos (${selectedFiles.length}/5)</span>
+                ${selectedFiles.length > 0 ? '<button type="button" onclick="clearAllAttachments()" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 3px; font-size: 12px; cursor: pointer;">Limpar Todos</button>' : ''}
+            `;
+            attachmentsList.appendChild(headerDiv);
+            
+            selectedFiles.forEach((file, index) => {
+                const fileDiv = document.createElement('div');
+                fileDiv.className = 'attachment-item';
+                fileDiv.innerHTML = `
+                    <span>📎 ${file.name} <small style="color: #666;">(${(file.size / 1024).toFixed(1)} KB)</small></span>
+                    <button type="button" onclick="removeFile(${index})" class="btn-remove">❌</button>
+                `;
+                attachmentsList.appendChild(fileDiv);
+            });
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            displayAttachments();
+            
+            // Não precisamos mais atualizar o input.files pois agora
+            // estamos gerenciando os arquivos separadamente
+            console.log(`Arquivo removido. Total de anexos: ${selectedFiles.length}`);
+        }
+
+        function clearAllAttachments() {
+            selectedFiles = [];
+            displayAttachments();
+            console.log('Todos os anexos foram removidos');
+        }
+
+        // Função para debug dos anexos
+        function debugAttachments() {
+            console.log('🔍 DEBUG DOS ANEXOS:');
+            console.log('📁 selectedFiles:', selectedFiles);
+            console.log('📊 Quantidade:', selectedFiles.length);
+            console.log('📋 Detalhes:', selectedFiles.map((file, index) => ({
+                index,
+                name: file.name,
+                size: file.size,
+                type: file.type
+            })));
+        }
+
+        // Função para fazer upload dos anexos
+        async function uploadAttachments() {
+            console.log('🔄 Iniciando upload de anexos...');
+            console.log('📁 Arquivos selecionados:', selectedFiles.length);
+            
+            if (selectedFiles.length === 0) {
+                console.log('❌ Nenhum arquivo para fazer upload');
+                return [];
+            }
+            
+            const uploadPromises = selectedFiles.map(async (file, index) => {
+                try {
+                    console.log(`📤 Fazendo upload do arquivo ${index + 1}/${selectedFiles.length}: ${file.name}`);
+                    
+                    const timestamp = Date.now();
+                    const fileName = `${timestamp}_${file.name}`;
+                    const storageRef = ref(storage, `attachments/${fileName}`);
+                    
+                    console.log(`📁 Referência do storage criada: ${fileName}`);
+                    
+                    const snapshot = await uploadBytes(storageRef, file);
+                    console.log(`✅ Upload concluído para: ${file.name}`);
+                    
+                    const downloadURL = await getDownloadURL(snapshot.ref);
+                    console.log(`🔗 Download URL obtida para: ${file.name}`);
+                    
+                    const attachmentData = {
+                        name: file.name,
+                        type: file.type,
+                        size: file.size,
+                        downloadURL: downloadURL,
+                        uploadedAt: new Date().toISOString()
+                    };
+                    
+                    console.log(`📋 Dados do anexo preparados:`, attachmentData);
+                    return attachmentData;
+                    
+                } catch (error) {
+                    console.error(`❌ Erro ao fazer upload de ${file.name}:`, error);
+                    throw new Error(`Falha no upload de ${file.name}: ${error.message}`);
+                }
+            });
+            
+            try {
+                const results = await Promise.all(uploadPromises);
+                console.log(`🎉 Upload de todos os anexos concluído! Total: ${results.length}`);
+                console.log('📋 Resultados finais:', results);
+                return results;
+            } catch (error) {
+                console.error('❌ Erro geral no upload dos anexos:', error);
+                throw error;
+            }
+        }
+
         // Validar formulário
         function validateForm() {
-            const requiredFields = ['school', 'municipality', 'technician', 'date', 'studentName', 'etapa', 'turmaId', 'status'];
+            const requiredFields = ['school', 'municipality', 'technician', 'date'];
             
             for (const fieldId of requiredFields) {
                 const field = document.getElementById(fieldId);
@@ -259,8 +400,36 @@
                 }
             }
             
+            // Verificar se pelo menos uma turma foi adicionada
+            if (turmas.length === 0) {
+                showStatus('Por favor, adicione pelo menos uma turma', false);
+                return false;
+            }
+            
+            // Validar cada turma
+            for (const turma of turmas) {
+                if (turma.totalEstudantes <= 0) {
+                    showStatus(`Por favor, informe o total de estudantes da turma "${turma.nome}"`, false);
+                    return false;
+                }
+                if (turma.estudantesFrequenciaBaixa < 0) {
+                    showStatus(`Por favor, informe o número de estudantes com frequência baixa da turma "${turma.nome}"`, false);
+                    return false;
+                }
+                if (!turma.etapa) {
+                    showStatus(`Por favor, selecione a etapa da turma "${turma.nome}"`, false);
+                    return false;
+                }
+                if (turma.bimestres.length === 0) {
+                    showStatus(`Por favor, selecione pelo menos um bimestre para a turma "${turma.nome}"`, false);
+                    return false;
+                }
+            }
+            
             return true;
         }
+
+
 
         // Inicializar
         checkAuth();
@@ -294,6 +463,19 @@
                 
                 console.log('Iniciando salvamento...');
                 
+                // Fazer upload dos anexos primeiro
+                let attachments = [];
+                try {
+                    attachments = await uploadAttachments();
+                    console.log('Anexos enviados:', attachments);
+                } catch (uploadError) {
+                    console.error('Erro no upload dos anexos:', uploadError);
+                    showStatus('Erro no upload dos anexos: ' + uploadError.message, false);
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                    return;
+                }
+
                 const formData = {
                     department: 'Currículo',
                     indicator: 'Frequência dos Estudantes',
@@ -304,10 +486,16 @@
                     studentName: document.getElementById('studentName').value,
                     etapa: document.getElementById('etapa').value,
                     turmaId: document.getElementById('turmaId').value,
-                    consecutiveAbsences: parseInt(document.getElementById('consecutiveAbsences').value),
+                    totalAbsences: parseInt(document.getElementById('totalAbsences').value),
+                    consecutiveAbsences: parseInt(document.getElementById('totalAbsences').value), // Mantém compatibilidade
+                    bimester1: document.getElementById('bimester1').checked,
+                    bimester2: document.getElementById('bimester2').checked,
+                    bimester3: document.getElementById('bimester3').checked,
+                    bimester4: document.getElementById('bimester4').checked,
+                    selectedBimesters: getSelectedBimesters(),
                     status: document.getElementById('status').value,
                     observations: document.getElementById('observations').value,
-                    documentLinks: document.getElementById('documentLinks').value,
+                    attachments: attachments, // ✅ Anexos em vez de documentLinks
                     createdBy: localStorage.getItem('userCPF') || 'Usuário não identificado',
                     createdByRole: localStorage.getItem('userRole') || 'N/A',
                     createdByName: localStorage.getItem('userName') || 'N/A',
@@ -384,6 +572,19 @@
                 
                 console.log('Iniciando salvamento...');
                 
+                // Fazer upload dos anexos primeiro
+                let attachments = [];
+                try {
+                    attachments = await uploadAttachments();
+                    console.log('Anexos enviados:', attachments);
+                } catch (uploadError) {
+                    console.error('Erro no upload dos anexos:', uploadError);
+                    showStatus('Erro no upload dos anexos: ' + uploadError.message, false);
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                    return;
+                }
+
                 const formData = {
                     department: 'Currículo',
                     indicator: 'Frequência dos Estudantes',
@@ -391,13 +592,9 @@
                     municipality: document.getElementById('municipality').value,
                     technician: document.getElementById('technician').value,
                     date: document.getElementById('date').value,
-                    studentName: document.getElementById('studentName').value,
-                    etapa: document.getElementById('etapa').value,
-                    turmaId: document.getElementById('turmaId').value,
-                    consecutiveAbsences: parseInt(document.getElementById('consecutiveAbsences').value),
-                    status: document.getElementById('status').value,
+                    turmas: turmas, // ✅ NOVO: Array com todas as turmas e seus dados
                     observations: document.getElementById('observations').value,
-                    documentLinks: document.getElementById('documentLinks').value,
+                    attachments: attachments, // ✅ Anexos em vez de documentLinks
                     createdBy: localStorage.getItem('userCPF') || 'Usuário não identificado',
                     createdByRole: localStorage.getItem('userRole') || 'N/A',
                     createdByName: localStorage.getItem('userName') || 'N/A',
@@ -450,8 +647,219 @@
         
         console.log('Event listener de clique adicionado ao botão');
 
-        // Exportar função de logout
+        // ===== SISTEMA DE TURMAS DINÂMICAS =====
+        let turmas = [];
+        let turmaCounter = 0;
+
+        // Função para adicionar nova turma
+        function addTurma() {
+            const turmaInput = document.getElementById('newTurma');
+            const turmaNome = turmaInput.value.trim();
+            
+            if (!turmaNome) {
+                alert('Por favor, digite o nome da turma');
+                turmaInput.focus();
+                return;
+            }
+            
+            // Verificar se a turma já existe
+            if (turmas.some(t => t.nome === turmaNome)) {
+                alert('Esta turma já foi adicionada');
+                turmaInput.focus();
+                return;
+            }
+            
+            turmaCounter++;
+            const turmaId = `turma_${turmaCounter}`;
+            
+            const novaTurma = {
+                id: turmaId,
+                nome: turmaNome,
+                totalEstudantes: 0,
+                estudantesFrequenciaBaixa: 0,
+                etapa: '',
+                bimestres: []
+            };
+            
+            turmas.push(novaTurma);
+            turmaInput.value = '';
+            displayTurmas();
+            updateTurmaCounter();
+            
+            alert(`Turma "${turmaNome}" adicionada com sucesso!`);
+        }
+
+        // Função para remover turma
+        function removeTurma(turmaId) {
+            const turmaIndex = turmas.findIndex(t => t.id === turmaId);
+            if (turmaIndex !== -1) {
+                const turmaNome = turmas[turmaIndex].nome;
+                turmas.splice(turmaIndex, 1);
+                displayTurmas();
+                updateTurmaCounter();
+                alert(`Turma "${turmaNome}" removida`);
+            }
+        }
+
+        // Função para atualizar dados da turma
+        function updateTurmaData(turmaId, field, value) {
+            const turma = turmas.find(t => t.id === turmaId);
+            if (turma) {
+                turma[field] = value;
+            }
+        }
+
+        // Função para atualizar bimestres da turma
+        function updateTurmaBimestres(turmaId, bimestre, isChecked) {
+            const turma = turmas.find(t => t.id === turmaId);
+            if (turma) {
+                if (isChecked) {
+                    if (!turma.bimestres.includes(bimestre)) {
+                        turma.bimestres.push(bimestre);
+                    }
+                } else {
+                    turma.bimestres = turma.bimestres.filter(b => b !== bimestre);
+                }
+            }
+        }
+
+        // Função para exibir turmas
+        function displayTurmas() {
+            const container = document.getElementById('turmasContainer');
+            
+            if (turmas.length === 0) {
+                container.innerHTML = `
+                    <p style="color: #666; font-style: italic; text-align: center; padding: 20px;">
+                        Nenhuma turma adicionada. Clique em "Adicionar Turma" para começar.
+                    </p>
+                `;
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            turmas.forEach(turma => {
+                const turmaDiv = document.createElement('div');
+                turmaDiv.className = 'form-section';
+                turmaDiv.style.cssText = 'background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 15px;';
+                turmaDiv.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #dee2e6;">
+                        <span style="font-weight: bold; color: #495057; font-size: 16px;">${turma.nome}</span>
+                        <button type="button" onclick="removeTurma('${turma.id}')" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                            ❌ Remover
+                        </button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div>
+                            <label>Total de Estudantes:</label>
+                            <input 
+                                type="number" 
+                                min="0" 
+                                placeholder="Digite o número" 
+                                value="${turma.totalEstudantes || 0}"
+                                onchange="updateTurmaData('${turma.id}', 'totalEstudantes', parseInt(this.value) || 0)"
+                                required
+                                style="width: 100%;"
+                            >
+                        </div>
+                        <div>
+                            <label>Estudantes com Frequência Baixa:</label>
+                            <input 
+                                type="number" 
+                                min="0" 
+                                placeholder="Digite o número" 
+                                value="${turma.estudantesFrequenciaBaixa || 0}"
+                                onchange="updateTurmaData('${turma.id}', 'estudantesFrequenciaBaixa', parseInt(this.value) || 0)"
+                                required
+                                style="width: 100%;"
+                            >
+                        </div>
+                        <div>
+                            <label>Etapa:</label>
+                                                         <select 
+                                 onchange="updateTurmaData('${turma.id}', 'etapa', this.value)"
+                                 required
+                                 style="width: 100%;"
+                             >
+                                 <option value="">Selecione</option>
+                                 <option value="Ensino Fundamental" ${turma.etapa === 'Ensino Fundamental' ? 'selected' : ''}>Ensino Fundamental</option>
+                                 <option value="Ensino Médio" ${turma.etapa === 'Ensino Médio' ? 'selected' : ''}>Ensino Médio</option>
+                                 <option value="Ensino Fundamental e Ensino Médio" ${turma.etapa === 'Ensino Fundamental e Ensino Médio' ? 'selected' : ''}>Ensino Fundamental e Ensino Médio</option>
+                                 <option value="EJA" ${turma.etapa === 'EJA' ? 'selected' : ''}>EJA</option>
+                                 <option value="Ensino Fundamental e EJA" ${turma.etapa === 'Ensino Fundamental e EJA' ? 'selected' : ''}>Ensino Fundamental e EJA</option>
+                                 <option value="Ensino Médio e EJA" ${turma.etapa === 'Ensino Médio e EJA' ? 'selected' : ''}>Ensino Médio e EJA</option>
+                             </select>
+                        </div>
+                        <div>
+                            <label>Bimestres:</label>
+                            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 5px;">
+                                <label style="display: flex; align-items: center; gap: 5px;">
+                                    <input 
+                                        type="checkbox" 
+                                        value="1º Bimestre"
+                                        ${turma.bimestres.includes('1º Bimestre') ? 'checked' : ''}
+                                        onchange="updateTurmaBimestres('${turma.id}', '1º Bimestre', this.checked)"
+                                    > 1º Bimestre
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 5px;">
+                                    <input 
+                                        type="checkbox" 
+                                        value="2º Bimestre"
+                                        ${turma.bimestres.includes('2º Bimestre') ? 'checked' : ''}
+                                        onchange="updateTurmaBimestres('${turma.id}', '2º Bimestre', this.checked)"
+                                    > 2º Bimestre
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 5px;">
+                                    <input 
+                                        type="checkbox" 
+                                        value="3º Bimestre"
+                                        ${turma.bimestres.includes('3º Bimestre') ? 'checked' : ''}
+                                        onchange="updateTurmaBimestres('${turma.id}', '3º Bimestre', this.checked)"
+                                    > 3º Bimestre
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 5px;">
+                                    <input 
+                                        type="checkbox" 
+                                        value="4º Bimestre"
+                                        ${turma.bimestres.includes('4º Bimestre') ? 'checked' : ''}
+                                        onchange="updateTurmaBimestres('${turma.id}', '4º Bimestre', this.checked)"
+                                    > 4º Bimestre
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(turmaDiv);
+            });
+        }
+
+        // Função para atualizar contador de turmas
+        function updateTurmaCounter() {
+            const addBtn = document.getElementById('addTurmaBtn');
+            if (turmas.length > 0) {
+                addBtn.innerHTML = `+ Adicionar Turma <span style="background: #007bff; color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; margin-left: 10px;">${turmas.length}</span>`;
+            } else {
+                addBtn.innerHTML = '+ Adicionar Turma';
+            }
+        }
+
+        // Event listener para o botão de adicionar turma
+        document.addEventListener('DOMContentLoaded', function() {
+            const addTurmaBtn = document.getElementById('addTurmaBtn');
+            if (addTurmaBtn) {
+                addTurmaBtn.addEventListener('click', addTurma);
+            }
+        });
+
+        // Exportar funções para uso global
         window.logout = logout;
+        window.removeFile = removeFile;
+        window.clearAllAttachments = clearAllAttachments;
+        window.debugAttachments = debugAttachments;
+        window.addTurma = addTurma;
+        window.removeTurma = removeTurma;
+        window.updateTurmaData = updateTurmaData;
+        window.updateTurmaBimestres = updateTurmaBimestres;
     </script>
     
     <!-- Script para pesquisa de escola -->

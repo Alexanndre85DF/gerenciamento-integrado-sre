@@ -5,26 +5,511 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerar Monitoramento - SRE GURUPI</title>
     <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        /* Estilos para o botão de ajuda */
+        .help-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 15px;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+        
+        .help-btn:hover {
+            background: #5a6268;
+        }
+        
+        /* Estilos para o modal de ajuda */
+        .help-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .help-modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        .help-modal-header {
+            background: #495057;
+            color: white;
+            padding: 20px;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .help-modal-header h2 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .help-close {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .help-close:hover {
+            opacity: 0.8;
+        }
+        
+        /* Estilos para as abas */
+        .help-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .help-tab-btn {
+            background: #e9ecef;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            font-size: 14px;
+            color: #495057;
+            border-radius: 0;
+            min-width: 120px;
+        }
+        
+        .help-tab-btn:hover {
+            background: #dee2e6;
+        }
+        
+        .help-tab-btn.active {
+            background: #007bff;
+            color: white;
+        }
+        
+        /* Estilos para o conteúdo das abas */
+        .help-tab-content {
+            display: none;
+            padding: 25px;
+            line-height: 1.6;
+        }
+        
+        .help-tab-content.active {
+            display: block;
+        }
+        
+        .help-tab-content h3 {
+            color: #495057;
+            margin-bottom: 20px;
+            font-size: 18px;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+        
+        .help-tab-content h4 {
+            color: #495057;
+            margin: 20px 0 10px 0;
+            font-size: 16px;
+        }
+        
+        .help-tab-content p {
+            margin: 10px 0;
+            color: #6c757d;
+        }
+        
+        .help-tab-content ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .help-tab-content ol {
+            margin: 10px 0;
+            padding-left: 30px;
+        }
+        
+        .help-tab-content li {
+            margin: 8px 0;
+            color: #6c757d;
+            padding-left: 10px;
+        }
+        
+        .help-tab-content .section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 3px solid #007bff;
+            margin: 15px 0;
+        }
+        
+        .help-tab-content .steps {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 3px solid #17a2b8;
+            margin: 15px 0;
+        }
+        
+        .help-tab-content .tips {
+            background: #f0f8f0;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 3px solid #28a745;
+            margin: 15px 0;
+        }
+        
+        /* Estilos para o footer do modal */
+        .help-modal-footer {
+            background: #f8f9fa;
+            padding: 15px 25px;
+            border-radius: 0 0 8px 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .help-modal-footer button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+        
+        .help-close-btn {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .help-close-btn:hover {
+            background: #5a6268;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .help-modal-content {
+                width: 95%;
+                margin: 2% auto;
+                max-height: 95vh;
+            }
+            
+            .help-tabs {
+                flex-direction: column;
+            }
+            
+            .help-tab-btn {
+                width: 100%;
+            }
+            
+            .help-tab-content {
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="header">
         <h1>Gerar Monitoramento</h1>
-        <button class="logout-btn" onclick="logout()">Sair</button>
+        <div style="display: flex; align-items: center;">
+            <button class="help-btn" onclick="openHelpModal()">Ajuda</button>
+            <button class="logout-btn" onclick="logout()">Sair</button>
+        </div>
     </div>
 
     <div class="main-container">
         <div class="card">
-            <h2>Monitoramento por Departamento</h2>
+            <div style="position: relative;">
+                <a href="user-dashboard.html" class="btn btn-secondary" style="position: absolute; top: 0; right: 0; font-size: 12px; padding: 6px 12px; margin: 0; background-color: #28a745; border-color: #28a745;">Voltar ao Menu</a>
+                <h2 style="margin-top: 60px;">Monitoramento por Departamento</h2>
+            </div>
             <p>Selecione o departamento para acessar os indicadores específicos:</p>
             
             <div class="department-buttons">
                 <a href="monitoring-curriculum.html" class="btn btn-primary">Currículo</a>
                 <a href="monitoring-supervision.html" class="btn btn-primary">Supervisão</a>
                 <a href="monitoring-multiprofessional.html" class="btn btn-primary">Equipe Multiprofissional</a>
+                <a href="monitoring-tec-etapas-modalidades.html" class="btn btn-primary">Téc. Etapas e Modalidades</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Ajuda -->
+    <div id="helpModal" class="help-modal">
+        <div class="help-modal-content">
+            <div class="help-modal-header">
+                <h2>Guia de Uso do Sistema</h2>
+                <span class="help-close" onclick="closeHelpModal()">&times;</span>
             </div>
             
-            <div class="back-button">
-                <a href="user-dashboard.html" class="btn btn-secondary">Voltar ao Menu</a>
+            <div class="help-tabs">
+                <button class="help-tab-btn active" onclick="showHelpTab('curriculum')">Currículo</button>
+                <button class="help-tab-btn" onclick="showHelpTab('multiprofessional')">Multiprofissional</button>
+                <button class="help-tab-btn" onclick="showHelpTab('supervision')">Supervisão</button>
+                <button class="help-tab-btn" onclick="showHelpTab('technical')">Técnico</button>
+            </div>
+            
+            <!-- Aba Currículo -->
+            <div id="curriculum-tab" class="help-tab-content active">
+                <h3>Departamento de Currículo</h3>
+                
+                <div class="section">
+                    <h4>O que este departamento faz:</h4>
+                    <p>O departamento de Currículo é responsável por monitorar o desempenho acadêmico dos estudantes e controlar indicadores educacionais fundamentais como notas, frequência e cumprimento do planejamento pedagógico.</p>
+                </div>
+                
+                <div class="section">
+                    <h4>Indicadores que você pode monitorar:</h4>
+                    <ul>
+                        <li><strong>Estudantes Abaixo da Média:</strong> Acompanha estudantes com notas insuficientes em componentes curriculares específicos</li>
+                        <li><strong>Frequência dos Estudantes:</strong> Monitora a assiduidade escolar e casos de infrequência</li>
+                        <li><strong>Aulas Previstas vs. Aulas Dadas:</strong> Controla se o planejamento pedagógico está sendo cumprido</li>
+                    </ul>
+                </div>
+                
+                <div class="steps">
+                    <h4>Como registrar um novo monitoramento:</h4>
+                    <ol>
+                        <li>Clique no botão "Currículo" na tela principal</li>
+                        <li>Escolha qual indicador você quer registrar</li>
+                        <li>Selecione a escola e município</li>
+                        <li>Configure as turmas envolvidas</li>
+                        <li>Preencha os dados específicos do indicador</li>
+                        <li>Adicione observações se necessário</li>
+                        <li>Clique em "Salvar" para criar o registro</li>
+                    </ol>
+                </div>
+                
+                <div class="steps">
+                    <h4>Como visualizar e gerenciar registros:</h4>
+                    <ol>
+                        <li>Acesse "Monitoramento" no menu principal</li>
+                        <li>Escolha "Registros de Monitoramento"</li>
+                        <li>Use os filtros para encontrar registros específicos</li>
+                        <li>Clique em "Visualizar" para ver detalhes completos</li>
+                        <li>Use "Editar" para modificar informações quando necessário</li>
+                        <li>Marque como "Resolvido" quando o problema for solucionado</li>
+                        <li>Acompanhe o histórico de cada turma ao longo do tempo</li>
+                    </ol>
+                </div>
+                
+                <div class="tips">
+                    <h4>Dicas importantes:</h4>
+                    <ul>
+                        <li>Use o sistema de turmas dinâmicas para organizar melhor os dados</li>
+                        <li>Registre componentes curriculares específicos que estão com problemas</li>
+                        <li>Acompanhe os bimestres separadamente para melhor análise</li>
+                        <li>Mantenha um histórico da evolução dos estudantes ao longo do tempo</li>
+                        <li>Use o campo de observações para detalhar situações específicas</li>
+                        <li>Revise regularmente os registros pendentes para acompanhamento</li>
+                        <li>Atualize o status das turmas conforme o progresso</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Aba Equipe Multiprofissional -->
+            <div id="multiprofessional-tab" class="help-tab-content">
+                <h3>Equipe Multiprofissional</h3>
+                
+                <div class="section">
+                    <h4>O que este departamento faz:</h4>
+                    <p>A Equipe Multiprofissional realiza busca ativa de estudantes e acompanha casos especiais que requerem atenção especializada, como estudantes com necessidades especiais, em situação de risco ou que precisam de acompanhamento multiprofissional.</p>
+                </div>
+                
+                <div class="section">
+                    <h4>Indicadores que você pode monitorar:</h4>
+                    <ul>
+                        <li><strong>Busca Ativa:</strong> Localiza estudantes que estão faltando às aulas ou em situação de risco</li>
+                        <li><strong>Frequência dos Estudantes:</strong> Monitora casos de infrequência escolar que precisam de intervenção</li>
+                        <li><strong>Estudantes Abaixo da Média:</strong> Acompanha casos especiais que vão além do desempenho acadêmico</li>
+                    </ul>
+                </div>
+                
+                <div class="steps">
+                    <h4>Como registrar um novo caso:</h4>
+                    <ol>
+                        <li>Clique no botão "Equipe Multiprofissional" na tela principal</li>
+                        <li>Escolha entre "Busca Ativa" ou "Frequência dos Estudantes"</li>
+                        <li>Selecione a escola e município</li>
+                        <li>Configure as turmas envolvidas</li>
+                        <li>Adicione os estudantes que precisam de acompanhamento</li>
+                        <li>Marque casos especiais (PCD, menor de idade, ministério público)</li>
+                        <li>Registre as ações realizadas e observações</li>
+                        <li>Salve o registro</li>
+                    </ol>
+                </div>
+                
+                <div class="steps">
+                    <h4>Como acompanhar e resolver casos:</h4>
+                    <ol>
+                        <li>Acesse "Monitoramento" → "Registros de Monitoramento"</li>
+                        <li>Filtre por "Equipe Multiprofissional" e status "Pendente"</li>
+                        <li>Clique em "Visualizar" para ver detalhes do caso</li>
+                        <li>Use "Editar" para atualizar informações e ações realizadas</li>
+                        <li>Registre cada visita ou contato realizado</li>
+                        <li>Atualize o status conforme o progresso (Acompanhamento → Resolvido)</li>
+                        <li>Marque como "Resolvido" quando o estudante retornar ou o caso for solucionado</li>
+                        <li>Mantenha histórico completo de todas as intervenções</li>
+                    </ol>
+                </div>
+                
+                <div class="tips">
+                    <h4>Dicas importantes:</h4>
+                    <ul>
+                        <li>Sempre marque casos especiais que precisam de atenção diferenciada</li>
+                        <li>Registre o número de visitas realizadas para cada estudante</li>
+                        <li>Use a situação "Acompanhamento" para casos que ainda estão em andamento</li>
+                        <li>Documente todas as ações multiprofissionais realizadas</li>
+                        <li>Mantenha um histórico das intervenções para cada estudante</li>
+                        <li>Use o campo de observações para detalhar situações específicas</li>
+                        <li>Revise semanalmente os casos pendentes para acompanhamento</li>
+                        <li>Atualize o status dos casos conforme a evolução</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Aba Supervisão -->
+            <div id="supervision-tab" class="help-tab-content">
+                <h3>Supervisão Pedagógica</h3>
+                
+                <div class="section">
+                    <h4>O que este departamento faz:</h4>
+                    <p>A Supervisão Pedagógica supervisiona as atividades pedagógicas e monitora indicadores educacionais para garantir a qualidade do ensino. É responsável por acompanhar o desenvolvimento das turmas e intervir quando necessário.</p>
+                </div>
+                
+                <div class="section">
+                    <h4>Indicadores que você pode monitorar:</h4>
+                    <ul>
+                        <li><strong>Frequência dos Estudantes:</strong> Monitora a assiduidade escolar e identifica padrões de infrequência</li>
+                        <li><strong>Estudantes Abaixo da Média:</strong> Acompanha o desempenho acadêmico e identifica necessidades de intervenção</li>
+                        <li><strong>Aulas Previstas vs. Aulas Dadas:</strong> Controla se o planejamento pedagógico está sendo cumprido adequadamente</li>
+                    </ul>
+                </div>
+                
+                <div class="steps">
+                    <h4>Como registrar uma supervisão:</h4>
+                    <ol>
+                        <li>Clique no botão "Supervisão" na tela principal</li>
+                        <li>Escolha o tipo de monitoramento que deseja realizar</li>
+                        <li>Selecione a escola e município</li>
+                        <li>Configure as turmas que serão supervisionadas</li>
+                        <li>Preencha os indicadores específicos</li>
+                        <li>Registre observações pedagógicas relevantes</li>
+                        <li>Marque o status de cada turma</li>
+                        <li>Salve o registro de supervisão</li>
+                    </ol>
+                </div>
+                
+                <div class="steps">
+                    <h4>Como acompanhar e resolver problemas pedagógicos:</h4>
+                    <ol>
+                        <li>Acesse "Monitoramento" → "Registros de Monitoramento"</li>
+                        <li>Filtre por "Supervisão" para ver todos os registros</li>
+                        <li>Identifique turmas com status "Pendente" ou "Acompanhamento"</li>
+                        <li>Clique em "Visualizar" para analisar detalhes</li>
+                        <li>Use "Editar" para atualizar informações e intervenções</li>
+                        <li>Registre as ações pedagógicas realizadas</li>
+                        <li>Acompanhe a evolução das turmas ao longo do tempo</li>
+                        <li>Marque como "Resolvido" quando os problemas forem solucionados</li>
+                        <li>Mantenha histórico das intervenções pedagógicas</li>
+                    </ol>
+                </div>
+                
+                <div class="tips">
+                    <h4>Dicas importantes:</h4>
+                    <ul>
+                        <li>Foque em indicadores qualitativos que mostrem a qualidade do ensino</li>
+                        <li>Acompanhe a evolução das turmas ao longo do tempo</li>
+                        <li>Use o sistema de status para marcar o progresso de cada turma</li>
+                        <li>Documente todas as intervenções pedagógicas realizadas</li>
+                        <li>Registre observações específicas sobre metodologias e práticas pedagógicas</li>
+                        <li>Mantenha um histórico das supervisões para análise de tendências</li>
+                        <li>Revise mensalmente os registros para identificar padrões</li>
+                        <li>Atualize o status conforme as intervenções surtam efeito</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Aba Técnico -->
+            <div id="technical-tab" class="help-tab-content">
+                <h3>Técnico - Etapas e Modalidades</h3>
+                
+                <div class="section">
+                    <h4>O que este departamento faz:</h4>
+                    <p>O departamento Técnico gerencia as etapas educacionais, modalidades de ensino e dados administrativos técnicos do sistema educacional. É responsável pelo controle operacional e técnico dos processos educacionais.</p>
+                </div>
+                
+                <div class="section">
+                    <h4>Indicadores que você pode monitorar:</h4>
+                    <ul>
+                        <li><strong>Etapas Educacionais:</strong> Ensino Fundamental, Ensino Médio, EJA (Educação de Jovens e Adultos)</li>
+                        <li><strong>Modalidades de Ensino:</strong> Presencial, semipresencial, a distância</li>
+                        <li><strong>Dados Administrativos:</strong> Controle técnico e operacional dos processos educacionais</li>
+                    </ul>
+                </div>
+                
+                <div class="steps">
+                    <h4>Como registrar dados técnicos:</h4>
+                    <ol>
+                        <li>Clique no botão "Téc. Etapas e Modalidades" na tela principal</li>
+                        <li>Selecione a escola e município</li>
+                        <li>Configure os parâmetros técnicos específicos</li>
+                        <li>Registre dados administrativos relevantes</li>
+                        <li>Monitore indicadores técnicos específicos</li>
+                        <li>Controle os processos educacionais em andamento</li>
+                        <li>Registre mudanças nas modalidades de ensino</li>
+                        <li>Salve o registro técnico</li>
+                    </ol>
+                </div>
+                
+                <div class="steps">
+                    <h4>Como gerenciar processos técnicos:</h4>
+                    <ol>
+                        <li>Acesse "Monitoramento" → "Registros de Monitoramento"</li>
+                        <li>Filtre por "Técnico" para ver registros técnicos</li>
+                        <li>Identifique processos que precisam de acompanhamento</li>
+                        <li>Use "Visualizar" para analisar detalhes técnicos</li>
+                        <li>Use "Editar" para atualizar parâmetros e configurações</li>
+                        <li>Monitore mudanças nas modalidades de ensino</li>
+                        <li>Acompanhe a implementação de novos processos</li>
+                        <li>Marque como "Resolvido" quando processos forem finalizados</li>
+                        <li>Mantenha histórico de todas as alterações técnicas</li>
+                    </ol>
+                </div>
+                
+                <div class="tips">
+                    <h4>Dicas importantes:</h4>
+                    <ul>
+                        <li>Mantenha os dados técnicos sempre atualizados e precisos</li>
+                        <li>Use este departamento para controle administrativo e operacional</li>
+                        <li>Acompanhe os processos educacionais de forma sistemática</li>
+                        <li>Registre todas as mudanças nas modalidades de ensino</li>
+                        <li>Mantenha um histórico das alterações técnicas realizadas</li>
+                        <li>Use o sistema para controle de qualidade dos processos educacionais</li>
+                        <li>Revise trimestralmente os processos técnicos em andamento</li>
+                        <li>Documente todas as mudanças para auditoria futura</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="help-modal-footer">
+                <button class="help-close-btn" onclick="closeHelpModal()">Fechar</button>
             </div>
         </div>
     </div>
@@ -56,6 +541,56 @@
             localStorage.clear();
             window.location.href = 'index.html';
         };
+    </script>
+
+    <!-- JavaScript para o sistema de ajuda -->
+    <script>
+        // Abrir modal de ajuda
+        function openHelpModal() {
+            document.getElementById('helpModal').style.display = 'block';
+        }
+
+        // Fechar modal de ajuda
+        function closeHelpModal() {
+            document.getElementById('helpModal').style.display = 'none';
+        }
+
+        // Mostrar aba específica
+        function showHelpTab(tabName) {
+            // Esconder todas as abas
+            const tabContents = document.querySelectorAll('.help-tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remover classe active de todos os botões
+            const tabButtons = document.querySelectorAll('.help-tab-btn');
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Mostrar aba selecionada
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Adicionar classe active ao botão clicado
+            event.target.classList.add('active');
+        }
+
+        // Fechar modal ao clicar fora
+        window.onclick = function(event) {
+            const modal = document.getElementById('helpModal');
+            if (event.target === modal) {
+                closeHelpModal();
+            }
+        }
+
+        // Fechar modal com tecla ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeHelpModal();
+            }
+        });
+
+        // Exportar funções para o escopo global
+        window.openHelpModal = openHelpModal;
+        window.closeHelpModal = closeHelpModal;
+        window.showHelpTab = showHelpTab;
     </script>
 </body>
 </html>

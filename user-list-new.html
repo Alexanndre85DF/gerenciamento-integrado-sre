@@ -202,7 +202,10 @@
 
     <div class="main-container">
         <div class="search-container">
-            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Buscar por nome, CPF ou escola...">
+            <div style="position: relative;">
+                <a href="user-dashboard.html" class="btn-secondary" style="position: absolute; top: 0; right: 0; font-size: 12px; padding: 6px 12px; margin: 0;">🔙 Voltar ao Menu</a>
+                <input type="text" id="searchInput" class="search-input" placeholder="🔍 Buscar por nome, CPF ou escola..." style="margin-top: 60px;">
+            </div>
         </div>
         
         <div id="usersList">
@@ -211,7 +214,6 @@
         
         <div class="btn-actions">
             <a href="user-management-new.html" class="btn-primary">👥 Cadastrar Novo Usuário</a>
-            <a href="user-dashboard.html" class="btn-secondary">🔙 Voltar ao Menu</a>
         </div>
     </div>
 

@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizar Relatórios - Sistema de Monitoramento Integrado</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        .back-navigation {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        .back-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+        
+        .back-btn:hover {
+            background-color: #0056b3;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 100%;
+        }
+        
+        .page-header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .search-filters {
+            background: white;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            width: 100%;
+        }
+        
+        .search-filters h3 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        
+        .filters-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .filter-group label {
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .filter-group input,
+        .filter-group select {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            width: 100%;
+            transition: border-color 0.3s ease;
+        }
+        
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+        }
+        
+        .search-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            font-weight: 500;
+        }
+        
+        .search-btn:hover {
+            background: #0056b3;
+        }
+        
+        .reports-list {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+        
+        .report-item {
+            padding: 25px 30px;
+            border-bottom: 1px solid #e9ecef;
+            transition: background-color 0.2s ease;
+        }
+        
+        .report-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .report-item:last-child {
+            border-bottom: none;
+        }
+        
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .report-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+        
+        .report-meta {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .priority-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        
+        .priority-low { background: #d4edda; color: #155724; }
+        .priority-medium { background: #fff3cd; color: #856404; }
+        .priority-high { background: #f8d7da; color: #721c24; }
+        .priority-urgent { background: #f5c6cb; color: #721c24; }
+        
+        .type-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        
+        .type-monitoring { background: #007bff; color: white; }
+        .type-assessment { background: #28a745; color: white; }
+        
+        .period-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            background: #6c757d;
+            color: white;
+        }
+        
+        .report-details {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border-left: 3px solid #007bff;
+        }
+        
+        .detail-section {
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .detail-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .report-summary {
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        
+        .report-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .report-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-small {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-view {
+            background: #007bff;
+            color: white;
+        }
+        
+        .btn-view:hover {
+            background: #0056b3;
+        }
+        
+        .btn-download {
+            background: #28a745;
+            color: white;
+        }
+        
+                 .btn-download:hover {
+             background: #218838;
+         }
+         
+         .btn-danger {
+             background: #dc3545;
+             color: white;
+         }
+         
+         .btn-danger:hover {
+             background: #c82333;
+         }
+        
+        .no-reports {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        
+        .no-reports h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        /* Estilos para Anexos */
+        .attachments-list {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .attachment-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            background: #e3f2fd;
+            color: #1976d2;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 13px;
+            border: 1px solid #bbdefb;
+            transition: all 0.3s ease;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .attachment-link:hover {
+            background: #bbdefb;
+            color: #1565c0;
+            border-color: #90caf9;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(25, 118, 210, 0.2);
+        }
+
+        .attachment-link:active {
+            transform: translateY(0);
+        }
+
+        /* Estilos do Modal */
+        .report-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 1.5rem;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-close:hover {
+            color: #333;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .report-full-details .detail-section {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 3px solid #007bff;
+        }
+        
+        .report-full-details .detail-section p {
+            margin: 5px 0 0 0;
+            line-height: 1.5;
+        }
+        
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .filters-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .report-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .report-meta {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .report-footer {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <div class="header">
+        <h1>Sistema de Monitoramento Integrado</h1>
+        <button class="logout-btn" onclick="logout()">Sair</button>
+    </div>
+
+    <div class="main-container">
+        <div class="back-navigation">
+            <a href="user-dashboard.html" class="back-btn">Voltar</a>
+        </div>
+        
+        <div class="page-header">
+            <h2>Visualizar Relatórios</h2>
+        </div>
+
+        <!-- Filtros de Busca -->
+        <div class="search-filters">
+            <h3>🔍 Filtros de Busca</h3>
+            <div class="filters-row">
+                <div class="filter-group">
+                    <label for="searchInput">Título</label>
+                    <input type="text" id="searchInput" placeholder="Buscar por título...">
+                </div>
+                <div class="filter-group">
+                    <label for="typeFilter">Tipo</label>
+                    <select id="typeFilter">
+                        <option value="">Todos os tipos</option>
+                        <option value="monitoring">Monitoramento</option>
+                        <option value="assessment">Assessoramento</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="periodFilter">Período</label>
+                    <select id="periodFilter">
+                        <option value="">Todos os períodos</option>
+                        <option value="semanal">Semanal</option>
+                        <option value="quinzenal">Quinzenal</option>
+                        <option value="bimestral">Bimestral</option>
+                        <option value="trimestral">Trimestral</option>
+                        <option value="semestral">Semestral</option>
+                        <option value="anual">Anual</option>
+                        <option value="especifico">Período Específico</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="dateFilter">Data</label>
+                    <input type="date" id="dateFilter">
+                </div>
+            </div>
+            <button class="search-btn" onclick="filterReports()">🔍 Buscar Relatórios</button>
+        </div>
+
+        <!-- Lista de Relatórios -->
+        <div class="reports-list" id="reportsList">
+            <!-- Relatórios serão carregados dinamicamente aqui -->
+        </div>
+    </div>
+    </div>
+
+    <!-- Rodapé Profissional -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 - Superintendência Regional de Educação de Gurupi</p>
+            <p>Sistema de Monitoramento Integrado - SRE Gurupi</p>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, getDocs, orderBy, query, where } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyABEloTfC_nT5vfDHpeqYdDjNoPCKwE-Eo",
+            authDomain: "projeto-alex-aaadf.firebaseapp.com",
+            projectId: "projeto-alex-aaadf",
+            storageBucket: "projeto-alex-aaadf.firebasestorage.app",
+            messagingSenderId: "720032595137",
+            appId: "1:720032595137:web:85834232e770a942216840"
+        };
+        
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        
+        // Debug: verificar se Firebase está funcionando
+        console.log('Firebase inicializado:', app);
+        console.log('Firestore DB:', db);
+        
+        // Verificar se está logado
+        if (!localStorage.getItem('userRole')) {
+            window.location.href = 'index.html';
+        }
+
+        // Função de logout
+        function logout() {
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('userCPF');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userId');
+            window.location.href = 'index.html';
+        }
+
+        // Dados dos relatórios (serão carregados do Firebase)
+        let reports = [];
+        
+        // Carregar relatórios do Firebase
+        async function loadReports() {
+            try {
+                const reportsRef = collection(db, 'reports');
+                const q = query(reportsRef, orderBy('createdAt', 'desc'));
+                const snapshot = await getDocs(q);
+                
+                reports = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                
+                displayReports(reports);
+            } catch (error) {
+                console.error('Erro ao carregar relatórios:', error);
+                reports = [];
+                displayReports([]);
+            }
+        }
+        
+        // Filtrar relatórios
+        function filterReports() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const typeFilter = document.getElementById('typeFilter').value;
+            const periodFilter = document.getElementById('periodFilter').value;
+            const dateFilter = document.getElementById('dateFilter').value;
+            
+            let filtered = reports.filter(report => {
+                const matchesSearch = report.title.toLowerCase().includes(searchTerm) ||
+                                    report.summary.toLowerCase().includes(searchTerm) ||
+                                    report.tags.toLowerCase().includes(searchTerm);
+                
+                const matchesType = !typeFilter || report.type === typeFilter;
+                const matchesPeriod = !periodFilter || report.period === periodFilter;
+                const matchesDate = !dateFilter || report.date === dateFilter;
+                
+                return matchesSearch && matchesType && matchesPeriod && matchesDate;
+            });
+            
+            displayReports(filtered);
+        }
+
+        // Exibir relatórios
+        function displayReports(reportsToShow) {
+            const reportsContainer = document.getElementById('reportsList');
+            
+            if (reportsToShow.length === 0) {
+                reportsContainer.innerHTML = `
+                    <div class="no-reports">
+                        <p>Nenhum relatório encontrado.</p>
+                        <a href="report-create.html" class="btn btn-primary">Criar Primeiro Relatório</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            reportsContainer.innerHTML = reportsToShow.map(report => `
+                <div class="report-item">
+                    <div class="report-header">
+                        <h3>${report.title || 'Sem título'}</h3>
+                        <div class="report-badges">
+                            ${report.type ? `<span class="type-badge ${report.type}">${getTypeLabel(report.type)}</span>` : ''}
+                            ${report.period ? `<span class="period-badge">${getPeriodLabel(report.period)}</span>` : ''}
+                        </div>
+                    </div>
+                    
+                    <div class="report-summary">
+                        <p>${report.summary || 'Sem resumo disponível'}</p>
+                    </div>
+                    
+                    <div class="report-details">
+                        ${report.date ? `<div class="detail-section">
+                            <strong>📅 Data:</strong> ${formatDate(report.date)}
+                        </div>` : ''}
+                        
+                        ${report.municipality ? `<div class="detail-section">
+                            <strong>🏘️ Município:</strong> ${report.municipality}
+                        </div>` : ''}
+                        
+                        ${report.schools && report.schools.length > 0 ? `<div class="detail-section">
+                            <strong>🏫 Escolas:</strong> ${report.schools.join(', ')}
+                        </div>` : ''}
+                        
+                        ${report.indicators && report.indicators.length > 0 ? `<div class="detail-section">
+                            <strong>📊 Indicadores:</strong> ${report.indicators.join(', ')}
+                        </div>` : ''}
+                        
+                        ${report.authors ? `<div class="detail-section">
+                            <strong>👥 Autores:</strong> ${report.authors}
+                        </div>` : ''}
+                        
+                        ${report.departments ? `<div class="detail-section">
+                            <strong>🏢 Departamentos:</strong> ${report.departments}
+                        </div>` : ''}
+                        
+                        ${report.createdAt ? `<div class="detail-section">
+                            <strong>🕒 Criado em:</strong> ${formatDate(report.createdAt)}
+                        </div>` : ''}
+                        
+                        ${report.createdBy ? `<div class="detail-section">
+                            <strong>✍️ Criado por:</strong> ${report.createdBy}
+                        </div>` : ''}
+                        
+                        ${report.attachments && report.attachments.length > 0 ? `<div class="detail-section">
+                            <strong>📎 Anexos:</strong> ${report.attachments.length} arquivo(s)
+                            <div class="attachments-list">
+                                ${report.attachments.map(attachment => `
+                                    <a href="${attachment.downloadURL || '#'}" 
+                                       target="_blank" 
+                                       class="attachment-link" 
+                                       title="Clique para visualizar ${attachment.name}"
+                                       ${!attachment.downloadURL ? 'onclick="alert(\'Arquivo não disponível para download\'); return false;"' : ''}>
+                                        ${getFileIcon(attachment.name)} ${attachment.name}
+                                    </a>
+                                `).join('')}
+                            </div>
+                        </div>` : ''}
+                    </div>
+                    
+                    <div class="report-actions">
+                        <button class="btn btn-primary" onclick="viewReport('${report.id}')">👁️ Visualizar</button>
+                        <button class="btn btn-secondary" onclick="downloadReport('${report.id}')">📥 Baixar</button>
+                        <button class="btn btn-danger" onclick="deleteReport('${report.id}')">🗑️ Excluir</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Funções auxiliares
+        function getTypeLabel(type) {
+            const labels = {
+                'monitoring': '📊 Monitoramento',
+                'assessment': '🔍 Assessoramento'
+            };
+            return labels[type] || type;
+        }
+        
+        function getPeriodLabel(period) {
+            const labels = {
+                'semanal': '📅 Semanal',
+                'quinzenal': '📅 Quinzenal',
+                'bimestral': '📅 Bimestral',
+                'trimestral': '📅 Trimestral',
+                'semestral': '📅 Semestral',
+                'anual': '📅 Anual',
+                'especifico': '📅 Período Específico'
+            };
+            return labels[period] || period;
+        }
+        
+        function formatDate(dateString) {
+            if (!dateString) return 'Data não informada';
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('pt-BR');
+            } catch (error) {
+                return dateString;
+            }
+        }
+
+        // Função para obter ícone baseado no tipo de arquivo
+        function getFileIcon(fileName) {
+            const extension = fileName.split('.').pop().toLowerCase();
+            
+            switch (extension) {
+                case 'pdf': return '📄';
+                case 'doc':
+                case 'docx': return '📝';
+                case 'xls':
+                case 'xlsx': return '📊';
+                case 'txt': return '📃';
+                case 'jpg':
+                case 'jpeg':
+                case 'png':
+                case 'gif': return '🖼️';
+                default: return '📎';
+            }
+        }
+        
+        // Função para visualizar relatório (tornada global)
+        window.viewReport = function(reportId) {
+            // Encontrar o relatório pelo ID
+            const report = reports.find(r => r.id === reportId);
+            if (!report) {
+                alert('Relatório não encontrado!');
+                return;
+            }
+            
+            // Criar modal com detalhes completos
+            const modal = document.createElement('div');
+            modal.className = 'report-modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>${report.title || 'Relatório sem título'}</h2>
+                        <button class="modal-close" onclick="this.closest('.report-modal').remove()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="report-full-details">
+                            <div class="detail-section">
+                                <strong>📊 Tipo:</strong> ${getTypeLabel(report.type) || 'Não informado'}
+                            </div>
+                            <div class="detail-section">
+                                <strong>📅 Data:</strong> ${formatDate(report.date) || 'Não informada'}
+                            </div>
+                            <div class="detail-section">
+                                <strong>⏰ Período:</strong> ${getPeriodLabel(report.period) || 'Não informado'}
+                            </div>
+                            ${report.startDate && report.endDate ? `
+                                <div class="detail-section">
+                                    <strong>📆 Período Específico:</strong> ${formatDate(report.startDate)} a ${formatDate(report.endDate)}
+                                </div>
+                            ` : ''}
+                            <div class="detail-section">
+                                <strong>🏘️ Município:</strong> ${report.municipality || 'Não informado'}
+                            </div>
+                            <div class="detail-section">
+                                <strong>🏫 Escolas Monitoradas:</strong> ${report.schools && report.schools.length > 0 ? report.schools.join(', ') : 'Não informadas'}
+                            </div>
+                            <div class="detail-section">
+                                <strong>📊 Indicadores Analisados:</strong> ${report.indicators && report.indicators.length > 0 ? report.indicators.join(', ') : 'Não informados'}
+                            </div>
+                            
+                            ${report.summary ? `
+                                <div class="detail-section">
+                                    <strong>📝 Resumo Executivo:</strong>
+                                    <p>${report.summary}</p>
+                                </div>
+                            ` : ''}
+                            
+                            ${report.findings ? `
+                                <div class="detail-section">
+                                    <strong>🔍 Principais Achados:</strong>
+                                    <p>${report.findings}</p>
+                                </div>
+                            ` : ''}
+                            
+                            ${report.challenges ? `
+                                <div class="detail-section">
+                                    <strong>⚠️ Desafios Identificados:</strong>
+                                    <p>${report.challenges}</p>
+                                </div>
+                            ` : ''}
+                            
+                            ${report.conclusions ? `
+                                <div class="detail-section">
+                                    <strong>✅ Conclusões:</strong>
+                                    <p>${report.conclusions}</p>
+                                </div>
+                            ` : ''}
+                            
+                            ${report.recommendations ? `
+                                <div class="detail-section">
+                                    <strong>💡 Recomendações:</strong>
+                                    <p>${report.recommendations}</p>
+                                </div>
+                            ` : ''}
+                            
+                            ${report.nextSteps ? `
+                                <div class="detail-section">
+                                    <strong>🚀 Próximos Passos:</strong>
+                                    <p>${report.nextSteps}</p>
+                                </div>
+                            ` : ''}
+                            
+                            <div class="detail-section">
+                                <strong>👥 Autores:</strong> ${report.authors || 'Não informados'}
+                            </div>
+                            
+                            ${report.attachments && report.attachments.length > 0 ? `
+                                <div class="detail-section">
+                                    <strong>📎 Arquivos Anexados (${report.attachments.length}):</strong>
+                                    <div class="attachments-list">
+                                        ${report.attachments.map(attachment => `
+                                            <a href="${attachment.downloadURL || '#'}" 
+                                               target="_blank" 
+                                               class="attachment-link" 
+                                               title="Clique para visualizar ${attachment.name}"
+                                               ${!attachment.downloadURL ? 'onclick="alert(\'Arquivo não disponível para download\'); return false;"' : ''}>
+                                                ${getFileIcon(attachment.name)} ${attachment.name}
+                                            </a>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
+                            <div class="detail-section">
+                                <strong>🏢 Departamentos:</strong> ${report.departments || 'Não informados'}
+                            </div>
+                            ${report.tags ? `
+                                <div class="detail-section">
+                                    <strong>🏷️ Tags:</strong> ${report.tags}
+                                </div>
+                            ` : ''}
+                            
+                            <div class="detail-section">
+                                <strong>🕒 Criado em:</strong> ${formatDate(report.createdAt) || 'Não informado'}
+                            </div>
+                            
+                        </div>
+                    </div>
+                                         <div class="modal-footer">
+                         <button class="btn btn-secondary" onclick="this.closest('.report-modal').remove()">Fechar</button>
+                         <button class="btn btn-primary" onclick="downloadReport('${report.id}')">📥 Baixar Relatório</button>
+                         <button class="btn btn-danger" onclick="deleteReport('${report.id}'); this.closest('.report-modal').remove();">🗑️ Excluir Relatório</button>
+                     </div>
+                </div>
+            `;
+            
+            // Adicionar modal ao body
+            document.body.appendChild(modal);
+        };
+        
+                 // Função para download do relatório (tornada global)
+         window.downloadReport = function(reportId) {
+             console.log('Iniciando download do relatório:', reportId);
+             
+             // Encontrar o relatório pelo ID
+             const report = reports.find(r => r.id === reportId);
+             if (!report) {
+                 alert('Relatório não encontrado!');
+                 return;
+             }
+             
+             console.log('Relatório encontrado:', report.title);
+             
+             // Sempre usar download como texto
+             downloadAsText(report);
+         };
+         
+         // Função para excluir relatório (tornada global)
+         window.deleteReport = function(reportId) {
+             console.log('Iniciando exclusão do relatório:', reportId);
+             
+             // Encontrar o relatório pelo ID
+             const report = reports.find(r => r.id === reportId);
+             if (!report) {
+                 alert('Relatório não encontrado!');
+                 return;
+             }
+             
+             // Confirmar exclusão
+             const confirmDelete = confirm(`Tem certeza que deseja excluir o relatório "${report.title}"?\n\nEsta ação não pode ser desfeita.`);
+             if (!confirmDelete) {
+                 return;
+             }
+             
+             // Excluir do Firebase
+             deleteReportFromFirebase(reportId);
+         };
+         
+         // Função para excluir relatório do Firebase
+         async function deleteReportFromFirebase(reportId) {
+             try {
+                 console.log('Excluindo relatório do Firebase...');
+                 
+                 // Importar função de exclusão do Firestore
+                 const { deleteDoc, doc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+                 
+                 // Referência do documento
+                 const reportRef = doc(db, 'reports', reportId);
+                 
+                 // Excluir documento
+                 await deleteDoc(reportRef);
+                 
+                 console.log('Relatório excluído com sucesso do Firebase');
+                 
+                 // Remover da lista local
+                 reports = reports.filter(r => r.id !== reportId);
+                 
+                 // Atualizar a interface
+                 displayReports(reports);
+                 
+                 alert('Relatório excluído com sucesso!');
+                 
+             } catch (error) {
+                 console.error('Erro ao excluir relatório:', error);
+                 alert('Erro ao excluir relatório. Verifique o console para mais detalhes.');
+             }
+         }
+        
+        // Função auxiliar para download como texto
+        function downloadAsText(report) {
+            try {
+                console.log('Gerando arquivo de texto...');
+                
+                // Criar conteúdo do relatório em formato de texto
+                let reportContent = `RELATÓRIO: ${report.title || 'Sem título'}\n`;
+                reportContent += `==========================================\n\n`;
+                
+                if (report.type) reportContent += `TIPO: ${getTypeLabel(report.type)}\n`;
+                if (report.date) reportContent += `DATA: ${formatDate(report.date)}\n`;
+                if (report.period) reportContent += `PERÍODO: ${getPeriodLabel(report.period)}\n`;
+                if (report.startDate && report.endDate) reportContent += `PERÍODO ESPECÍFICO: ${formatDate(report.startDate)} a ${formatDate(report.endDate)}\n`;
+                if (report.municipality) reportContent += `MUNICÍPIO: ${report.municipality}\n`;
+                if (report.schools && report.schools.length > 0) reportContent += `ESCOLAS: ${report.schools.join(', ')}\n`;
+                if (report.indicators && report.indicators.length > 0) reportContent += `INDICADORES: ${report.indicators.join(', ')}\n`;
+                if (report.summary) reportContent += `\nRESUMO EXECUTIVO:\n${report.summary}\n`;
+                if (report.findings) reportContent += `\nPRINCIPAIS ACHADOS:\n${report.findings}\n`;
+                if (report.challenges) reportContent += `\nDESAFIOS IDENTIFICADOS:\n${report.challenges}\n`;
+                if (report.conclusions) reportContent += `\nCONCLUSÕES:\n${report.conclusions}\n`;
+                if (report.recommendations) reportContent += `\nRECOMENDAÇÕES:\n${report.recommendations}\n`;
+                if (report.nextSteps) reportContent += `\nPRÓXIMOS PASSOS:\n${report.nextSteps}\n`;
+                if (report.authors) reportContent += `\nAUTORES: ${report.authors}\n`;
+                if (report.departments) reportContent += `DEPARTAMENTOS: ${report.departments}\n`;
+                if (report.tags) reportContent += `TAGS: ${report.tags}\n`;
+                if (report.createdAt) reportContent += `\nCRIADO EM: ${formatDate(report.createdAt)}\n`;
+                if (report.createdBy) reportContent += `CRIADO POR: ${report.createdBy}\n`;
+                
+                // Criar blob e fazer download como arquivo de texto
+                const blob = new Blob([reportContent], { type: 'text/plain;charset=utf-8' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `relatorio_${report.id}_${new Date().toISOString().split('T')[0]}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+                
+                alert('Relatório baixado como arquivo de texto (.txt) com sucesso!');
+                
+            } catch (fallbackError) {
+                console.error('Erro no método alternativo:', fallbackError);
+                alert('Erro ao baixar relatório. Verifique o console para mais detalhes.');
+            }
+        }
+
+        // Carregar relatórios ao carregar a página
+        window.addEventListener('load', function() {
+            loadReports();
+            
+            // Adicionar event listeners para filtros em tempo real
+            document.getElementById('searchInput').addEventListener('input', filterReports);
+            document.getElementById('typeFilter').addEventListener('change', filterReports);
+            document.getElementById('periodFilter').addEventListener('change', filterReports);
+            document.getElementById('dateFilter').addEventListener('change', filterReports);
+        });
+    </script>
+</body>
+</html>

@@ -111,7 +111,19 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="technician">Técnico(a):</label>
-                            <input type="text" id="technician" name="technician" required>
+                            <select id="technician" name="technician" required>
+                                <option value="">Selecione o técnico</option>
+                                <option value="Alexandre Pereira Tolentino">Alexandre Pereira Tolentino</option>
+                                <option value="Sayonara Santos de Morais">Sayonara Santos de Morais</option>
+                                <option value="Alline Lemos Lira">Alline Lemos Lira</option>
+                                <option value="Alaíde de Miranda Santiago">Alaíde de Miranda Santiago</option>
+                                <option value="Noadia Gomes Martins">Noadia Gomes Martins</option>
+                                <option value="Jorge Montané Vila">Jorge Montané Vila</option>
+                                <option value="Fábio Costa do Amaral">Fábio Costa do Amaral</option>
+                                <option value="Darlene de Carvalho Silva">Darlene de Carvalho Silva</option>
+                                <option value="Kárita Santos Lemos">Kárita Santos Lemos</option>
+                                <option value="Luso Soares Madureira">Luso Soares Madureira</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="date">Data do Registro:</label>
@@ -123,16 +135,40 @@
                 <!-- Dados do Estudante -->
                 <div class="form-section">
                     <h3>Dados do Estudante</h3>
+                    
+                    <!-- Campo de Bimestre -->
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="studentName">Nome do(a) Estudante:</label>
-                            <input type="text" id="studentName" name="studentName" placeholder="Nome completo" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="studentGrade">Nota:</label>
-                            <input type="number" id="studentGrade" name="studentGrade" min="0" max="10" step="0.1" placeholder="0.0" required>
+                            <label for="bimester">Bimestre:</label>
+                            <select id="bimester" name="bimester" required>
+                                <option value="">Selecione o bimestre</option>
+                                <option value="1º Bimestre">1º Bimestre</option>
+                                <option value="2º Bimestre">2º Bimestre</option>
+                                <option value="3º Bimestre">3º Bimestre</option>
+                                <option value="4º Bimestre">4º Bimestre</option>
+                            </select>
                         </div>
                     </div>
+
+                    <!-- Sistema de Turmas Dinâmicas -->
+                    <div class="form-row">
+                        <div class="form-group" style="width: 100%;">
+                            <label for="newTurma">Adicionar Nova Turma:</label>
+                            <div style="display: flex; gap: 10px; align-items: flex-end;">
+                                <input type="text" id="newTurma" placeholder="Ex: 1º ano A, 2º ano B" style="flex: 1;">
+                                <button type="button" id="addTurmaBtn" class="btn btn-secondary" style="white-space: nowrap;">+ Adicionar Turma</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lista de Turmas Adicionadas -->
+                    <div id="turmasContainer" class="form-section">
+                        <p style="color: #666; font-style: italic; text-align: center; padding: 20px;">
+                            Nenhuma turma adicionada. Clique em "Adicionar Turma" para começar.
+                        </p>
+                    </div>
+
+                    <!-- Campo único para situação (aplicável a todas as turmas) -->
                     <div class="form-row">
                         <div class="form-group">
                             <label for="studentSituation">Situação:</label>
@@ -141,46 +177,6 @@
                                 <option value="Pendente">Pendente</option>
                                 <option value="Resolvido">Resolvido</option>
                             </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="seriesClass">Série/Turma:</label>
-                            <input type="text" id="seriesClass" name="seriesClass" placeholder="Ex: 1º ano A, 2º ano B" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="curricularComponents">Número de Componentes Curriculares Abaixo da Média:</label>
-                            <input type="number" id="curricularComponents" name="curricularComponents" min="0" placeholder="Digite o número" required>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Disciplinas Abaixo da Média -->
-                <div class="form-section">
-                    <h3>Disciplinas Abaixo da Média</h3>
-                    <div class="form-group">
-                        <div class="checkbox-group">
-                            <label><input type="checkbox" name="portuguese" value="true"> Língua Portuguesa</label>
-                            <label><input type="checkbox" name="mathematics" value="true"> Matemática</label>
-                            <label><input type="checkbox" name="history" value="true"> História</label>
-                            <label><input type="checkbox" name="geography" value="true"> Geografia</label>
-                            <label><input type="checkbox" name="science" value="true"> Ciências</label>
-                            <label><input type="checkbox" name="physicalEducation" value="true"> Educação Física</label>
-                            <label><input type="checkbox" name="arts" value="true"> Arte</label>
-                            <label><input type="checkbox" name="english" value="true"> Inglês</label>
-                            <label><input type="checkbox" name="philosophy" value="true"> Filosofia</label>
-                            <label><input type="checkbox" name="sociology" value="true"> Sociologia</label>
-                            <label><input type="checkbox" name="biology" value="true"> Biologia</label>
-                            <label><input type="checkbox" name="physics" value="true"> Física</label>
-                            <label><input type="checkbox" name="chemistry" value="true"> Química</label>
-                            <label><input type="checkbox" name="literature" value="true"> Literatura</label>
-                            <label><input type="checkbox" name="spanish" value="true"> Espanhol</label>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label><input type="checkbox" name="others" value="true"> Outros:</label>
-                            <input type="text" id="otherSubjects" name="otherSubjects" placeholder="Especifique quais disciplinas" disabled>
                         </div>
                     </div>
                 </div>
@@ -193,12 +189,14 @@
                     </div>
                 </div>
 
-                <!-- Links de Documentos -->
+                <!-- Anexos -->
                 <div class="form-section">
-                    <h3>Links de Documentos:</h3>
-                    <p class="form-description">Insira links para Google Drive, Google Docs, Planilhas ou outros documentos online</p>
+                    <h3>Anexos:</h3>
+                    <p class="form-description">Faça upload de documentos relacionados (PDF, Word, Excel, imagens, etc.)</p>
                     <div class="form-group">
-                        <textarea id="documentLinks" name="documentLinks" rows="4" placeholder="Ex: https://drive.google.com/...&#10;https://docs.google.com/..."></textarea>
+                        <input type="file" id="attachments" name="attachments" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.txt" style="margin-bottom: 10px;">
+                        <div id="attachmentsList" class="attachments-list"></div>
+                        <small style="color: #666; font-size: 12px;">Formatos aceitos: PDF, Word, Excel, imagens, texto. Máximo 5 arquivos.</small>
                     </div>
                 </div>
 
@@ -217,8 +215,9 @@
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
 
-        // Configuração do Firebase CORRIGIDA
+        // Configuração do Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyABEloTfC_nT5vfDHpeqYdDjNoPCKwE-Eo",
             authDomain: "projeto-alex-aaadf.firebaseapp.com",
@@ -230,6 +229,7 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const storage = getStorage(app);
 
         // Verificar autenticação
         function checkAuth() {
@@ -272,6 +272,280 @@
             }, 5000);
         }
 
+        // ===== SISTEMA DE ANEXOS MÚLTIPLOS =====
+        let selectedFiles = [];
+
+        // Event listener para seleção de arquivos
+        document.getElementById('attachments').addEventListener('change', function(e) {
+            const newFiles = Array.from(e.target.files);
+            
+            // Adicionar novos arquivos aos existentes (evitando duplicatas)
+            newFiles.forEach(newFile => {
+                // Verificar se o arquivo já existe (por nome e tamanho)
+                const isDuplicate = selectedFiles.some(existingFile => 
+                    existingFile.name === newFile.name && existingFile.size === newFile.size
+                );
+                
+                if (!isDuplicate) {
+                    selectedFiles.push(newFile);
+                }
+            });
+            
+            // Verificar limite máximo
+            if (selectedFiles.length > 5) {
+                alert('Máximo de 5 arquivos permitido! Removendo arquivos excedentes.');
+                selectedFiles = selectedFiles.slice(0, 5);
+            }
+            
+            displayAttachments();
+            console.log(`📁 Total de anexos selecionados: ${selectedFiles.length}`);
+        });
+
+        function displayAttachments() {
+            const attachmentsList = document.getElementById('attachmentsList');
+            attachmentsList.innerHTML = '';
+            
+            if (selectedFiles.length === 0) {
+                attachmentsList.innerHTML = '<p style="color: #666; font-style: italic;">Nenhum arquivo selecionado</p>';
+                return;
+            }
+            
+            // Cabeçalho com contador e botão limpar tudo
+            const headerDiv = document.createElement('div');
+            headerDiv.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 8px; background: #f8f9fa; border-radius: 5px;';
+            headerDiv.innerHTML = `
+                <span style="font-weight: bold; color: #495057;">📎 Anexos selecionados (${selectedFiles.length}/5)</span>
+                <button type="button" onclick="clearAllAttachments()" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 3px; font-size: 11px; cursor: pointer;">🗑️ Limpar Todos</button>
+            `;
+            attachmentsList.appendChild(headerDiv);
+            
+            selectedFiles.forEach((file, index) => {
+                const fileDiv = document.createElement('div');
+                fileDiv.className = 'attachment-item';
+                const fileSizeKB = (file.size / 1024).toFixed(1);
+                fileDiv.innerHTML = `
+                    <span>📎 ${file.name} <small style="color: #666;">(${fileSizeKB} KB)</small></span>
+                    <button type="button" onclick="removeFile(${index})" class="btn-remove">❌</button>
+                `;
+                attachmentsList.appendChild(fileDiv);
+            });
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            displayAttachments();
+            console.log(`Arquivo removido. Total de anexos: ${selectedFiles.length}`);
+        }
+
+        function clearAllAttachments() {
+            selectedFiles = [];
+            displayAttachments();
+            console.log('Todos os anexos foram removidos');
+        }
+
+        // ===== SISTEMA DE TURMAS DINÂMICAS =====
+        let turmas = [];
+        let turmaCounter = 0;
+
+        // Função para adicionar nova turma
+        function addTurma() {
+            const turmaInput = document.getElementById('newTurma');
+            const turmaNome = turmaInput.value.trim();
+            
+            if (!turmaNome) {
+                showStatus('Por favor, digite o nome da turma', false);
+                turmaInput.focus();
+                return;
+            }
+            
+            // Verificar se a turma já existe
+            if (turmas.some(t => t.nome === turmaNome)) {
+                showStatus('Esta turma já foi adicionada', false);
+                turmaInput.focus();
+                return;
+            }
+            
+            turmaCounter++;
+            const turmaId = `turma_${turmaCounter}`;
+            
+            const novaTurma = {
+                id: turmaId,
+                nome: turmaNome,
+                estudantes: '',
+                componentesCurriculares: 0,
+                componentesDetalhados: ''
+            };
+            
+            turmas.push(novaTurma);
+            turmaInput.value = '';
+            displayTurmas();
+            updateTurmaCounter();
+            
+            showStatus(`Turma "${turmaNome}" adicionada com sucesso!`, true);
+        }
+
+        // Função para remover turma
+        function removeTurma(turmaId) {
+            const turmaIndex = turmas.findIndex(t => t.id === turmaId);
+            if (turmaIndex !== -1) {
+                const turmaNome = turmas[turmaIndex].nome;
+                turmas.splice(turmaIndex, 1);
+                displayTurmas();
+                updateTurmaCounter();
+                showStatus(`Turma "${turmaNome}" removida`, true);
+            }
+        }
+
+        // Função para atualizar dados da turma
+        function updateTurmaData(turmaId, field, value) {
+            const turma = turmas.find(t => t.id === turmaId);
+            if (turma) {
+                turma[field] = value;
+            }
+        }
+
+        // Função para exibir turmas
+        function displayTurmas() {
+            const container = document.getElementById('turmasContainer');
+            
+            if (turmas.length === 0) {
+                container.innerHTML = `
+                    <p style="color: #666; font-style: italic; text-align: center; padding: 20px;">
+                        Nenhuma turma adicionada. Clique em "Adicionar Turma" para começar.
+                    </p>
+                `;
+                return;
+            }
+            
+            // Limpar apenas o conteúdo, não o container inteiro
+            container.innerHTML = '';
+            
+            turmas.forEach(turma => {
+                const turmaDiv = document.createElement('div');
+                turmaDiv.className = 'form-section';
+                turmaDiv.style.cssText = 'background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 15px;';
+                turmaDiv.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #dee2e6;">
+                        <span style="font-weight: bold; color: #495057; font-size: 16px;">${turma.nome}</span>
+                        <button type="button" onclick="removeTurma('${turma.id}')" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                            ❌ Remover
+                        </button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div style="grid-column: 1 / -1;">
+                            <label>Estudantes abaixo da média:</label>
+                            <textarea 
+                                placeholder="Cole ou digite a lista de estudantes (um por linha)" 
+                                onchange="updateTurmaData('${turma.id}', 'estudantes', this.value)"
+                                required
+                                style="width: 100%; min-height: 80px; resize: vertical;"
+                            >${turma.estudantes || ''}</textarea>
+                        </div>
+                        <div>
+                            <label>Número de Componentes Curriculares:</label>
+                            <input 
+                                type="number" 
+                                min="0" 
+                                placeholder="Digite o número" 
+                                value="${turma.componentesCurriculares || 0}"
+                                onchange="updateTurmaData('${turma.id}', 'componentesCurriculares', parseInt(this.value) || 0)"
+                                required
+                                style="width: 100%;"
+                            >
+                        </div>
+                        <div style="grid-column: 1 / -1;">
+                            <label>Componentes Curriculares (escreva quais):</label>
+                            <textarea 
+                                placeholder="Ex: Matemática, Português, História..." 
+                                onchange="updateTurmaData('${turma.id}', 'componentesDetalhados', this.value)"
+                                rows="3"
+                                style="width: 100%; min-height: 60px; resize: vertical;"
+                            >${turma.componentesDetalhados || ''}</textarea>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(turmaDiv);
+            });
+        }
+
+        // Função para atualizar contador de turmas
+        function updateTurmaCounter() {
+            const addBtn = document.getElementById('addTurmaBtn');
+            if (turmas.length > 0) {
+                addBtn.innerHTML = `+ Adicionar Turma <span style="background: #007bff; color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; margin-left: 10px;">${turmas.length}</span>`;
+            } else {
+                addBtn.innerHTML = '+ Adicionar Turma';
+            }
+        }
+
+        // Função para validar turmas
+        function validateTurmas() {
+            if (turmas.length === 0) {
+                showStatus('Por favor, adicione pelo menos uma turma', false);
+                return false;
+            }
+            
+            for (const turma of turmas) {
+                if (!turma.estudantes.trim()) {
+                    showStatus(`Por favor, preencha a lista de estudantes da turma "${turma.nome}"`, false);
+                    return false;
+                }
+                if (turma.componentesCurriculares <= 0) {
+                    showStatus(`Por favor, informe o número de componentes curriculares da turma "${turma.nome}"`, false);
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        // Event listener para o botão de adicionar turma
+        document.addEventListener('DOMContentLoaded', function() {
+            const addTurmaBtn = document.getElementById('addTurmaBtn');
+            if (addTurmaBtn) {
+                addTurmaBtn.addEventListener('click', addTurma);
+            }
+        });
+
+        // Função para fazer upload dos anexos
+        async function uploadAttachments() {
+            if (selectedFiles.length === 0) return [];
+            
+            console.log(`🚀 Iniciando upload de ${selectedFiles.length} arquivo(s)...`);
+            
+            const uploadPromises = selectedFiles.map(async (file, index) => {
+                try {
+                    console.log(`📤 Fazendo upload do arquivo ${index + 1}/${selectedFiles.length}: ${file.name}`);
+                    
+                    const timestamp = Date.now();
+                    const fileName = `${timestamp}_${file.name}`;
+                    const storageRef = ref(storage, `attachments/${fileName}`);
+                    
+                    const snapshot = await uploadBytes(storageRef, file);
+                    const downloadURL = await getDownloadURL(snapshot.ref);
+                    
+                    console.log(`✅ Upload concluído: ${file.name}`);
+                    
+                    return {
+                        name: file.name,
+                        type: file.type,
+                        size: file.size,
+                        downloadURL: downloadURL,
+                        uploadedAt: new Date().toISOString()
+                    };
+                } catch (error) {
+                    console.error(`❌ Erro no upload de ${file.name}:`, error);
+                    throw error;
+                }
+            });
+            
+            const uploadedAttachments = await Promise.all(uploadPromises);
+            console.log(`🎉 Todos os ${uploadedAttachments.length} anexos foram enviados com sucesso!`);
+            console.log('📋 Resumo dos anexos:', uploadedAttachments.map(att => `${att.name} (${(att.size/1024).toFixed(1)} KB)`));
+            
+            return uploadedAttachments;
+        }
+
         // Validar formulário
         function validateForm() {
             console.log('Iniciando validação do formulário...');
@@ -281,11 +555,8 @@
                 { id: 'municipality', name: 'Município' },
                 { id: 'technician', name: 'Técnico(a)' },
                 { id: 'date', name: 'Data do Registro' },
-                { id: 'studentName', name: 'Nome do(a) Estudante' },
-                { id: 'studentGrade', name: 'Nota' },
-                { id: 'studentSituation', name: 'Situação' },
-                { id: 'seriesClass', name: 'Série/Turma' },
-                { id: 'curricularComponents', name: 'Número de Componentes Curriculares' }
+                { id: 'bimester', name: 'Bimestre' },
+                { id: 'studentSituation', name: 'Situação' }
             ];
             
             for (const fieldInfo of requiredFields) {
@@ -323,6 +594,11 @@
                 console.log(`Campo ${fieldInfo.name} está preenchido corretamente`);
             }
             
+            // Validar turmas
+            if (!validateTurmas()) {
+                return false;
+            }
+            
             console.log('Validação passou com sucesso!');
             return true;
         }
@@ -330,15 +606,6 @@
         // Inicializar
         checkAuth();
         setCurrentDate();
-        
-        // Habilitar/desabilitar campo "Outros" baseado no checkbox
-        document.querySelector('input[name="others"]').addEventListener('change', function() {
-            const otherSubjectsField = document.getElementById('otherSubjects');
-            otherSubjectsField.disabled = !this.checked;
-            if (!this.checked) {
-                otherSubjectsField.value = '';
-            }
-        });
         
         // Debug: verificar se o formulário existe
         console.log('Formulário encontrado:', document.getElementById('belowAverageForm'));
@@ -375,32 +642,11 @@
                     municipality: document.getElementById('municipality').value,
                     technician: document.getElementById('technician').value,
                     date: document.getElementById('date').value,
-                    studentName: document.getElementById('studentName').value,
-                    studentGrade: parseFloat(document.getElementById('studentGrade').value),
+                    bimester: document.getElementById('bimester').value,
+                    turmas: turmas, // Array com todas as turmas e seus dados
                     studentSituation: document.getElementById('studentSituation').value,
-                    seriesClass: document.getElementById('seriesClass').value,
-                    curricularComponents: parseInt(document.getElementById('curricularComponents').value),
-                    subjects: {
-                        portuguese: document.querySelector('input[name="portuguese"]').checked,
-                        mathematics: document.querySelector('input[name="mathematics"]').checked,
-                        history: document.querySelector('input[name="history"]').checked,
-                        geography: document.querySelector('input[name="geography"]').checked,
-                        science: document.querySelector('input[name="science"]').checked,
-                        physicalEducation: document.querySelector('input[name="physicalEducation"]').checked,
-                        arts: document.querySelector('input[name="arts"]').checked,
-                        english: document.querySelector('input[name="english"]').checked,
-                        philosophy: document.querySelector('input[name="philosophy"]').checked,
-                        sociology: document.querySelector('input[name="sociology"]').checked,
-                        biology: document.querySelector('input[name="biology"]').checked,
-                        physics: document.querySelector('input[name="physics"]').checked,
-                        chemistry: document.querySelector('input[name="chemistry"]').checked,
-                        literature: document.querySelector('input[name="literature"]').checked,
-                        spanish: document.querySelector('input[name="spanish"]').checked,
-                        others: document.querySelector('input[name="others"]').checked,
-                        otherSubjects: document.getElementById('otherSubjects').value
-                    },
                     observations: document.getElementById('observations').value,
-                    documentLinks: document.getElementById('documentLinks').value,
+                    attachments: await uploadAttachments(), // Anexos do Firebase Storage
                     createdBy: localStorage.getItem('userCPF') || 'Usuário não identificado',
                     createdByRole: localStorage.getItem('userRole') || 'N/A',
                     createdByName: localStorage.getItem('userName') || 'N/A',
@@ -488,32 +734,11 @@
                     municipality: document.getElementById('municipality').value,
                     technician: document.getElementById('technician').value,
                     date: document.getElementById('date').value,
-                    studentName: document.getElementById('studentName').value,
-                    studentGrade: parseFloat(document.getElementById('studentGrade').value),
+                    bimester: document.getElementById('bimester').value,
+                    turmas: turmas, // Array com todas as turmas e seus dados
                     studentSituation: document.getElementById('studentSituation').value,
-                    seriesClass: document.getElementById('seriesClass').value,
-                    curricularComponents: parseInt(document.getElementById('curricularComponents').value),
-                    subjects: {
-                        portuguese: document.querySelector('input[name="portuguese"]').checked,
-                        mathematics: document.querySelector('input[name="mathematics"]').checked,
-                        history: document.querySelector('input[name="history"]').checked,
-                        geography: document.querySelector('input[name="geography"]').checked,
-                        science: document.querySelector('input[name="science"]').checked,
-                        physicalEducation: document.querySelector('input[name="physicalEducation"]').checked,
-                        arts: document.querySelector('input[name="arts"]').checked,
-                        english: document.querySelector('input[name="english"]').checked,
-                        philosophy: document.querySelector('input[name="philosophy"]').checked,
-                        sociology: document.querySelector('input[name="sociology"]').checked,
-                        biology: document.querySelector('input[name="biology"]').checked,
-                        physics: document.querySelector('input[name="physics"]').checked,
-                        chemistry: document.querySelector('input[name="chemistry"]').checked,
-                        literature: document.querySelector('input[name="literature"]').checked,
-                        spanish: document.querySelector('input[name="spanish"]').checked,
-                        others: document.querySelector('input[name="others"]').checked,
-                        otherSubjects: document.getElementById('otherSubjects').value
-                    },
                     observations: document.getElementById('observations').value,
-                    documentLinks: document.getElementById('documentLinks').value,
+                    attachments: await uploadAttachments(), // Anexos do Firebase Storage
                     createdBy: localStorage.getItem('userCPF') || 'Usuário não identificado',
                     createdByRole: localStorage.getItem('userRole') || 'N/A',
                     createdByName: localStorage.getItem('userName') || 'N/A',
@@ -570,8 +795,13 @@
         
         console.log('Event listener de clique adicionado ao botão');
 
-        // Exportar função de logout
+        // Exportar funções para uso global
         window.logout = logout;
+        window.removeFile = removeFile;
+        window.clearAllAttachments = clearAllAttachments;
+        window.addTurma = addTurma;
+        window.removeTurma = removeTurma;
+        window.updateTurmaData = updateTurmaData;
     </script>
     
     <!-- Script para pesquisa de escola -->

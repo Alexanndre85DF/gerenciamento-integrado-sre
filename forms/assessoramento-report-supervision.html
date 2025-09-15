@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios para Anexo - Supervisão - SRE GURUPI</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../js/schools.js"></script>
+    <script src="../js/municipalities.js"></script>
+</head>
+<body>
+    <div class="header">
+        <h1>Relatórios para Anexo - Supervisão</h1>
+        <button class="logout-btn" onclick="logout()">Sair</button>
+    </div>
+
+    <div class="main-container">
+        <!-- Formulário de Criação -->
+        <div class="card">
+            <h2>Criar Novo Relatório</h2>
+            
+            <form id="assessoramentoForm" class="form-container">
+                <!-- Informações Gerais -->
+                <div class="form-section">
+                    <h3>Informações do Relatório</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="school">Escola:</label>
+                            <select id="school" name="school" required>
+                                <option value="">Selecione a escola</option>
+                                <option value="CENTRO DE ENSINO MEDIO ARY RIBEIRO VALADAO FILHO">CENTRO DE ENSINO MEDIO ARY RIBEIRO VALADAO FILHO</option>
+                                <option value="CENTRO DE ENSINO MEDIO BOM JESUS">CENTRO DE ENSINO MEDIO BOM JESUS</option>
+                                <option value="CENTRO DE ENSINO MEDIO DE GURUPI">CENTRO DE ENSINO MEDIO DE GURUPI</option>
+                                <option value="COL DE TECELAGEM ART NSA SENHORA AUXILIADORA">COL DE TECELAGEM ART NSA SENHORA AUXILIADORA</option>
+                                <option value="COL EST ALAIR SENA CONCEICAO">COL EST ALAIR SENA CONCEICAO</option>
+                                <option value="COLÉGIO AGRICOLA DOM BOSCO">COLÉGIO AGRICOLA DOM BOSCO</option>
+                                <option value="COLÉGIO ESTADUAL ADELAIDE FRANCISCO SOARES">COLÉGIO ESTADUAL ADELAIDE FRANCISCO SOARES</option>
+                                <option value="COLÉGIO ESTADUAL ANITA CASSIMIRO MORENO">COLÉGIO ESTADUAL ANITA CASSIMIRO MORENO</option>
+                                <option value="COLÉGIO ESTADUAL BENEDITO PEREIRA BANDEIRA">COLÉGIO ESTADUAL BENEDITO PEREIRA BANDEIRA</option>
+                                <option value="COLÉGIO ESTADUAL CANDIDO FIGUEIRA">COLÉGIO ESTADUAL CANDIDO FIGUEIRA</option>
+                                <option value="COLÉGIO ESTADUAL DE ALVORADA">COLÉGIO ESTADUAL DE ALVORADA</option>
+                                <option value="COLÉGIO ESTADUAL DE TALISMA">COLÉGIO ESTADUAL DE TALISMA</option>
+                                <option value="COLÉGIO ESTADUAL DOM ALANO">COLÉGIO ESTADUAL DOM ALANO</option>
+                                <option value="COLÉGIO ESTADUAL ELSEBAO LIMA">COLÉGIO ESTADUAL ELSEBAO LIMA</option>
+                                <option value="COLÉGIO ESTADUAL FAMILIA AGRICOLA JOSE PORFIRIO DE SOUZA">COLÉGIO ESTADUAL FAMILIA AGRICOLA JOSE PORFIRIO DE SOUZA</option>
+                                <option value="COLÉGIO ESTADUAL GIRASSOL DE TEMPO INTEGRAL JOSE SEABRA LEMOS">COLÉGIO ESTADUAL GIRASSOL DE TEMPO INTEGRAL JOSE SEABRA LEMOS</option>
+                                <option value="COLÉGIO ESTADUAL JOAO TAVARES MARTINS">COLÉGIO ESTADUAL JOAO TAVARES MARTINS</option>
+                                <option value="COLÉGIO ESTADUAL NOSSA SENHORA APARECIDA">COLÉGIO ESTADUAL NOSSA SENHORA APARECIDA</option>
+                                <option value="COLÉGIO ESTADUAL OLAVO BILAC">COLÉGIO ESTADUAL OLAVO BILAC</option>
+                                <option value="COLÉGIO ESTADUAL PORTO DO RIO MARANHAO">COLÉGIO ESTADUAL PORTO DO RIO MARANHAO</option>
+                                <option value="COLÉGIO ESTADUAL POSITIVO DE GURUPI">COLÉGIO ESTADUAL POSITIVO DE GURUPI</option>
+                                <option value="COLÉGIO ESTADUAL PROFESSORA ONEIDES ROSA DE MOURA">COLÉGIO ESTADUAL PROFESSORA ONEIDES ROSA DE MOURA</option>
+                                <option value="COLÉGIO ESTADUAL REGINA SIQUEIRA CAMPOS">COLÉGIO ESTADUAL REGINA SIQUEIRA CAMPOS</option>
+                                <option value="COLÉGIO ESTADUAL TARSO DUTRA">COLÉGIO ESTADUAL TARSO DUTRA</option>
+                                <option value="COLÉGIO ESTADUAL TIRADENTES">COLÉGIO ESTADUAL TIRADENTES</option>
+                                <option value="COLEGIO MILITAR DO ESTADO DO TOCANTINS - ADJULIO BALTHAZAR">COLEGIO MILITAR DO ESTADO DO TOCANTINS - ADJULIO BALTHAZAR</option>
+                                <option value="COLEGIO MILITAR DO ESTADO DO TOCANTINS - PROFESSORA MARIA">COLEGIO MILITAR DO ESTADO DO TOCANTINS - PROFESSORA MARIA</option>
+                                <option value="COLEGIO MILITAR DO ESTADO DO TOCANTINS PRESIDENTE COSTA E SILVA">COLEGIO MILITAR DO ESTADO DO TOCANTINS PRESIDENTE COSTA E SILVA</option>
+                                <option value="ESC DE TEC ART NOSSA SRA AUXILIADORA">ESC DE TEC ART NOSSA SRA AUXILIADORA</option>
+                                <option value="ESC EST RETIRO">ESC EST RETIRO</option>
+                                <option value="ESC EST TANCREDO DE ALMEIDA NEVES">ESC EST TANCREDO DE ALMEIDA NEVES</option>
+                                <option value="ESCOLA ESTADUAL ANA MARIA DE JESUS">ESCOLA ESTADUAL ANA MARIA DE JESUS</option>
+                                <option value="ESCOLA ESTADUAL DR JOAQUIM PEREIRA DA COSTA">ESCOLA ESTADUAL DR JOAQUIM PEREIRA DA COSTA</option>
+                                <option value="ESCOLA ESTADUAL FE E ALEGRIA PAROQUIAL BERNARDO SAYAO">ESCOLA ESTADUAL FE E ALEGRIA PAROQUIAL BERNARDO SAYAO</option>
+                                <option value="ESCOLA ESTADUAL GERCINA BORGES TEIXEIRA">ESCOLA ESTADUAL GERCINA BORGES TEIXEIRA</option>
+                                <option value="ESCOLA ESTADUAL HERCILIA CARVALHO DA SILVA">ESCOLA ESTADUAL HERCILIA CARVALHO DA SILVA</option>
+                                <option value="ESCOLA ESTADUAL NOSSA SENHORA DO CARMO">ESCOLA ESTADUAL NOSSA SENHORA DO CARMO</option>
+                                <option value="ESCOLA ESTADUAL OLAVO BILAC">ESCOLA ESTADUAL OLAVO BILAC</option>
+                                <option value="ESCOLA ESTADUAL PADRE JOSE DE ANCHIETA">ESCOLA ESTADUAL PADRE JOSE DE ANCHIETA</option>
+                                <option value="ESCOLA ESTADUAL PASSO A PASSO">ESCOLA ESTADUAL PASSO A PASSO</option>
+                                <option value="ESCOLA ESTADUAL PRESBITERIANA ARAGUAIA">ESCOLA ESTADUAL PRESBITERIANA ARAGUAIA</option>
+                                <option value="ESCOLA ESTADUAL PRESBITERIANA EDUCACIONAL">ESCOLA ESTADUAL PRESBITERIANA EDUCACIONAL</option>
+                                <option value="ESCOLA ESTADUAL RUI BARBOSA">ESCOLA ESTADUAL RUI BARBOSA</option>
+                                <option value="ESCOLA ESTADUAL SALVADOR CAETANO">ESCOLA ESTADUAL SALVADOR CAETANO</option>
+                                <option value="ESCOLA ESTADUAL VALDIR LINS">ESCOLA ESTADUAL VALDIR LINS</option>
+                                <option value="ESCOLA ESTADUAL VILA GUARACY">ESCOLA ESTADUAL VILA GUARACY</option>
+                                <option value="ESCOLA INDIGENA BARRA DO RIO VERDE">ESCOLA INDIGENA BARRA DO RIO VERDE</option>
+                                <option value="ESCOLA INDIGENA IJANARI">ESCOLA INDIGENA IJANARI</option>
+                                <option value="ESCOLA INDIGENA IJAWALA">ESCOLA INDIGENA IJAWALA</option>
+                                <option value="ESCOLA INDIGENA SANAWE">ESCOLA INDIGENA SANAWE</option>
+                                <option value="ESCOLA INDIGENA TAINA">ESCOLA INDIGENA TAINA</option>
+                                <option value="ESCOLA INDIGENA TEMANARE">ESCOLA INDIGENA TEMANARE</option>
+                                <option value="ESCOLA INDIGENA TEWADURE">ESCOLA INDIGENA TEWADURE</option>
+                                <option value="ESCOLA INDIGENA TXUIRI-HINA">ESCOLA INDIGENA TXUIRI-HINA</option>
+                                <option value="ESCOLA INDIGENA WAHURI">ESCOLA INDIGENA WAHURI</option>
+                                <option value="ESCOLA INDIGENA WATAKURI">ESCOLA INDIGENA WATAKURI</option>
+                                <option value="INSTITUTO EDUCACIONAL PASSO A PASSO">INSTITUTO EDUCACIONAL PASSO A PASSO</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="municipality">Município:</label>
+                            <select id="municipality" name="municipality" required>
+                                <option value="">Selecione o município</option>
+                                <option value="Alvorada">Alvorada</option>
+                                <option value="Araguaçu">Araguaçu</option>
+                                <option value="Cariri do Tocantins">Cariri do Tocantins</option>
+                                <option value="Crixás do Tocantins">Crixás do Tocantins</option>
+                                <option value="Dueré">Dueré</option>
+                                <option value="Figueirópolis">Figueirópolis</option>
+                                <option value="Formoso do Araguaia">Formoso do Araguaia</option>
+                                <option value="Gurupi">Gurupi</option>
+                                <option value="Jaú do Tocantins">Jaú do Tocantins</option>
+                                <option value="Palmeirópolis">Palmeirópolis</option>
+                                <option value="Peixe">Peixe</option>
+                                <option value="Sandolândia">Sandolândia</option>
+                                <option value="São Salvador do Tocantins">São Salvador do Tocantins</option>
+                                <option value="São Valério">São Valério</option>
+                                <option value="Sucupira">Sucupira</option>
+                                <option value="Talismã">Talismã</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="technician">Técnico(a):</label>
+                            <input type="text" id="technician" name="technician" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Data do Relatório:</label>
+                            <input type="date" id="date" name="date" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="department">Departamento:</label>
+                            <input type="text" id="department" name="department" value="Supervisão" readonly style="background-color: #f8f9fa;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Anexos -->
+                <div class="form-section">
+                    <h3>Anexos:</h3>
+                                         <p class="form-description">Faça upload dos relatórios de supervisão (PDF, Word, Excel, imagens, etc.)</p>
+                     <div class="form-group">
+                         <input type="file" id="attachments" name="attachments" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.txt" style="margin-bottom: 10px;">
+                         <div id="attachmentsList" class="attachments-list"></div>
+                         <small style="color: #666; font-size: 12px;">Formatos aceitos: PDF, Word, Excel, imagens, texto. Máximo 5 arquivos, 10MB cada.</small>
+                    </div>
+                </div>
+
+                <!-- Botões -->
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Salvar Relatório</button>
+                    <button type="button" class="btn-secondary" onclick="window.history.back()">Voltar</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Lista de Relatórios Salvos -->
+        <div class="card" style="margin-top: 30px;">
+            <h2>Relatórios Salvos</h2>
+            <div id="reportsList">
+                <p style="text-align: center; color: #666; font-style: italic;">Carregando relatórios...</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, serverTimestamp, deleteDoc, doc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
+
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyABEloTfC_nT5vfDHpeqYdDjNoPCKwE-Eo",
+            authDomain: "projeto-alex-aaadf.firebaseapp.com",
+            projectId: "projeto-alex-aaadf",
+            storageBucket: "projeto-alex-aaadf.firebasestorage.app",
+            messagingSenderId: "720032595137",
+            appId: "1:720032595137:web:85834232e770a942216840"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // Sistema de anexos
+        let selectedFiles = [];
+
+        // Limite de tamanho: 10MB por arquivo
+        const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB em bytes
+        
+        document.getElementById('attachments').addEventListener('change', function(e) {
+            const newFiles = Array.from(e.target.files);
+            const validFiles = [];
+            
+            newFiles.forEach(newFile => {
+                // Verificar tamanho do arquivo
+                if (newFile.size > MAX_FILE_SIZE) {
+                    alert(`⚠️ Arquivo "${newFile.name}" excede o limite de 10MB!\n\nTamanho atual: ${(newFile.size / (1024 * 1024)).toFixed(1)}MB\nLimite permitido: 10MB`);
+                    return;
+                }
+                
+                // Verificar se é duplicado
+                const isDuplicate = selectedFiles.some(existingFile => 
+                    existingFile.name === newFile.name && existingFile.size === newFile.size
+                );
+                
+                if (!isDuplicate) {
+                    validFiles.push(newFile);
+                }
+            });
+            
+            // Adicionar arquivos válidos
+            selectedFiles.push(...validFiles);
+            
+            // Verificar limite de quantidade
+            if (selectedFiles.length > 5) {
+                alert('⚠️ Máximo de 5 arquivos permitido! Os últimos arquivos foram removidos.');
+                selectedFiles = selectedFiles.slice(0, 5);
+            }
+            
+            displayAttachments();
+        });
+
+        function displayAttachments() {
+            const attachmentsList = document.getElementById('attachmentsList');
+            attachmentsList.innerHTML = '';
+            
+            selectedFiles.forEach((file, index) => {
+                const fileDiv = document.createElement('div');
+                fileDiv.className = 'attachment-item';
+                fileDiv.style.cssText = 'display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px; margin-bottom: 8px;';
+                
+                const fileInfo = document.createElement('span');
+                fileInfo.innerHTML = `
+                    <span style="margin-right: 8px;">📎</span>
+                    ${file.name}
+                    <small style="color: #6c757d; margin-left: 8px;">(${(file.size / 1024).toFixed(1)} KB)</small>
+                `;
+                
+                const removeBtn = document.createElement('button');
+                removeBtn.innerHTML = '❌';
+                removeBtn.style.cssText = 'background: none; border: none; color: #dc3545; cursor: pointer; font-size: 16px; padding: 4px;';
+                removeBtn.onclick = () => removeFile(index);
+                
+                fileDiv.appendChild(fileInfo);
+                fileDiv.appendChild(removeBtn);
+                attachmentsList.appendChild(fileDiv);
+            });
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            displayAttachments();
+        }
+
+        function clearAllAttachments() {
+            selectedFiles = [];
+            displayAttachments();
+            document.getElementById('attachments').value = '';
+        }
+
+        async function uploadAttachments() {
+            if (selectedFiles.length === 0) return [];
+            
+            const uploadPromises = selectedFiles.map(async (file) => {
+                try {
+                    const storageRef = ref(storage, `assessoramento-supervisao/${Date.now()}_${file.name}`);
+                    const snapshot = await uploadBytes(storageRef, file);
+                    const downloadURL = await getDownloadURL(snapshot.ref);
+                    
+                    return {
+                        name: file.name,
+                        size: file.size,
+                        type: file.type,
+                        downloadURL: downloadURL
+                    };
+                } catch (error) {
+                    console.error('Erro ao fazer upload do arquivo:', file.name, error);
+                    throw error;
+                }
+            });
+            
+            return Promise.all(uploadPromises);
+        }
+
+        function checkAuth() {
+            if (!localStorage.getItem('userRole')) {
+                window.location.href = '../index.html';
+            }
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = '../index.html';
+        }
+
+        async function loadReports() {
+            try {
+                const reportsList = document.getElementById('reportsList');
+                reportsList.innerHTML = '<p style="text-align: center; color: #666; font-style: italic;">Carregando relatórios...</p>';
+
+                console.log('🔍 Tentando carregar relatórios de supervisão...');
+                console.log('👤 Usuário logado:', {
+                    role: localStorage.getItem('userRole'),
+                    cpf: localStorage.getItem('userCPF'),
+                    name: localStorage.getItem('userName')
+                });
+
+                // Primeiro, vamos tentar listar TODOS os documentos da coleção reports
+                const simpleQuery = query(collection(db, 'reports'));
+                console.log('📋 Query simples criada');
+                
+                const querySnapshot = await getDocs(simpleQuery);
+                console.log('✅ Query executada com sucesso');
+                console.log('📊 Total de documentos encontrados:', querySnapshot.size);
+                
+                if (querySnapshot.empty) {
+                    reportsList.innerHTML = '<p style="text-align: center; color: #666; font-style: italic;">Nenhum relatório encontrado na coleção.</p>';
+                    return;
+                }
+
+                // Filtrar apenas relatórios de assessoramento de supervisão
+                const reports = [];
+                querySnapshot.forEach((doc) => {
+                    const report = doc.data();
+                    if (report.type === 'assessoramento' && report.department === 'Supervisão') {
+                        reports.push({
+                            id: doc.id,
+                            ...report
+                        });
+                    }
+                });
+
+                // Ordenar por data de criação (mais recente primeiro)
+                reports.sort((a, b) => {
+                    if (a.createdAt && b.createdAt) {
+                        return b.createdAt.toDate() - a.createdAt.toDate();
+                    }
+                    return 0;
+                });
+
+                if (reports.length === 0) {
+                    reportsList.innerHTML = '<p style="text-align: center; color: #666; font-style: italic;">Nenhum relatório de assessoramento de supervisão encontrado.</p>';
+                    return;
+                }
+
+                displayReports(reports);
+            } catch (error) {
+                console.error('❌ Erro ao carregar relatórios:', error);
+                document.getElementById('reportsList').innerHTML = '<p style="text-align: center; color: #dc3545;">Erro ao carregar relatórios: ' + error.message + '</p>';
+            }
+        }
+
+        function displayReports(reports) {
+            const reportsList = document.getElementById('reportsList');
+            
+            if (reports.length === 0) {
+                reportsList.innerHTML = '<p style="text-align: center; color: #666; font-style: italic;">Nenhum relatório encontrado</p>';
+                return;
+            }
+            
+            const html = reports.map(report => {
+                const date = report.date ? new Date(report.date).toLocaleDateString('pt-BR') : 'Data não informada';
+                const createdAt = report.createdAt ? 
+                    (report.createdAt.toDate ? new Date(report.createdAt.toDate()).toLocaleDateString('pt-BR') : 
+                     new Date(report.createdAt).toLocaleDateString('pt-BR')) : 'Data não informada';
+                
+                return `
+                    <div class="report-item" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin-bottom: 20px; background-color: #fafafa;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                            <div>
+                                <h4 style="margin: 0 0 10px 0; color: #333;">🏫 ${report.school || 'N/A'}</h4>
+                                <p style="margin: 5px 0; color: #666;"><strong>Município:</strong> ${report.municipality || 'N/A'}</p>
+                                <p style="margin: 5px 0; color: #666;"><strong>Técnico:</strong> ${report.technician || 'N/A'}</p>
+                                <p style="margin: 5px 0; color: #666;"><strong>Data do Relatório:</strong> ${date}</p>
+                                <p style="margin: 5px 0; color: #666;"><strong>Departamento:</strong> ${report.department || 'N/A'}</p>
+                                <p style="margin: 5px 0; color: #666;"><strong>Tipo:</strong> ${report.type || 'N/A'}</p>
+                                <p style="margin: 5px 0; color: #666;"><strong>Criado por:</strong> ${report.createdByName || 'N/A'} (${report.createdByRole || 'N/A'})</p>
+                                <p style="margin: 5px 0; color: #666;"><strong>Criado em:</strong> ${createdAt}</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <small style="color: #999; font-size: 12px; display: block; margin-bottom: 10px;">ID: ${report.id}</small>
+                                <button onclick="deleteReport('${report.id}')" style="background: #dc3545; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-size: 14px; transition: background-color 0.2s;">🗑️ Excluir</button>
+                            </div>
+                        </div>
+                        
+                        ${report.attachments && report.attachments.length > 0 ? `
+                            <div style="margin-top: 15px;">
+                                <h5 style="margin: 0 0 10px 0; color: #555;">📎 Anexos:</h5>
+                                <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                                    ${report.attachments.map(attachment => {
+                                        const fileIcon = getFileIcon(attachment.type);
+                                        return `
+                                            <a href="${attachment.downloadURL}" target="_blank" class="attachment-link" style="display: inline-flex; align-items: center; padding: 8px 12px; background-color: #e9ecef; border-radius: 6px; text-decoration: none; color: #495057; font-size: 14px; transition: background-color 0.2s;">
+                                                <span style="margin-right: 8px; font-size: 16px;">${fileIcon}</span>
+                                                ${attachment.name}
+                                                <small style="margin-left: 8px; color: #6c757d;">(${(attachment.size / 1024).toFixed(1)} KB)</small>
+                                            </a>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        ` : '<p style="color: #999; font-style: italic; margin-top: 15px;">Nenhum anexo</p>'}
+                    </div>
+                `;
+            }).join('');
+            
+            reportsList.innerHTML = html;
+        }
+
+        function getFileIcon(fileType) {
+            if (!fileType) return '📄';
+            if (fileType.includes('pdf')) return '📄';
+            if (fileType.includes('word') || fileType.includes('doc')) return '📝';
+            if (fileType.includes('excel') || fileType.includes('sheet') || fileType.includes('xls')) return '📊';
+            if (fileType.includes('image') || fileType.includes('jpg') || fileType.includes('jpeg') || fileType.includes('png')) return '🖼️';
+            if (fileType.includes('text') || fileType.includes('txt')) return '📝';
+            return '📎';
+        }
+
+        async function deleteReport(reportId) {
+            if (!confirm('⚠️ Tem certeza que deseja excluir este relatório? Esta ação não pode ser desfeita.')) {
+                return;
+            }
+
+            try {
+                console.log('🗑️ Tentando excluir relatório:', reportId);
+                
+                // Excluir documento do Firestore
+                await deleteDoc(doc(db, 'reports', reportId));
+                console.log('✅ Relatório excluído com sucesso!');
+                
+                alert('Relatório excluído com sucesso!');
+                
+                // Recarregar lista de relatórios
+                loadReports();
+                
+            } catch (error) {
+                console.error('❌ Erro ao excluir relatório:', error);
+                alert('Erro ao excluir o relatório: ' + error.message);
+            }
+        }
+
+        // Inicializar
+        checkAuth();
+        document.getElementById('date').value = new Date().toISOString().split('T')[0];
+        loadReports();
+        
+        // Form handler
+        document.getElementById('assessoramentoForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            try {
+                console.log('🚀 Tentando salvar relatório...');
+                console.log('👤 Dados do usuário:', {
+                    role: localStorage.getItem('userRole'),
+                    cpf: localStorage.getItem('userCPF'),
+                    name: localStorage.getItem('userName')
+                });
+
+                const formData = {
+                    school: document.getElementById('school').value,
+                    municipality: document.getElementById('municipality').value,
+                    technician: document.getElementById('technician').value,
+                    date: document.getElementById('date').value,
+                    department: document.getElementById('department').value,
+                    type: 'assessoramento',
+                    attachments: await uploadAttachments(),
+                    createdBy: localStorage.getItem('userCPF'),
+                    createdByRole: localStorage.getItem('userRole'),
+                    createdByName: localStorage.getItem('userName'),
+                    createdAt: serverTimestamp(),
+                    status: 'active'
+                };
+
+                console.log('📋 Dados do formulário:', formData);
+                console.log('📁 Tentando salvar na coleção "reports"...');
+
+                const docRef = await addDoc(collection(db, 'reports'), formData);
+                console.log('✅ Documento salvo com sucesso! ID:', docRef.id);
+                
+                alert('Relatório salvo com sucesso! ID: ' + docRef.id);
+                
+                // Limpar formulário
+                document.getElementById('assessoramentoForm').reset();
+                document.getElementById('date').value = new Date().toISOString().split('T')[0];
+                selectedFiles = [];
+                displayAttachments();
+                
+                // Recarregar lista de relatórios
+                loadReports();
+                
+            } catch (error) {
+                console.error('❌ Erro ao salvar:', error);
+                console.error('🔍 Detalhes do erro:', {
+                    code: error.code,
+                    message: error.message,
+                    stack: error.stack
+                });
+                alert('Erro ao salvar o relatório: ' + error.message);
+            }
+        });
+
+        // Exportar funções para uso global
+        window.logout = logout;
+        window.removeFile = removeFile;
+        window.clearAllAttachments = clearAllAttachments;
+        window.deleteReport = deleteReport;
+    </script>
+</body>
+</html>
+

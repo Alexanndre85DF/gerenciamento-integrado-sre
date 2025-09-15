@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Relatório - Sistema de Monitoramento Integrado</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .back-navigation {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        .back-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+        
+        .back-btn:hover {
+            background-color: #0056b3;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .page-header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .report-form-container {
+            width: 100%;
+            margin: 20px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        
+        .form-section h3 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        
+        /* Estilos para escolas e indicadores */
+        .schools-selection {
+            margin-bottom: 15px;
+        }
+        
+        .schools-selection select[multiple] {
+            width: 100%;
+            min-height: 120px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: white;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .schools-selection select[multiple] option {
+            padding: 8px 12px;
+            margin: 2px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .schools-selection select[multiple] option:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .schools-selection select[multiple] option:checked {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        .selection-buttons {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Estilos para anexos */
+        .file-preview {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            border-color: #007bff;
+        }
+
+        .file-list {
+            display: grid;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-icon {
+            font-size: 24px;
+            color: #007bff;
+        }
+
+        .file-details h5 {
+            margin: 0;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .file-details small {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-remove {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-remove:hover {
+            background: #c82333;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-select-all {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-select-all:hover {
+            background: #218838;
+        }
+
+        .btn-deselect-all {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-deselect-all:hover {
+            background: #545b62;
+        }
+        
+        .indicators-container {
+            margin-bottom: 15px;
+        }
+        
+        .indicators-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .indicator-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            border-radius: 8px;
+            background: white;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .indicator-item:hover {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%);
+            border-color: #007bff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,123,255,0.15);
+        }
+        
+        .indicator-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #007bff;
+            transform: scale(1.1);
+        }
+        
+        .indicator-item label {
+            font-weight: 600;
+            color: #333;
+            font-size: 15px;
+            cursor: pointer;
+            flex: 1;
+            margin: 0;
+        }
+        
+        .indicators-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .btn-select-all {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(40,167,69,0.3);
+        }
+        
+        .btn-select-all:hover {
+            background: linear-gradient(135deg, #218838 0%, #1ea085 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40,167,69,0.4);
+        }
+        
+        .btn-deselect-all {
+            background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(220,53,69,0.3);
+        }
+        
+        .btn-deselect-all:hover {
+            background: linear-gradient(135deg, #c82333 0%, #e8590c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220,53,69,0.4);
+        }
+        
+        .btn-small {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-small:hover {
+            background: #545b62;
+        }
+        
+        .form-help {
+            display: block;
+            margin-top: 5px;
+            font-size: 12px;
+            color: #6c757d;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <div class="header">
+        <h1>Sistema de Monitoramento Integrado</h1>
+        <button class="logout-btn" onclick="logout()">Sair</button>
+    </div>
+
+    <div class="main-container">
+        <div class="back-navigation">
+            <a href="user-dashboard.html" class="back-btn">Voltar</a>
+        </div>
+        
+        <div class="page-header">
+            <h2>Criar Relatório</h2>
+        </div>
+
+        <div class="report-form-container">
+            <form id="reportForm">
+                <!-- Informações Básicas -->
+                <div class="form-section">
+                    <h3>Informações Básicas</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="reportTitle">Título do Relatório</label>
+                            <input type="text" id="reportTitle" name="reportTitle" placeholder="Ex: Relatório de Monitoramento - SRE Gurupi - Janeiro 2025">
+                        </div>
+                        <div class="form-group">
+                            <label for="reportType">Tipo de Relatório</label>
+                                                         <select id="reportType" name="reportType">
+                                <option value="">Selecione o tipo</option>
+                                <option value="monitoring">Monitoramento</option>
+                                <option value="assessment">Assessoramento</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="reportDate">Data do Relatório</label>
+                            <input type="date" id="reportDate" name="reportDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="reportPeriod">Período de Referência</label>
+                            <select id="reportPeriod" name="reportPeriod">
+                                <option value="">Selecione o período</option>
+                                <option value="semanal">Semanal</option>
+                                <option value="quinzenal">Quinzenal</option>
+                                <option value="bimestral">Bimestral</option>
+                                <option value="trimestral">Trimestral</option>
+                                <option value="semestral">Semestral</option>
+                                <option value="anual">Anual</option>
+                                <option value="especifico">Período Específico</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row" id="specificPeriodRow" style="display: none;">
+                        <div class="form-group">
+                            <label for="startDate">Data Início</label>
+                            <input type="date" id="startDate" name="startDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="endDate">Data Fim</label>
+                            <input type="date" id="endDate" name="endDate">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="municipality">Município</label>
+                            <select id="municipality" name="municipality">
+                                <option value="">Selecione o município</option>
+                                <option value="alvorada">Alvorada</option>
+                                <option value="araguacu">Araguaçu</option>
+                                <option value="cariri_do_tocantins">Cariri do Tocantins</option>
+                                <option value="crixas_do_tocantins">Crixás do Tocantins</option>
+                                <option value="duere">Dueré</option>
+                                <option value="figueiropolis">Figueirópolis</option>
+                                <option value="formoso_do_araguaia">Formoso do Araguaia</option>
+                                <option value="gurupi">Gurupi</option>
+                                <option value="jau_do_tocantins">Jaú do Tocantins</option>
+                                <option value="palmeiropolis">Palmeirópolis</option>
+                                <option value="peixe">Peixe</option>
+                                <option value="sandolandia">Sandolândia</option>
+                                <option value="sao_salvador_do_tocantins">São Salvador do Tocantins</option>
+                                <option value="sao_valerio">São Valério</option>
+                                <option value="sucupira">Sucupira</option>
+                                <option value="talisma">Talismã</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Escolas e Indicadores -->
+                <div class="form-section">
+                    <h3>Escolas e Indicadores</h3>
+                                         <div class="form-group">
+                         <label for="schoolsInput">Escolas Monitoradas *</label>
+                         <input type="text" id="schoolsInput" name="schools" placeholder="Digite os nomes das escolas separados por vírgula (Ex: CENTRO DE ENSINO MEDIO ARY RIBEIRO, COLEGIO ESTADUAL ADELAIDE, ESCOLA ESTADUAL ANA MARIA)" required>
+                         <small class="form-help">💡 Dica: Digite os nomes das escolas separados por vírgula. Você pode copiar e colar da lista completa abaixo:</small>
+                         <div class="schools-reference" style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #e9ecef;">
+                             <strong>📚 Lista Completa de Escolas:</strong>
+                             <div style="margin-top: 10px; font-size: 12px; color: #666; line-height: 1.4;">
+                                 CENTRO DE ENSINO MEDIO ARY RIBEIRO VALADAO FILHO, CENTRO DE ENSINO MEDIO BOM JESUS, CENTRO DE ENSINO MEDIO DE GURUPI, COL DE TECELAGEM ART NSA SENHORA AUXILIADORA, COL EST ALAIR SENA CONCEICAO, COLEGIO AGRICOLA DOM BOSCO, COLÉGIO ESTADUAL ADELAIDE FRANCISCO SOARES, COLEGIO ESTADUAL ANITA CASSIMIRO MORENO, COLEGIO ESTADUAL BENEDITO PEREIRA BANDEIRA, COLEGIO ESTADUAL CANDIDO FIGUEIRA, COLEGIO ESTADUAL DE ALVORADA, COLEGIO ESTADUAL DE TALISMA, COLEGIO ESTADUAL DOM ALANO, COLEGIO ESTADUAL ELSEBAO LIMA, COLEGIO ESTADUAL FAMILIA AGRICOLA JOSE PORFIRIO DE SOUZA, COLEGIO ESTADUAL GIRASSOL DE TEMPO INTEGRAL JOSE SEABRA LEMOS, COLEGIO ESTADUAL JOAO TAVARES MARTINS, COLEGIO ESTADUAL NOSSA SENHORA APARECIDA, COLEGIO ESTADUAL OLAVO BILAC, COLEGIO ESTADUAL PORTO DO RIO MARANHAO, COLEGIO ESTADUAL POSITIVO DE GURUPI, COLEGIO ESTADUAL PROFESSORA ONEIDES ROSA DE MOURA, COLEGIO ESTADUAL REGINA SIQUEIRA CAMPOS, COLEGIO ESTADUAL TARSO DUTRA, COLEGIO ESTADUAL TIRADENTES, COLEGIO MILITAR DO ESTADO DO TOCANTINS - ADJULIO BALTHAZAR, COLEGIO MILITAR DO ESTADO DO TOCANTINS - PROFESSORA MARIA, COLEGIO MILITAR DO ESTADO DO TOCANTINS PRESIDENTE COSTA E SILVA, ESC DE TEC ART NOSSA SRA AUXILIADORA, ESC EST RETIRO, ESC EST TANCREDO DE ALMEIDA NEVES, ESCOLA ESTADUAL ANA MARIA DE JESUS, ESCOLA ESTADUAL DR JOAQUIM PEREIRA DA COSTA, ESCOLA ESTADUAL FE E ALEGRIA PAROQUIAL BERNARDO SAYAO, ESCOLA ESTADUAL GERCINA BORGES TEIXEIRA, ESCOLA ESTADUAL HERCILIA CARVALHO DA SILVA, ESCOLA ESTADUAL NOSSA SENHORA DO CARMO, ESCOLA ESTADUAL PADRE JOSE DE ANCHIETA, ESCOLA ESTADUAL PASSO A PASSO, ESCOLA ESTADUAL PRESBITERIANA ARAGUAIA, ESCOLA ESTADUAL PRESBITERIANA EDUCACIONAL, ESCOLA ESTADUAL RUI BARBOSA, ESCOLA ESTADUAL SALVADOR CAETANO, ESCOLA ESTADUAL VALDIR LINS, ESCOLA ESTADUAL VILA GUARACY, ESCOLA INDIGENA BARRA DO RIO VERDE, ESCOLA INDIGENA IJANARI, ESCOLA INDIGENA IJAWALA, ESCOLA INDIGENA SANAWE, ESCOLA INDIGENA TAINA, ESCOLA INDIGENA TEMANARE, ESCOLA INDIGENA TEWADURE, ESCOLA INDIGENA TXUIRI-HINA, ESCOLA INDIGENA WAHURI, ESCOLA INDIGENA WATAKURI, INSTITUTO EDUCACIONAL PASSO A PASSO
+                             </div>
+                         </div>
+                     </div>
+                    
+                    <div class="form-group">
+                        <label>Indicadores Analisados *</label>
+                        <div class="indicators-container">
+                            <div class="indicators-grid">
+                                <div class="indicator-item">
+                                    <input type="checkbox" id="indicator1" name="indicators" value="frequencia_estudantes">
+                                    <label for="indicator1">👥 Frequência dos Estudantes</label>
+                                </div>
+                                <div class="indicator-item">
+                                    <input type="checkbox" id="indicator2" name="indicators" value="busca_ativa">
+                                    <label for="indicator2">🔍 Busca Ativa</label>
+                                </div>
+                                <div class="indicator-item">
+                                    <input type="checkbox" id="indicator3" name="indicators" value="aulas_previstas_e_dadas">
+                                    <label for="indicator3">📚 Aulas Previstas e Aulas Dadas</label>
+                                </div>
+                                <div class="indicator-item">
+                                    <input type="checkbox" id="indicator4" name="indicators" value="estudantes_abaixo_media">
+                                    <label for="indicator4">📉 Estudantes Abaixo da Média</label>
+                                </div>
+                            </div>
+                            <div class="indicators-actions">
+                                <button type="button" class="btn-small btn-select-all" onclick="selectAllIndicators()">✅ Selecionar Todos</button>
+                                <button type="button" class="btn-small btn-deselect-all" onclick="deselectAllIndicators()">❌ Desmarcar Todos</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conteúdo do Relatório -->
+                <div class="form-section">
+                    <h3>Conteúdo do Relatório</h3>
+                    <div class="form-group">
+                        <label for="reportSummary">Resumo Executivo</label>
+                        <textarea id="reportSummary" name="reportSummary" placeholder="Descreva brevemente o objetivo, escopo e principais pontos do relatório de monitoramento/assessoramento..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="findings">Principais Achados</label>
+                        <textarea id="findings" name="findings" placeholder="Descreva os principais achados do monitoramento/assessoramento, incluindo pontos fortes e áreas de melhoria identificadas..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="challenges">Desafios Identificados</label>
+                        <textarea id="challenges" name="challenges" placeholder="Descreva os principais desafios enfrentados pelas escolas e pela equipe de monitoramento..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Seção Conclusiva -->
+                <div class="form-section">
+                    <h3>Seção Conclusiva</h3>
+                    <div class="form-group">
+                        <label for="conclusions">Conclusões *</label>
+                        <textarea id="conclusions" name="conclusions" placeholder="Apresente as principais conclusões do relatório, síntese dos achados e avaliação geral..." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="recommendations">Recomendações *</label>
+                        <textarea id="recommendations" name="recommendations" placeholder="Liste as recomendações específicas para cada escola e indicador, incluindo prazos e responsabilidades..." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nextSteps">Próximos Passos</label>
+                        <textarea id="nextSteps" name="nextSteps" placeholder="Descreva as próximas ações, cronograma de acompanhamento e estratégias para implementação das recomendações..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Metadados -->
+                <div class="form-section">
+                    <h3>Metadados</h3>
+                    <div class="form-group">
+                        <label for="reportAuthors">Autores do Relatório *</label>
+                        <input type="text" id="reportAuthors" name="reportAuthors" placeholder="Ex: Alexandre Tolentino, Maria Silva, João Santos" required>
+                        <small class="form-help">Digite os nomes separados por vírgula</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reportDepartments">Departamentos Envolvidos *</label>
+                        <input type="text" id="reportDepartments" name="reportDepartments" placeholder="Ex: SRE, Coordenação Pedagógica, Supervisão Escolar" required>
+                        <small class="form-help">Digite os departamentos separados por vírgula</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reportTags">Tags (separadas por vírgula)</label>
+                        <input type="text" id="reportTags" name="reportTags" placeholder="Ex: monitoramento, SRE, frequência, busca ativa, aulas">
+                        <small class="form-help">Digite as tags separadas por vírgula para facilitar a busca</small>
+                    </div>
+                </div>
+
+                <!-- Anexos -->
+                <div class="form-section">
+                    <h3>📎 Anexos</h3>
+                    <div class="form-group">
+                        <label for="fileAttachments">Arquivos Anexados</label>
+                        <input type="file" id="fileAttachments" name="fileAttachments" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.jpg,.jpeg,.png,.gif" style="padding: 8px;">
+                        <small class="form-help">💡 Você pode selecionar múltiplos arquivos. Formatos aceitos: PDF, Word, Excel, Texto, Imagens</small>
+                        <small class="form-help">📏 Tamanho máximo por arquivo: 10MB</small>
+                    </div>
+                    
+                    <!-- Preview dos arquivos selecionados -->
+                    <div id="filePreview" class="file-preview" style="display: none;">
+                        <h4>📋 Arquivos Selecionados:</h4>
+                        <div id="fileList" class="file-list"></div>
+                    </div>
+                </div>
+
+                <!-- Ações -->
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">💾 Salvar Relatório</button>
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='user-dashboard.html'">❌ Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+
+    <!-- Rodapé Profissional -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 - Superintendência Regional de Educação de Gurupi</p>
+            <p>Sistema de Monitoramento Integrado - SRE Gurupi</p>
+        </div>
+    </footer>
+
+         <script type="module">
+         // Função assíncrona para carregar Firebase
+         async function initializeFirebase() {
+             try {
+                 const firebaseApp = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+                 const firestore = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+                 const storage = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js');
+                 
+                 window.initializeApp = firebaseApp.initializeApp;
+                 window.getFirestore = firestore.getFirestore;
+                 window.collection = firestore.collection;
+                 window.addDoc = firestore.addDoc;
+                 window.serverTimestamp = firestore.serverTimestamp;
+                 window.getStorage = storage.getStorage;
+                 window.ref = storage.ref;
+                 window.uploadBytes = storage.uploadBytes;
+                 window.getDownloadURL = storage.getDownloadURL;
+                 
+                 console.log('✅ Firebase imports carregados com sucesso!');
+                 return true;
+             } catch (error) {
+                 console.error('❌ Erro ao carregar Firebase:', error);
+                 alert('Erro ao carregar Firebase: ' + error.message);
+                 return false;
+             }
+         }
+         
+         // Chamar a função de inicialização
+         initializeFirebase().then(success => {
+             if (success) {
+                 console.log('🚀 Firebase inicializado com sucesso!');
+             } else {
+                 console.log('⚠️ Firebase não pôde ser inicializado, mas a página continuará funcionando');
+             }
+         });
+         
+         // Configuração do Firebase
+         const firebaseConfig = {
+             apiKey: "AIzaSyABEloTfC_nT5vfDHpeqYdDjNoPCKwE-Eo",
+             authDomain: "projeto-alex-aaadf.firebaseapp.com",
+             projectId: "projeto-alex-aaadf",
+             storageBucket: "projeto-alex-aaadf.firebasestorage.app",
+             messagingSenderId: "720032595137",
+             appId: "1:720032595137:web:85834232e770a942216840"
+         };
+         
+         // Inicializar Firebase quando as funções estiverem disponíveis
+         let app, db, storage;
+         
+         function initializeFirebaseApp() {
+             if (window.initializeApp && window.getFirestore && window.getStorage) {
+                 try {
+                     app = window.initializeApp(firebaseConfig);
+                     db = window.getFirestore(app);
+                     storage = window.getStorage(app);
+                     console.log('✅ Firebase inicializado com sucesso!');
+                     return true;
+                 } catch (error) {
+                     console.error('❌ Erro ao inicializar Firebase:', error);
+                     return false;
+                 }
+             }
+             return false;
+         }
+         
+         // Tentar inicializar Firebase a cada 500ms até conseguir
+         const firebaseInterval = setInterval(() => {
+             if (initializeFirebaseApp()) {
+                 clearInterval(firebaseInterval);
+                 console.log('🚀 Firebase configurado e pronto para uso!');
+             }
+         }, 500);
+         
+         // Debug: verificar se Firebase está funcionando
+         console.log('Firebase inicializado:', app);
+         console.log('Firestore DB:', db);
+         console.log('Storage:', storage);
+         console.log('Usuário logado:', localStorage.getItem('userName'));
+         console.log('Role do usuário:', localStorage.getItem('userRole'));
+         
+         // Garantir que a página seja exibida mesmo com erro no Firebase
+         console.log('✅ Página carregada!');
+         
+         // Verificar se está logado
+         if (!localStorage.getItem('userRole')) {
+            window.location.href = 'index.html';
+        }
+
+        // Definir data atual como padrão
+        document.getElementById('reportDate').value = new Date().toISOString().split('T')[0];
+        
+                          // Definir autor como usuário logado
+        const userName = localStorage.getItem('userName');
+        if (userName && userName.trim() !== '') {
+            document.getElementById('reportAuthors').value = userName;
+        } else {
+            // Fallback: tentar pegar do userRole ou deixar vazio para o usuário preencher
+            const userRole = localStorage.getItem('userRole');
+            if (userRole && userRole !== 'Currículo') {
+                document.getElementById('reportAuthors').value = userRole;
+            } else {
+                document.getElementById('reportAuthors').value = '';
+                console.log('⚠️ Nome do usuário não encontrado no localStorage');
+            }
+        }
+
+         // Adicionar event listener para arquivos anexados
+         document.getElementById('fileAttachments').addEventListener('change', handleFileSelection);
+
+         // Adicionar event listener para mostrar/ocultar campos de período específico
+         document.getElementById('reportType').addEventListener('change', function() {
+             const periodSelect = document.getElementById('reportPeriod');
+             const specificPeriodRow = document.getElementById('specificPeriodRow');
+             
+             if (periodSelect.value === 'especifico') {
+                 specificPeriodRow.style.display = 'grid';
+             } else {
+                 specificPeriodRow.style.display = 'none';
+             }
+         });
+
+         // Adicionar event listener para o select de período
+         document.getElementById('reportPeriod').addEventListener('change', function() {
+             const specificPeriodRow = document.getElementById('specificPeriodRow');
+             
+             if (this.value === 'especifico') {
+                 specificPeriodRow.style.display = 'grid';
+             } else {
+                 specificPeriodRow.style.display = 'none';
+             }
+         });
+
+         // Função para mostrar/ocultar campos de período específico
+        function toggleTypeSpecificFields() {
+            const periodSelect = document.getElementById('reportPeriod');
+            const specificPeriodRow = document.getElementById('specificPeriodRow');
+            
+            if (periodSelect.value === 'especifico') {
+                specificPeriodRow.style.display = 'grid';
+            } else {
+                specificPeriodRow.style.display = 'none';
+            }
+        }
+
+        
+
+        // Funções para indicadores
+        function selectAllIndicators() {
+            const indicatorCheckboxes = document.querySelectorAll('input[name="indicators"]');
+            indicatorCheckboxes.forEach(checkbox => checkbox.checked = true);
+        }
+
+        function deselectAllIndicators() {
+            const indicatorCheckboxes = document.querySelectorAll('input[name="indicators"]');
+            indicatorCheckboxes.forEach(checkbox => checkbox.checked = false);
+        }
+
+        // Variáveis para gerenciar arquivos anexados
+        let selectedFiles = [];
+
+        // Função para gerenciar seleção de arquivos
+        function handleFileSelection(event) {
+            const files = Array.from(event.target.files);
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            
+            // Validar tamanho dos arquivos
+            const validFiles = files.filter(file => {
+                if (file.size > maxSize) {
+                    alert(`Arquivo "${file.name}" excede o tamanho máximo de 10MB`);
+                    return false;
+                }
+                return true;
+            });
+            
+            // Adicionar arquivos válidos
+            validFiles.forEach(file => {
+                if (!selectedFiles.find(f => f.name === file.name && f.size === file.size)) {
+                    selectedFiles.push(file);
+                }
+            });
+            
+            // Atualizar preview
+            updateFilePreview();
+        }
+
+        // Função para atualizar preview dos arquivos
+        function updateFilePreview() {
+            const filePreview = document.getElementById('filePreview');
+            const fileList = document.getElementById('fileList');
+            
+            if (selectedFiles.length === 0) {
+                filePreview.style.display = 'none';
+                return;
+            }
+            
+            filePreview.style.display = 'block';
+            fileList.innerHTML = '';
+            
+            selectedFiles.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                
+                const fileIcon = getFileIcon(file.name);
+                const fileSize = formatFileSize(file.size);
+                
+                fileItem.innerHTML = `
+                    <div class="file-info">
+                        <div class="file-icon">${fileIcon}</div>
+                        <div class="file-details">
+                            <h5>${file.name}</h5>
+                            <small>${fileSize} • ${file.type || 'Tipo não identificado'}</small>
+                        </div>
+                    </div>
+                                         <div class="file-actions">
+                         <button type="button" class="btn-remove" onclick="window.removeFile(${index})">🗑️</button>
+                     </div>
+                `;
+                
+                fileList.appendChild(fileItem);
+            });
+        }
+
+        // Função para obter ícone baseado no tipo de arquivo
+        function getFileIcon(fileName) {
+            const extension = fileName.split('.').pop().toLowerCase();
+            
+            switch (extension) {
+                case 'pdf': return '📄';
+                case 'doc':
+                case 'docx': return '📝';
+                case 'xls':
+                case 'xlsx': return '📊';
+                case 'txt': return '📃';
+                case 'jpg':
+                case 'jpeg':
+                case 'png':
+                case 'gif': return '🖼️';
+                default: return '📎';
+            }
+        }
+
+        // Função para formatar tamanho do arquivo
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Função para remover arquivo
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            updateFilePreview();
+            
+            // Atualizar input de arquivo
+            const fileInput = document.getElementById('fileAttachments');
+            fileInput.value = '';
+        }
+        
+        // Tornar função global
+        window.removeFile = removeFile;
+
+                 // Função para fazer upload de arquivo para Firebase Storage
+         async function uploadFileToStorage(file) {
+             try {
+                 // Verificar se Firebase está disponível
+                 if (!storage || !window.ref || !window.uploadBytes || !window.getDownloadURL) {
+                     throw new Error('Firebase Storage não está disponível ainda');
+                 }
+                 
+                 // Criar nome único para o arquivo
+                 const timestamp = Date.now();
+                 const fileName = `${timestamp}_${file.name}`;
+                 
+                 // Criar referência no Storage
+                 const storageRef = window.ref(storage, `reports/${fileName}`);
+                 
+                 // Fazer upload do arquivo
+                 const snapshot = await window.uploadBytes(storageRef, file);
+                 
+                 // Obter URL de download
+                 const downloadURL = await window.getDownloadURL(snapshot.ref);
+                 
+                 return {
+                     name: file.name,
+                     type: file.type,
+                     size: file.size,
+                     storagePath: snapshot.ref.fullPath,
+                     downloadURL: downloadURL,
+                     uploadedAt: new Date().toISOString()
+                 };
+             } catch (error) {
+                 console.error(`Erro ao fazer upload do arquivo ${file.name}:`, error);
+                 throw error;
+             }
+         }
+
+        // Função de logout
+        function logout() {
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('userCPF');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userId');
+            window.location.href = 'index.html';
+        }
+
+        // Handler do formulário
+        document.getElementById('reportForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Mostrar loading
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '💾 Salvando...';
+            submitBtn.disabled = true;
+            
+            // Timeout de segurança (30 segundos)
+            const timeoutPromise = new Promise((_, reject) => {
+                setTimeout(() => reject(new Error('Timeout: Operação demorou muito tempo')), 30000);
+            });
+            
+            try {
+                // Verificar se Firebase está inicializado
+                if (!app || !db || !storage) {
+                    throw new Error('Firebase não foi inicializado. Aguarde alguns segundos e tente novamente.');
+                }
+                
+                // Coletar dados do formulário
+                const formData = new FormData(this);
+                const reportData = {
+                    title: formData.get('reportTitle') || '',
+                    type: formData.get('reportType') || '',
+                    date: formData.get('reportDate') || '',
+                    period: formData.get('reportPeriod') || '',
+                    startDate: formData.get('startDate') || '',
+                    endDate: formData.get('endDate') || '',
+                    municipality: formData.get('municipality') || '',
+                    
+                    // Escolas digitadas (separadas por vírgula)
+                    schools: formData.get('schools') ? formData.get('schools').split(',').map(school => school.trim()).filter(school => school.length > 0) : [],
+                    
+                    // Indicadores selecionados
+                    indicators: Array.from(document.querySelectorAll('input[name="indicators"]:checked')).map(checkbox => checkbox.nextElementSibling.textContent),
+                    
+                    // Conteúdo
+                    summary: formData.get('reportSummary') || '',
+                    findings: formData.get('findings') || '',
+                    challenges: formData.get('challenges') || '',
+                    
+                    // Seção conclusiva
+                    conclusions: formData.get('conclusions') || '',
+                    recommendations: formData.get('recommendations') || '',
+                    nextSteps: formData.get('nextSteps') || '',
+                    
+                    // Metadados
+                    authors: formData.get('reportAuthors') || '',
+                    departments: formData.get('reportDepartments') || '',
+                    tags: formData.get('reportTags') || '',
+                    
+                    // Metadados do sistema
+                    createdAt: new Date().toISOString(),
+                    createdBy: localStorage.getItem('userName') || 'Usuário',
+                    userId: localStorage.getItem('userId') || '',
+                    userRole: localStorage.getItem('userRole') || ''
+                };
+
+                // Processar arquivos anexados
+                if (selectedFiles.length > 0) {
+                    console.log(`Iniciando upload de ${selectedFiles.length} arquivos...`);
+                    
+                    const filePromises = selectedFiles.map(async (file) => {
+                        try {
+                            console.log(`Fazendo upload do arquivo: ${file.name}`);
+                            // Fazer upload para Firebase Storage
+                            const uploadResult = await uploadFileToStorage(file);
+                            console.log(`Upload concluído: ${file.name}`);
+                            return uploadResult;
+                        } catch (error) {
+                            console.error(`Erro ao processar arquivo ${file.name}:`, error);
+                            alert(`Erro ao fazer upload do arquivo "${file.name}": ${error.message}`);
+                            return null;
+                        }
+                    });
+
+                    const processedFiles = await Promise.race([
+                        Promise.all(filePromises),
+                        timeoutPromise
+                    ]);
+                    reportData.attachments = processedFiles.filter(file => file !== null);
+                    
+                    console.log(`Processados ${reportData.attachments.length} arquivos anexados`);
+                }
+                
+                // Debug: verificar dados antes de salvar
+                console.log('Dados do relatório:', reportData);
+                console.log('DB disponível:', db);
+                console.log('Tentando salvar no Firebase...');
+                
+                // Salvar no Firebase
+                if (!db || !window.addDoc || !window.collection) {
+                    throw new Error('Firebase Firestore não está disponível ainda');
+                }
+                
+                const docRef = await Promise.race([
+                    window.addDoc(window.collection(db, 'reports'), reportData),
+                    timeoutPromise
+                ]);
+                
+                // Debug: verificar resultado
+                console.log('Documento salvo com ID:', docRef.id);
+                
+                // Sucesso
+                alert(`Relatório salvo com sucesso! ID: ${docRef.id}`);
+                window.location.href = 'report-view.html';
+                
+                         } catch (error) {
+                 console.error('Erro ao salvar relatório:', error);
+                 alert('Erro ao salvar relatório: ' + error.message);
+                 
+                 // Restaurar botão
+                 const submitBtn = this.querySelector('button[type="submit"]');
+                 submitBtn.innerHTML = '💾 Salvar Relatório';
+                 submitBtn.disabled = false;
+             }
+        });
+        
+        // Garantir que o campo de autores seja preenchido corretamente quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                const userName = localStorage.getItem('userName');
+                const userRole = localStorage.getItem('userRole');
+                
+                if (userName && userName.trim() !== '' && userName !== 'Currículo') {
+                    document.getElementById('reportAuthors').value = userName;
+                    console.log('✅ Nome do usuário preenchido:', userName);
+                } else if (userRole && userRole !== 'Currículo') {
+                    document.getElementById('reportAuthors').value = userRole;
+                    console.log('✅ Role do usuário preenchido:', userRole);
+                } else {
+                    // Se não encontrar nome válido, deixar vazio para o usuário preencher
+                    document.getElementById('reportAuthors').value = '';
+                    console.log('⚠️ Nome do usuário não encontrado. Campo será preenchido manualmente.');
+                }
+            }, 200);
+        });
+    </script>
+</body>
+</html>
